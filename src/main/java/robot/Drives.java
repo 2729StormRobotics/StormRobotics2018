@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 public class Drives {
     TalonSRX leftMotor, rightMotor;
 
-    public Drives(TalonSRX _left, CANTalon _right){
+    public Drives(TalonSRX _left, TalonSRX _right){
         leftMotor = _left;
         rightMotor = _right;
     }
