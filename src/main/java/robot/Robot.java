@@ -1,13 +1,19 @@
 package robot;
 
-import com.ctre.CANTalon;
+
+import AutoModes.MidSwitch;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
 
 public class Robot extends IterativeRobot {
 
+    private SendableChooser autoChooser;
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
@@ -17,6 +23,11 @@ public class Robot extends IterativeRobot {
 
     private static final TalonSRX _rightMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_RIGHT_MAIN);
     private static final TalonSRX _right2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_RIGHT_2);
+
+    public static final class Auto{
+        public static final String MID_SWITCH = "Mid Switch";
+        public static final String MOVE_FORWARD = "Move Forward";
+    }
 
     @Override
     public void robotInit() {
@@ -29,7 +40,7 @@ public class Robot extends IterativeRobot {
 
         XboxController xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
         GenericHID.Hand x = new GenericHID.Hand(1);
-        forwardSpeed = xboxDrive.getTriggerAxis()
+        forwardSpeed = xboxDrive.getTriggerAxis();
         reverseSpeed = xboxDrive.getLeftTrigger();
         turnSpeed = xboxDrive.getRightX();
 
@@ -37,8 +48,8 @@ public class Robot extends IterativeRobot {
 
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.MOTION_PROF_1, new MotionProf1(_leftMain, _rightMain));
-        autoChooser.addObject(Auto.MOTION_PROF_1, new MotionProf1(_leftMain, _rightMain));
+        autoChooser.addDefault(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain));
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain));
         //autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward());
 
 
