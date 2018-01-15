@@ -1,11 +1,13 @@
 package robot;
 
 import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Drives {
-    CANTalon leftMotor, rightMotor;
+    TalonSRX leftMotor, rightMotor;
 
-    public Drives(CANTalon _left, CANTalon _right){
+    public Drives(TalonSRX _left, CANTalon _right){
         leftMotor = _left;
         rightMotor = _right;
     }
@@ -29,18 +31,18 @@ public class Drives {
         double leftSpeed = (combinedSpeed - turn);
         leftSpeed = leftSpeed * Math.abs(leftSpeed);
 
-        double right = combinedSpeed + turn;
-        right = right * Math.abs(right);
+        double rightSpeed = combinedSpeed + turn;
+        rightSpeed = rightSpeed * Math.abs(rightSpeed);
 
         if(Math.abs(leftSpeed) > 0.05)
-            leftMotor.set(leftSpeed);
+            leftMotor.set(ControlMode.PercentOutput, leftSpeed);
         else
-            leftMotor.set(0);
+            leftMotor.set(ControlMode.PercentOutput, 0);
 
-        if(Math.abs(right) > 0.05)
-            rightMotor.set(right);
+        if(Math.abs(rightSpeed) > 0.05)
+            rightMotor.set(ControlMode.PercentOutput, rightSpeed);
         else
-            rightMotor.set(0);
+            rightMotor.set(ControlMode.PercentOutput, 0);
 
 
     }
