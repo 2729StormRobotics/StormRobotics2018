@@ -1,22 +1,35 @@
 package robot;
 
+import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class Robot extends IterativeRobot {
+
+    private double forwardSpeed;
+    private double reverseSpeed;
+    private double turnSpeed;
+
+    private static final TalonSRX _leftMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_MAIN);
+    private static final TalonSRX _left2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_2);
+
+    private static final TalonSRX _rightMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_RIGHT_MAIN);
+    private static final TalonSRX _right2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_RIGHT_2);
+
     @Override
     public void robotInit() {
-        _left2.changeControlMode(CANTalon.TalonControlMode.Follower);
-        _left2.set(_leftMain.getDeviceID());
+        _left2.follow(_leftMain);
 
-        _right2.changeControlMode(CANTalon.TalonControlMode.Follower);
-        _right2.set(_rightMain.getDeviceID());
+        _right2.follow(_rightMain);
 
 
         _rightMain.setInverted(true);
 
-        Gamepad xboxDrive = Hardware.HumanInterfaceDevices.xbox360(RobotMap.PORT_XBOX_DRIVE);
-
-        forwardSpeed = xboxDrive.getRightTrigger();
+        XboxController xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
+        GenericHID.Hand x = new GenericHID.Hand(1);
+        forwardSpeed = xboxDrive.getTriggerAxis()
         reverseSpeed = xboxDrive.getLeftTrigger();
         turnSpeed = xboxDrive.getRightX();
 
