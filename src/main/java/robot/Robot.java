@@ -4,7 +4,11 @@ import com.ctre.CANTalon;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
+
+
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
@@ -28,12 +32,10 @@ public class Robot extends IterativeRobot {
         _rightMain.setInverted(true);
 
         XboxController xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
-        GenericHID.Hand x = new GenericHID.Hand(1);
-        forwardSpeed = xboxDrive.getTriggerAxis()
-        reverseSpeed = xboxDrive.getLeftTrigger();
-        turnSpeed = xboxDrive.getRightX();
+        forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
+        reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
 
-        //drive = new TankDrive(_leftMain, _rightMain);
+
 
 
         autoChooser = new SendableChooser<>();
