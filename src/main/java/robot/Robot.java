@@ -1,26 +1,23 @@
 package robot;
 
 
+import AutoModes.LeftSwitch;
 import AutoModes.MidSwitch;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
-import jaci.pathfinder.modifiers.TankModifier;
 
-import java.io.File;
 
 
 public class Robot extends IterativeRobot {
+    private AHRS ahrs;
 
     private SendableChooser autoChooser;
-    private Pathfinder pathfinder;
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
@@ -33,7 +30,7 @@ public class Robot extends IterativeRobot {
 
     public static final class Auto{
         public static final String MID_SWITCH = "Mid Switch";
-        public static final String MOVE_FORWARD = "Move Forward";
+        public static final String LEFT_SWITCH = "Left Side Switch";
     }
 
     @Override
@@ -46,17 +43,16 @@ public class Robot extends IterativeRobot {
         _rightMain.setInverted(true);
 
         XboxController xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
-        GenericHID.Hand x = new GenericHID.Hand(1);
-        forwardSpeed = xboxDrive.getTriggerAxis();
-        reverseSpeed = xboxDrive.getLeftTrigger();
-        turnSpeed = xboxDrive.getRightX();
+        forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
+        reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
         //drive = new TankDrive(_leftMain, _rightMain);
 
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain));
+        autoChooser.addDefault(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
+        autoChooser.addObject(Auto.LEFT_SWITCH, new LeftSwitch(_leftMain, _rightMain, ahrs));
         //autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward());
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
