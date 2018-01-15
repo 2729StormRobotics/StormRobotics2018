@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Pathfinder;
@@ -104,8 +105,8 @@ public class Robot extends IterativeRobot {
 
         //Strongback.logger().warn("Left Speed: " + leftSpeed.read() + "          Right Speed: " + rightSpeed.read());
 
-        double combinedSpeed = forwardSpeed.read() - reverseSpeed.read();
-        double turn = turnSpeed.read();
+        double combinedSpeed = forwardSpeed - reverseSpeed;
+        double turn = turnSpeed;
 
         drive.stormDrive(combinedSpeed, turn, true);
     }
