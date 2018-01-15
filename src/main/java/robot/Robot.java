@@ -8,12 +8,18 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.modifiers.TankModifier;
 
+import java.io.File;
 
 
 public class Robot extends IterativeRobot {
 
     private SendableChooser autoChooser;
+    private Pathfinder pathfinder;
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
@@ -52,14 +58,13 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain));
         //autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward());
 
-
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
         Waypoint[] points = new Waypoint[] {
                 new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
                 new Waypoint(-2, -2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
                 new Waypoint(0, 0, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
-        };
+        }
 
         Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
         Trajectory trajectory = Pathfinder.generate(points, config);
