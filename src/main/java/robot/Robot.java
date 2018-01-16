@@ -3,6 +3,8 @@ package robot;
 
 import AutoModes.LeftSwitch;
 import AutoModes.MidSwitch;
+import AutoModes.PointTurn;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -34,6 +36,7 @@ public class Robot extends IterativeRobot {
     public static final class Auto{
         public static final String MID_SWITCH = "Mid Switch";
         public static final String LEFT_SWITCH = "Left Side Switch";
+        public static final String POINT_TURN = "Point Turn";
     }
 
     @Override
@@ -48,7 +51,7 @@ public class Robot extends IterativeRobot {
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
 
-        _rightMain.setInverted(true);
+        //_rightMain.setInverted(true);
 
         XboxController xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
@@ -58,6 +61,7 @@ public class Robot extends IterativeRobot {
         autoChooser.addDefault(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.LEFT_SWITCH, new LeftSwitch(_leftMain, _rightMain, ahrs));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 40));
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
@@ -68,10 +72,13 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        /*
         Command autonomousCommand = (Command) autoChooser.getSelected();
         if (autonomousCommand != null) {
             autonomousCommand.start();
         }
+        */
+        PointTurn.start();
     }
 
     @Override
@@ -94,7 +101,10 @@ public class Robot extends IterativeRobot {
         double combinedSpeed = forwardSpeed - reverseSpeed;
         double turn = turnSpeed;
 
-        drive.stormDrive(combinedSpeed, turn, true);
+        //drive.stormDrive(combinedSpeed, turn, true);
+
+        _rightMain.set(ControlMode.PercentOutput, -0.2);
+        _leftMain.set(ControlMode.PercentOutput, 0.2);
     }
 
     @Override
