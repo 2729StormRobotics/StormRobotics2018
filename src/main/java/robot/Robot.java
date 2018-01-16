@@ -5,8 +5,9 @@ import AutoModes.LeftSwitch;
 import AutoModes.MidSwitch;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -16,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
     private AHRS ahrs;
+
+
 
     private SendableChooser autoChooser;
     private double forwardSpeed;
@@ -35,10 +38,15 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
+        try {
+            ahrs = new AHRS(SPI.Port.kMXP);
+        } catch (RuntimeException ex ) {
+            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+        }
+
+
         _left2.follow(_leftMain);
-
         _right2.follow(_rightMain);
-
 
         _rightMain.setInverted(true);
 
@@ -46,14 +54,10 @@ public class Robot extends IterativeRobot {
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
-        //drive = new TankDrive(_leftMain, _rightMain);
-
-
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.LEFT_SWITCH, new LeftSwitch(_leftMain, _rightMain, ahrs));
-        //autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward());
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
@@ -86,8 +90,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         Drives drive = new Drives(_leftMain, _rightMain);
-
-        //Strongback.logger().warn("Left Speed: " + leftSpeed.read() + "          Right Speed: " + rightSpeed.read());
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         double turn = turnSpeed;
