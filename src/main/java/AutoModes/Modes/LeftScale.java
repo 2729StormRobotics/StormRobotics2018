@@ -1,5 +1,6 @@
-package AutoModes;
+package AutoModes.Modes;
 
+import AutoModes.Commands.ProfileFollower;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.command.CommandGroup;
