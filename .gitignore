@@ -42,7 +42,8 @@ Thumbs.db
 junit/
 
 
-# Created by https://www.gitignore.io/api/git,vim,osx,java,linux,macos,maven,xcode,emacs,gradle,eclipse,windows,netbeans,notepadpp,intellij+all,visualstudio,visualstudiocode
+
+# Created by https://www.gitignore.io/api/git,vim,osx,java,linux,maven,xcode,emacs,gradle,eclipse,windows,netbeans,notepadpp,intellij+all,visualstudio,visualstudiocode
 
 ### Eclipse ###
 
@@ -97,10 +98,10 @@ local.properties
 .worksheet
 
 ### Eclipse Patch ###
-# Eclipse Core
+# Eclipse Core		
 .project
 
-# JDT-specific (Eclipse Java Development Tools)
+# JDT-specific (Eclipse Java Development Tools)		
 .classpath
 
 ### Emacs ###
@@ -270,33 +271,6 @@ hs_err_pid*
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
-### macOS ###
-*.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
 ### Maven ###
 target/
 pom.xml.tag
@@ -323,14 +297,31 @@ nbactions.xml
 # Notepad++ backups #
 
 ### OSX ###
+*.DS_Store
+.AppleDouble
+.LSOverride
 
 # Icon must end with two \r
+Icon
 
 # Thumbnails
+._*
 
 # Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
 # Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 
 ### Vim ###
 # swap
@@ -712,4 +703,4 @@ __pycache__/
 # should be stored in the .pubxml.user file.
 
 
-# End of https://www.gitignore.io/api/git,vim,osx,java,linux,macos,maven,xcode,emacs,gradle,eclipse,windows,netbeans,notepadpp,intellij+all,visualstudio,visualstudiocode
+# End of https://www.gitignore.io/api/git,vim,osx,java,linux,maven,xcode,emacs,gradle,eclipse,windows,netbeans,notepadpp,intellij+all,visualstudio,visualstudiocode
