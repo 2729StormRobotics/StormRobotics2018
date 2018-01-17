@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -59,10 +60,10 @@ public class Robot extends IterativeRobot {
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.LEFT_SWITCH, new LeftSwitch(_leftMain, _rightMain, ahrs));
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 40, _leftMain, _rightMain));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
@@ -73,12 +74,19 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        /*
         Command autonomousCommand = (Command) autoChooser.getSelected();
+
         if (autonomousCommand != null) {
+            System.err.println("Auto " + autoChooser.getSelected() + " selected!");
             autonomousCommand.start();
+        } else {
+            System.err.println("Auto not selected!");
+            Command c = new PointTurn(ahrs, 90, _leftMain, _rightMain);
+            c.start();
         }
-        */
+
+
+
     }
 
     @Override
@@ -92,20 +100,20 @@ public class Robot extends IterativeRobot {
     public void disabledPeriodic() { }
     
     @Override
-    public void autonomousPeriodic() { }
+    public void autonomousPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
     @Override
     public void teleopPeriodic() {
-        /*
+
         Drives drive = new Drives(_leftMain, _rightMain);
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         double turn = turnSpeed;
 
         //drive.stormDrive(combinedSpeed, turn, true);
-        */
-        LeftScale lsc = new LeftScale(_leftMain, _rightMain, ahrs);
-        lsc.start();
+
     }
 
     @Override
