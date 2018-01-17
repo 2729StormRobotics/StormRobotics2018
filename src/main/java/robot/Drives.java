@@ -46,4 +46,9 @@ public class Drives {
 
 
     }
+
+    public void stormDrive(double left, double right) {
+        leftMotor.set(ControlMode.PercentOutput, left);
+        rightMotor.set(ControlMode.PercentOutput, right);
+    }
 }
