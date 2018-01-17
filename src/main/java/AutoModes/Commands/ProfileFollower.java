@@ -1,4 +1,4 @@
-package AutoModes;
+package AutoModes.Commands;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Command;
@@ -19,7 +19,7 @@ public class ProfileFollower extends Command{
         motionProfile = new File(csv);
 
         Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
-        Trajectory trajectory = Pathfinder.readFromCSV(motionProfile)
+        Trajectory trajectory = Pathfinder.readFromCSV(motionProfile);
 
         TankModifier modifier = new TankModifier(trajectory).modify(0.5);
         EncoderFollower left = new EncoderFollower(modifier.getLeftTrajectory());

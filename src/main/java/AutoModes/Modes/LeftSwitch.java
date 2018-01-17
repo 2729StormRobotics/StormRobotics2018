@@ -1,4 +1,4 @@
-package AutoModes;
+package AutoModes.Modes;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;

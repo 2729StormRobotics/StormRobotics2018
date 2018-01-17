@@ -1,4 +1,4 @@
-package AutoModes;
+package AutoModes.Commands;
 
 public class MoveForward {
 

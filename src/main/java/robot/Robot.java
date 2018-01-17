@@ -1,9 +1,9 @@
 package robot;
 
 
-import AutoModes.LeftSwitch;
-import AutoModes.MidSwitch;
-import AutoModes.PointTurn;
+import AutoModes.Modes.LeftSwitch;
+import AutoModes.Modes.MidSwitch;
+import AutoModes.Commands.PointTurn;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -61,7 +60,7 @@ public class Robot extends IterativeRobot {
         autoChooser.addDefault(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.LEFT_SWITCH, new LeftSwitch(_leftMain, _rightMain, ahrs));
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 40));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 40, _leftMain, _rightMain));
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
@@ -78,7 +77,6 @@ public class Robot extends IterativeRobot {
             autonomousCommand.start();
         }
         */
-        PointTurn.start();
     }
 
     @Override
