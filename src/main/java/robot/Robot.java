@@ -2,6 +2,7 @@ package robot;
 
 
 import AutoModes.Modes.LeftSwitch;
+import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -11,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -94,15 +96,16 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        /*
         Drives drive = new Drives(_leftMain, _rightMain);
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         double turn = turnSpeed;
 
         //drive.stormDrive(combinedSpeed, turn, true);
-
-        _rightMain.set(ControlMode.PercentOutput, -0.2);
-        _leftMain.set(ControlMode.PercentOutput, 0.2);
+        */
+        LeftScale lsc = new LeftScale(_leftMain, _rightMain, ahrs);
+        lsc.start();
     }
 
     @Override
