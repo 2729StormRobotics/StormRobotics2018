@@ -28,6 +28,7 @@ public class Robot extends IterativeRobot {
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
+    public XboxController xboxDrive;
 
     private static final TalonSRX _leftMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_MAIN);
     private static final TalonSRX _left2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_2);
@@ -53,11 +54,10 @@ public class Robot extends IterativeRobot {
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
 
-        //_rightMain.setInverted(true);
+        _rightMain.setInverted(true);
 
-        XboxController xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
-        forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
-        reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
+        xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
+
 
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
@@ -112,7 +112,10 @@ public class Robot extends IterativeRobot {
         double combinedSpeed = forwardSpeed - reverseSpeed;
         double turn = turnSpeed;
 
-        //drive.stormDrive(combinedSpeed, turn, true);
+        forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
+        reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
+
+        drive.stormDrive(combinedSpeed, turn, true);
 
     }
 
