@@ -60,7 +60,7 @@ public class PointTurn extends Command {
 
     @Override
     protected void initialize() {
-        super.initialize();
+        turnController = new PIDController(0.01, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite);
         ahrs.reset();
         System.err.println("initialize Point Turn");
         turnController = new PIDController(0.008, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
@@ -84,14 +84,9 @@ public class PointTurn extends Command {
     protected void interrupted() {
         System.err.println("interrupted Point Turn");
         super.interrupted();
-    }
-
-    @Override
-    protected void execute() {
         super.execute();
 
         System.err.println("Speed: " + turnSpeed + " Gyro: " + ahrs.getRawGyroZ() + " Get: " + turnController.get());
-
         SmartDashboard.putNumber("Gyro Value: ", ahrs.getRawGyroZ());
 
         left.set(ControlMode.PercentOutput, turnSpeed);
