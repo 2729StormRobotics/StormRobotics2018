@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PointTurn extends Command {
     AHRS ahrs;
     TalonSRX left, right;
-    double turnSpeed;
+    double turnSpeed, targetAngle;
     PIDController turnController;
 
     PIDSource angleSource = new PIDSource() {
@@ -42,7 +42,6 @@ public class PointTurn extends Command {
         }
     };
 
-    double targetAngle;
     static final double toleranceDegrees = 2.0;
 
     public PointTurn(AHRS _ahrs, double angle, TalonSRX _left, TalonSRX _right) {
@@ -63,14 +62,13 @@ public class PointTurn extends Command {
         super.initialize();
         ahrs.reset();
         System.err.println("initialize Point Turn");
-        turnController = new PIDController(0.008, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
+        turnController = new PIDController(0.0095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
         turnController.setInputRange(-180.0, 180.0);
         turnController.setOutputRange(-.2, 0.2);
         turnController.setAbsoluteTolerance(toleranceDegrees);
         turnController.setContinuous(true);
         turnController.setSetpoint(targetAngle);
         turnController.enable();
-        turnController.setSetpoint(targetAngle);
         System.err.println("initialize Point Turn");
     }
 

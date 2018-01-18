@@ -1,6 +1,7 @@
 package robot;
 
 
+import AutoModes.Commands.MoveForward;
 import AutoModes.Modes.LeftSwitch;
 import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
@@ -39,6 +40,7 @@ public class Robot extends IterativeRobot {
         public static final String MID_SWITCH = "Mid Switch";
         public static final String LEFT_SWITCH = "Left Side Switch";
         public static final String POINT_TURN = "Point Turn";
+        public static final String MOVE_FORWARD = "Move Forward";
     }
 
     @Override
@@ -64,6 +66,7 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.LEFT_SWITCH, new LeftSwitch(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 1516524365, _leftMain, _rightMain)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
