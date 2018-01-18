@@ -16,7 +16,7 @@ public class Drives {
         //Left and Right triggers control speed.  Steer with joystick
         turn = turn * Math.abs(turn);
 
-        int mult = -1;
+        int mult;
         if (combinedSpeed < 0)
             mult = 1;
         else
@@ -40,7 +40,7 @@ public class Drives {
             leftMotor.set(ControlMode.PercentOutput, 0);
 
         if(Math.abs(rightSpeed) > 0.05)
-            rightMotor.set(ControlMode.PercentOutput, rightSpeed);
+            rightMotor.set(ControlMode.PercentOutput, -rightSpeed);
         else
             rightMotor.set(ControlMode.PercentOutput, 0);
 

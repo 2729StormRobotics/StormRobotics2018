@@ -54,12 +54,15 @@ public class ProfileFollower extends Command{
     @Override
     protected void execute() {
         super.execute();
+        System.err.println("Execute ProfileFollower.");
         double l = left.calculate(leftMotor.getSelectedSensorPosition(0));
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
         double gyro_heading = navx.getRawGyroZ();
         double desired_heading = Pathfinder.r2d(left.getHeading());
         double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
         double turn = 0.8 * (-1.0/80.0) * angleDifference;
+        System.out.println("Left: " + (l + turn));
+        System.out.println("Right: " + (r - turn));
         leftMotor.set(ControlMode.PercentOutput, l + turn);
         rightMotor.set(ControlMode.PercentOutput, r - turn);
     }

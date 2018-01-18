@@ -9,10 +9,7 @@ import AutoModes.Commands.PointTurn;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -29,6 +26,7 @@ public class Robot extends IterativeRobot {
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
+    public XboxController xboxDrive;
 
     private static final TalonSRX _leftMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_MAIN);
     private static final TalonSRX _left2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_2);
@@ -57,9 +55,8 @@ public class Robot extends IterativeRobot {
 
         //_rightMain.setInverted(true);
 
-        XboxController xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
-        forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
-        reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
+        xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
+
 
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
@@ -113,9 +110,12 @@ public class Robot extends IterativeRobot {
         Drives drive = new Drives(_leftMain, _rightMain);
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
-        double turn = turnSpeed;
+        turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
 
-        //drive.stormDrive(combinedSpeed, turn, true);
+        forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
+        reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
+
+        drive.stormDrive(combinedSpeed, turnSpeed, true);
 
     }
 
