@@ -8,10 +8,7 @@ import AutoModes.Commands.PointTurn;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -54,7 +51,7 @@ public class Robot extends IterativeRobot {
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
 
-        _rightMain.setInverted(true);
+        //_rightMain.setInverted(true);
 
         xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
 
@@ -110,12 +107,12 @@ public class Robot extends IterativeRobot {
         Drives drive = new Drives(_leftMain, _rightMain);
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
-        double turn = turnSpeed;
+        turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
 
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
-        drive.stormDrive(combinedSpeed, turn, true);
+        drive.stormDrive(combinedSpeed, turnSpeed, true);
 
     }
 
