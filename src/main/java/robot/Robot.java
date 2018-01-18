@@ -1,12 +1,9 @@
 package robot;
 
-
 import AutoModes.Commands.MoveForward;
-import AutoModes.Modes.LeftSwitch;
 import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
@@ -14,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 
 
 public class Robot extends IterativeRobot {
@@ -37,6 +33,7 @@ public class Robot extends IterativeRobot {
     public static final class Auto{
         public static final String MID_SWITCH = "Mid Switch";
         public static final String LEFT_SWITCH = "Left Side Switch";
+        public static final String LEFT_SCALE = "Left Side Scale";
         public static final String POINT_TURN = "Point Turn";
         public static final String MOVE_FORWARD = "Move Forward";
     }
@@ -61,7 +58,7 @@ public class Robot extends IterativeRobot {
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
-        autoChooser.addObject(Auto.LEFT_SWITCH, new LeftSwitch(_leftMain, _rightMain, ahrs));
+        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(_leftMain, _rightMain, ahrs));
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
         autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 1516524365, _leftMain, _rightMain)); //change distance
 
