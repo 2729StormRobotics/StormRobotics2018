@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PointTurn extends Command {
     AHRS ahrs;
@@ -62,7 +63,7 @@ public class PointTurn extends Command {
         super.initialize();
         ahrs.reset();
         System.err.println("initialize Point Turn");
-        turnController = new PIDController(0.01, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
+        turnController = new PIDController(0.008, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
         turnController.setInputRange(-180.0, 180.0);
         turnController.setOutputRange(-.2, 0.2);
         turnController.setAbsoluteTolerance(toleranceDegrees);
@@ -90,6 +91,8 @@ public class PointTurn extends Command {
         super.execute();
 
         System.err.println("Speed: " + turnSpeed + " Gyro: " + ahrs.getRawGyroZ() + " Get: " + turnController.get());
+
+        SmartDashboard.putNumber("Gyro Value: ", ahrs.getRawGyroZ());
 
         left.set(ControlMode.PercentOutput, turnSpeed);
         right.set(ControlMode.PercentOutput, turnSpeed);
