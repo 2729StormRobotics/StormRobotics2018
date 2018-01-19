@@ -93,6 +93,9 @@ public class MoveForward extends Command {
         left.set(ControlMode.PercentOutput, moveSpeed);
         right.set(ControlMode.PercentOutput, -moveSpeed);
 
+        SmartDashboard.putNumber("Encoder:", right.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Original dist:", right.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("expected dist:", right.getSelectedSensorPosition(0) - distance);
 
 
         System.err.println("execute Move Forward");
