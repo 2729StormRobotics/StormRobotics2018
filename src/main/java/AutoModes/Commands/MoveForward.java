@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import robot.Constants;
 
 public class MoveForward extends Command {
 
@@ -31,7 +32,7 @@ public class MoveForward extends Command {
         }
 
         public double pidGet() { // Encoder Position Robot @
-            return right.getSelectedSensorPosition(0);
+            return -right.getSelectedSensorPosition(0);
         }
     };
 
@@ -42,7 +43,7 @@ public class MoveForward extends Command {
         }
     };
 
-    static final double toleranceInches = 0.1;
+    static final double toleranceInches = 0.5 * Constants.TICKS_PER_REV;
 
     public MoveForward(AHRS _ahrs, double _dist, TalonSRX _left, TalonSRX _right) {
         ahrs = _ahrs;
@@ -63,24 +64,27 @@ public class MoveForward extends Command {
         ahrs.reset();
         System.err.println("initialize Move Forward");
         moveController = new PIDController(0.0095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
-        moveController.setInputRange(-1000, 1000);
-        moveController.setOutputRange(-.1, .1);
+        moveController.setInputRange(-1000 * Constants.TICKS_PER_REV, 1000 * Constants.TICKS_PER_REV);
+        moveController.setOutputRange(-.2, .2);
         moveController.setAbsoluteTolerance(toleranceInches);
         moveController.setContinuous(true);
-        moveController.setSetpoint(right.getSelectedSensorPosition(0) - distance);
+        moveController.setSetpoint((right.getSelectedSensorPosition(0) + distance * Constants.TICKS_PER_REV));
         moveController.enable();
         System.err.println("initialize Move Forward");
+        SmartDashboard.putNumber("expected dist:", moveController.getSetpoint());
     }
 
     @Override
     protected void end() {
         System.err.println("end Move Forward");
+        moveController.disable();
         super.end();
     }
 
     @Override
     protected void interrupted() {
         System.err.println("interrupted Move Forward");
+        moveController.disable();
         super.interrupted();
     }
 
@@ -93,9 +97,7 @@ public class MoveForward extends Command {
         left.set(ControlMode.PercentOutput, moveSpeed);
         right.set(ControlMode.PercentOutput, -moveSpeed);
 
-        SmartDashboard.putNumber("Encoder:", right.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Original dist:", right.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("expected dist:", right.getSelectedSensorPosition(0) - distance);
+        SmartDashboard.putNumber("Encoder:", -right.getSelectedSensorPosition(0));
 
 
         System.err.println("execute Move Forward");
