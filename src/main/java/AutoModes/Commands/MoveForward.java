@@ -67,7 +67,7 @@ public class MoveForward extends Command {
         moveController.setOutputRange(-1, 1);
         moveController.setAbsoluteTolerance(toleranceInches);
         moveController.setContinuous(true);
-        moveController.setSetpoint(distance);
+        moveController.setSetpoint(right.getSelectedSensorPosition(0) + distance);
         moveController.enable();
         System.err.println("initialize Move Forward");
     }
@@ -91,7 +91,7 @@ public class MoveForward extends Command {
         System.err.println("Speed: " + moveSpeed + " Gyro: " + ahrs.getRawGyroZ() + " Get: " + moveController.get());
 
         left.set(ControlMode.PercentOutput, moveSpeed);
-        right.set(ControlMode.PercentOutput, moveSpeed);
+        right.set(ControlMode.PercentOutput, -moveSpeed);
 
         System.err.println("execute Move Forward");
     }
