@@ -4,6 +4,7 @@ import AutoModes.Commands.MoveForward;
 import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
+import Subsystems.DriveTrain;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
@@ -24,11 +25,11 @@ public class Robot extends IterativeRobot {
     private double turnSpeed;
     public XboxController xboxDrive;
 
-    private static final TalonSRX _leftMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_MAIN);
-    private static final TalonSRX _left2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_2);
+    private static final TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
+    private static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
 
-    private static final TalonSRX _rightMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_RIGHT_MAIN);
-    private static final TalonSRX _right2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_RIGHT_2);
+    private static final TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
+    private static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
     public static final class Auto{
         public static final String MID_SWITCH = "Mid Switch";
@@ -52,7 +53,7 @@ public class Robot extends IterativeRobot {
 
         //_rightMain.setInverted(true);
 
-        xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
+        xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
 
 
         autoChooser = new SendableChooser<>();
@@ -104,7 +105,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
 
-        Drives drive = new Drives(_leftMain, _rightMain);
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
@@ -112,7 +112,7 @@ public class Robot extends IterativeRobot {
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
-        drive.stormDrive(combinedSpeed, turnSpeed, true);
+        DriveTrain.stormDrive(combinedSpeed, turnSpeed);
 
     }
 
