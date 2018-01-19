@@ -9,8 +9,6 @@ import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
-import robot.Drives;
-import robot.Robot;
 
 import java.io.File;
 
@@ -30,6 +28,12 @@ public class ProfileFollower extends Command{
         this.navx = navx;
         motionProfile = new File(csv);
         System.err.println("ProfileFollower: Set file.");
+        System.err.println("Can read \"" + csv + "\": " + motionProfile.canRead());
+        System.err.println("\"" + csv + "\" exists: " + motionProfile.exists());
+        System.err.println("\"" + csv + "\" is file: " + motionProfile.isFile());
+        System.err.println("\"" + csv + "\" is directory: " + motionProfile.isDirectory());
+        System.err.println("\"" + csv + "\" is hidden: " + motionProfile.isHidden());
+        System.err.println("\"" + csv + "\" is absolute: " + motionProfile.isAbsolute());
 
         leftMotor = _left;
         rightMotor = _right;
