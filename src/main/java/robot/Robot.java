@@ -25,11 +25,6 @@ public class Robot extends IterativeRobot {
     private double turnSpeed;
     public XboxController xboxDrive;
 
-    private static final TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
-    private static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
-
-    private static final TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
-    private static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
     public static final class Auto{
         public static final String MID_SWITCH = "Mid Switch";
@@ -48,8 +43,6 @@ public class Robot extends IterativeRobot {
         }
 
 
-        _left2.follow(_leftMain);
-        _right2.follow(_rightMain);
 
         //_rightMain.setInverted(true);
 
@@ -57,11 +50,11 @@ public class Robot extends IterativeRobot {
 
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
-        //autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(_leftMain, _rightMain, ahrs));
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 10, _leftMain, _rightMain)); //change distance
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
+        //autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 10, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
@@ -79,7 +72,7 @@ public class Robot extends IterativeRobot {
             autonomousCommand.start();
         } else {
             System.err.println("Auto not selected!");
-            Command c = new PointTurn(ahrs, 90, _leftMain, _rightMain);
+            Command c = new PointTurn(ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain);
             c.start();
         }
 
