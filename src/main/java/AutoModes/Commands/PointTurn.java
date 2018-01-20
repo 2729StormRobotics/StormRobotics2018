@@ -73,24 +73,28 @@ public class PointTurn extends Command {
 
     @Override
     protected void end() {
-        System.err.println("end Point Turn");
+        System.err.println("end Move Forward");
+        turnController.disable();
         super.end();
     }
 
     @Override
     protected void interrupted() {
-        System.err.println("interrupted Point Turn");
+        System.err.println("interrupted Move Forward");
+        turnController.disable();
         super.interrupted();
-        super.execute();
+    }
 
-        System.err.println("Speed: " + turnSpeed + " Gyro: " + ahrs.getRawGyroZ() + " Get: " + turnController.get());
-        SmartDashboard.putNumber("Gyro Value: ", ahrs.getRawGyroZ());
+    @Override
+    protected void execute() {
+        super.execute();
 
         DriveTrain._leftMain.set(ControlMode.PercentOutput, turnSpeed);
         DriveTrain._rightMain.set(ControlMode.PercentOutput, turnSpeed);
 
         System.err.println("execute Point Turn");
     }
+
 
     @Override
     protected boolean isFinished() {
