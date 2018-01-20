@@ -10,8 +10,8 @@ public class LeftScale extends CommandGroup {
 
     public LeftScale(TalonSRX left, TalonSRX right, AHRS navx) {
         System.err.println("LeftScale.");
-        //addSequential(new ProfileFollower(left, right, navx, "/home/lvuser/MotionProfiles/LeftScale/_left.csv"));
-        addSequential(new ProfileFollower(left, right, navx, Robot.traj));
+        addSequential(new ProfileFollower(left, right, navx, "/home/lvuser/MotionProfiles/LeftScale/_left.csv"));
+        //addSequential(new ProfileFollower(left, right, navx, Robot.traj));
     }
 
 }

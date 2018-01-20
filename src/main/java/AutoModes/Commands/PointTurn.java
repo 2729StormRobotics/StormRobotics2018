@@ -1,5 +1,6 @@
 package AutoModes.Commands;
 
+import Subsystems.DriveTrain;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -10,10 +11,10 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import javafx.scene.input.DragEvent;
 
 public class PointTurn extends Command {
     AHRS ahrs;
-    TalonSRX left, right;
     double turnSpeed, targetAngle;
     PIDController turnController;
 
@@ -44,10 +45,8 @@ public class PointTurn extends Command {
 
     static final double toleranceDegrees = 2.0;
 
-    public PointTurn(AHRS _ahrs, double angle, TalonSRX _left, TalonSRX _right) {
+    public PointTurn(AHRS _ahrs, double angle) {
         ahrs = _ahrs;
-        left = _left;
-        right = _right;
         targetAngle = angle;
     }
 
@@ -87,8 +86,8 @@ public class PointTurn extends Command {
         System.err.println("Speed: " + turnSpeed + " Gyro: " + ahrs.getRawGyroZ() + " Get: " + turnController.get());
         SmartDashboard.putNumber("Gyro Value: ", ahrs.getRawGyroZ());
 
-        left.set(ControlMode.PercentOutput, turnSpeed);
-        right.set(ControlMode.PercentOutput, turnSpeed);
+        DriveTrain._leftMain.set(ControlMode.PercentOutput, turnSpeed);
+        DriveTrain._rightMain.set(ControlMode.PercentOutput, turnSpeed);
 
         System.err.println("execute Point Turn");
     }

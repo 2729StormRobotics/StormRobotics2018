@@ -7,6 +7,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
 
@@ -14,7 +15,7 @@ import java.io.File;
 
 public class ProfileFollower extends Command{
 
-    File motionProfile;
+    File traj;
     TalonSRX leftMotor, rightMotor;
     EncoderFollower left;
     EncoderFollower right;
@@ -24,16 +25,29 @@ public class ProfileFollower extends Command{
 
 
     public ProfileFollower(TalonSRX _left, TalonSRX _right, AHRS navx, String csv){
+
+        Waypoint[] points = new Waypoint[] {
+                new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+                new Waypoint(-2, -2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
+                new Waypoint(0, 0, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
+        };
+
+        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
+        Trajectory trajectory = Pathfinder.generate(points, config);
+
+        traj = new File("Trajectory.traj");
+        Pathfinder.writeToFile(traj, trajectory);
+
         System.err.println("ProfileFollower.");
         this.navx = navx;
-        motionProfile = new File(csv);
-        System.err.println("ProfileFollower: Set file.");
-        System.err.println("Can read \"" + csv + "\": " + motionProfile.canRead());
-        System.err.println("\"" + csv + "\" exists: " + motionProfile.exists());
-        System.err.println("\"" + csv + "\" is file: " + motionProfile.isFile());
-        System.err.println("\"" + csv + "\" is directory: " + motionProfile.isDirectory());
-        System.err.println("\"" + csv + "\" is hidden: " + motionProfile.isHidden());
-        System.err.println("\"" + csv + "\" is absolute: " + motionProfile.isAbsolute());
+//        motionProfile = new File(csv);
+//        System.err.println("ProfileFollower: Set file.");
+//        System.err.println("Can read \"" + csv + "\": " + motionProfile.canRead());
+//        System.err.println("\"" + csv + "\" exists: " + motionProfile.exists());
+//        System.err.println("\"" + csv + "\" is file: " + motionProfile.isFile());
+//        System.err.println("\"" + csv + "\" is directory: " + motionProfile.isDirectory());
+//        System.err.println("\"" + csv + "\" is hidden: " + motionProfile.isHidden());
+//        System.err.println("\"" + csv + "\" is absolute: " + motionProfile.isAbsolute());
 
         leftMotor = _left;
         rightMotor = _right;
@@ -42,8 +56,8 @@ public class ProfileFollower extends Command{
         //Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
         System.err.println("ProfileFollower: Config.");
         try {
-            System.err.println("ProfileFollower: Attempting to read \"" + csv + "\". (\"" + motionProfile.getAbsolutePath() + "\")");
-            Trajectory trajectory = Pathfinder.readFromCSV(motionProfile);
+            //System.err.println("ProfileFollower: Attempting to read \"" + csv + "\". (\"" + motionProfile.getAbsolutePath() + "\")");
+            //Trajectory trajectory = Pathfinder.readFromCSV(motionProfile);
             System.err.println("ProfileFollower: Loaded \"" + csv + "\" motion profile.");
             TankModifier modifier = new TankModifier(trajectory).modify(0.5);
             System.err.println("ProfileFollower: Modified trajectory.");

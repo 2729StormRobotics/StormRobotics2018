@@ -67,10 +67,10 @@ public class Robot extends IterativeRobot {
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
         autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90));
         autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 10, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
@@ -89,8 +89,7 @@ public class Robot extends IterativeRobot {
             autonomousCommand.start();
         } else {
             System.err.println("Auto not selected!");
-            Command c = new PointTurn(ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain);
-            c.start();
+            driveTrain.pointTurn(90);
         }
 
 
