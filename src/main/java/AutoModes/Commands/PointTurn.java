@@ -61,7 +61,7 @@ public class PointTurn extends Command {
     protected void initialize() {
         ahrs.reset();
         System.err.println("initialize Point Turn");
-        turnController = new PIDController(0.0095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
+        turnController = new PIDController(0.00095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
         turnController.setInputRange(-180.0, 180.0);
         turnController.setOutputRange(-.4, 0.4);
         turnController.setAbsoluteTolerance(toleranceDegrees);

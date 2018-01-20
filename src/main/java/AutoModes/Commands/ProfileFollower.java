@@ -104,7 +104,7 @@ public class ProfileFollower extends Command{
         System.out.println("Left: " + (l + turn));
         System.out.println("Right: " + (r - turn));
         leftMotor.set(ControlMode.PercentOutput, l + turn);
-        rightMotor.set(ControlMode.PercentOutput, r - turn);
+        rightMotor.set(ControlMode.PercentOutput, -(r - turn));
     }
 
     @Override

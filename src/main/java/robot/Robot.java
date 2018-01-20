@@ -73,9 +73,9 @@ public class Robot extends IterativeRobot {
         autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, DriveTrain.ahrs));
         autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
-        //autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
+        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(DriveTrain.ahrs, 72, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(DriveTrain.ahrs, 150, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 

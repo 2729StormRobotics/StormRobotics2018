@@ -15,12 +15,12 @@ public class MoveForward extends Command {
 
     private static final double WHEEL_SIZE = 4.0 * 3.14;
     private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 50;
-
+    private static final double TOLERANCE_DEGREES = 1.0;
 
     AHRS ahrs;
     TalonSRX left, right;
-    double moveLeftSpeed, moveRightSpeed, distance;
-    PIDController moveLeftController, moveRightController;
+    double moveLeftSpeed, moveRightSpeed, turnSpeed, distance, angle;
+    PIDController moveLeftController, moveRightController, angleController;
 
     PIDSource leftSource = new PIDSource() {
         PIDSourceType pidST;
@@ -58,11 +58,36 @@ public class MoveForward extends Command {
         }
     };
 
+    PIDSource angleSource = new PIDSource() {
+        PIDSourceType pidST;
+        @Override
+        public void setPIDSourceType(PIDSourceType pidSource) {
+
+            pidST = pidSource;
+        }
+
+        @Override
+        public PIDSourceType getPIDSourceType() {
+            return PIDSourceType.kDisplacement;
+        }
+
+        public double pidGet() { // Angle Robot at
+            SmartDashboard.putNumber("Angle:", ahrs.getYaw());
+            return ahrs.getYaw();
+        }
+    };
+
+    PIDOutput motorSpeedWrite = new PIDOutput() {
+        public void pidWrite(double a) {
+            //System.out.println("PID output: " + a);
+            turnSpeed = a;  //change to -a later when .setInverted works
+        }
+    };
+
     PIDOutput motorLeftSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             moveLeftSpeed = a;
-            SmartDashboard.putNumber("MoveForward Output:", a);
         }
     };
 
@@ -70,7 +95,6 @@ public class MoveForward extends Command {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             moveRightSpeed = a;
-            SmartDashboard.putNumber("MoveForward Output:", a);
         }
     };
 
@@ -101,6 +125,8 @@ public class MoveForward extends Command {
         ahrs.reset();
         System.err.println("initialize Move Forward");
 
+        angle = ahrs.getYaw();
+
         moveLeftController = new PIDController(0.0002, 0.0, 0.0002, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveLeftController.setOutputRange(-.5, .5);
@@ -116,6 +142,14 @@ public class MoveForward extends Command {
         moveRightController.setContinuous(true);
         moveRightController.setSetpoint(((right.getSelectedSensorPosition(0)) + targetTicks));
         moveRightController.enable();
+
+        angleController = new PIDController(0.005, 0.00, 0.5, 0.00, angleSource, motorSpeedWrite, 0.02);
+        angleController.setInputRange(-180.0, 180.0);
+        angleController.setOutputRange(-.5, 0.5);
+        angleController.setAbsoluteTolerance(TOLERANCE_DEGREES);
+        angleController.setContinuous(true);
+        angleController.setSetpoint(angle);
+        angleController.enable();
     }
 
     @Override
@@ -138,11 +172,21 @@ public class MoveForward extends Command {
     protected void execute() {
         super.execute();
 
+        if(turnSpeed > 0) {
+            moveLeftSpeed += turnSpeed;
+        } else {
+            moveRightSpeed += turnSpeed;
+        }
+
         left.set(ControlMode.PercentOutput, moveLeftSpeed);
         right.set(ControlMode.PercentOutput, moveRightSpeed);
 
         SmartDashboard.putNumber("Left Encoder:", left.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Right Encoder:", right.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("MoveForward moveLeftSpeed:", moveLeftSpeed);
+        SmartDashboard.putNumber("MoveForward moveRightSpeed:", moveRightSpeed);
+        SmartDashboard.putNumber("Turn Speed: ", turnSpeed);
+        SmartDashboard.putNumber("Angle:", ahrs.getYaw());
 
 
         System.err.println("execute Move Forward");
