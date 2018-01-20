@@ -68,12 +68,17 @@ public class Robot extends IterativeRobot {
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, DriveTrain.ahrs));
-        autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90));
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
+<<<<<<< HEAD
+        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90));
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 10, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
+=======
         //autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(DriveTrain.ahrs, 72, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 3, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
+>>>>>>> c6bc2934667590a7339f840b4e3321fb5b763c48
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
