@@ -51,6 +51,7 @@ public class Robot extends IterativeRobot {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
 
+        /*
         Waypoint[] points = new Waypoint[] {
                 new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
                 new Waypoint(-2, -2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
@@ -62,16 +63,16 @@ public class Robot extends IterativeRobot {
 
         traj = new File("Trajectory.traj");
         Pathfinder.writeToFile(traj, trajectory);
-
+        */
 
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
 
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
-        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
+        //autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 10, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 3, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 

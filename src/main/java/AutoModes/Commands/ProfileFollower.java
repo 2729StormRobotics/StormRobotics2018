@@ -23,10 +23,10 @@ public class ProfileFollower extends Command{
     AHRS navx;
 
 
-    public ProfileFollower(TalonSRX _left, TalonSRX _right, AHRS navx, String csv){
+    public ProfileFollower(TalonSRX _left, TalonSRX _right, AHRS navx, File csv){
         System.err.println("ProfileFollower.");
         this.navx = navx;
-        motionProfile = new File(csv);
+        motionProfile = csv;
         System.err.println("ProfileFollower: Set file.");
         System.err.println("Can read \"" + csv + "\": " + motionProfile.canRead());
         System.err.println("\"" + csv + "\" exists: " + motionProfile.exists());
