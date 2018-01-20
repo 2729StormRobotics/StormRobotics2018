@@ -2,6 +2,9 @@ package Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SPI;
 import robot.Constants;
 
 public class DriveTrain {
@@ -12,7 +15,17 @@ public class DriveTrain {
     public static final TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
     public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
-    public DriveTrain(){
+    public static AHRS ahrs;
+
+    public DriveTrain() {
+        try {
+            ahrs = new AHRS(SPI.Port.kMXP);
+        } catch (RuntimeException ex ) {
+            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+        }
+
+        _rightMain.setInverted(true);
+        _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
     }
@@ -45,7 +58,7 @@ public class DriveTrain {
             _leftMain.set(ControlMode.PercentOutput, 0);
 
         if(Math.abs(rightSpeed) > 0.05)
-            _rightMain.set(ControlMode.PercentOutput, -rightSpeed);
+            _rightMain.set(ControlMode.PercentOutput, rightSpeed);
         else
             _rightMain.set(ControlMode.PercentOutput, 0);
 

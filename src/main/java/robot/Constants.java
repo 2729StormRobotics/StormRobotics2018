@@ -10,6 +10,6 @@ public class Constants {
     public static final int PORT_XBOX_DRIVE                     = 0;
     public static final int PORT_XBOX_WEAPONS                   = 1;
 
-    public static final int TICKS_PER_REV                       = 1000;
+    public static final int TICKS_PER_REV                       = 1024;
 
 }

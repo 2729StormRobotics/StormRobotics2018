@@ -13,16 +13,19 @@ import robot.Constants;
 
 public class MoveForward extends Command {
 
+    private static final double WHEEL_SIZE = 4.0 * 3.14;
+    private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 50;
+
+
     AHRS ahrs;
     TalonSRX left, right;
-    double moveSpeed, distance;
-    PIDController moveController;
+    double moveLeftSpeed, moveRightSpeed, distance;
+    PIDController moveLeftController, moveRightController;
 
-    PIDSource angleSource = new PIDSource() {
+    PIDSource leftSource = new PIDSource() {
         PIDSourceType pidST;
         @Override
         public void setPIDSourceType(PIDSourceType pidSource) {
-
             pidST = pidSource;
         }
 
@@ -32,29 +35,57 @@ public class MoveForward extends Command {
         }
 
         public double pidGet() { // Encoder Position Robot @
-            SmartDashboard.putNumber("Encoder:", -right.getSelectedSensorPosition(0));
-            return -right.getSelectedSensorPosition(0);
+            return left.getSelectedSensorPosition(0);
 
         }
     };
 
-    PIDOutput motorSpeedWrite = new PIDOutput() {
+    PIDSource rightSource = new PIDSource() {
+        PIDSourceType pidST;
+        @Override
+        public void setPIDSourceType(PIDSourceType pidSource) {
+            pidST = pidSource;
+        }
+
+        @Override
+        public PIDSourceType getPIDSourceType() {
+            return PIDSourceType.kDisplacement;
+        }
+
+        public double pidGet() { // Encoder Position Robot @
+            return right.getSelectedSensorPosition(0);
+
+        }
+    };
+
+    PIDOutput motorLeftSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
-            moveSpeed = a;  //change to -a later when .setInverted works
-            left.set(ControlMode.PercentOutput, moveSpeed);
-            right.set(ControlMode.PercentOutput, -moveSpeed);
-            SmartDashboard.putNumber("Encoder:", -right.getSelectedSensorPosition(0));
+            moveLeftSpeed = a;
+            SmartDashboard.putNumber("MoveForward Output:", a);
         }
     };
 
-    static final double toleranceInches = 5.0 * Constants.TICKS_PER_REV;
+    PIDOutput motorRightSpeedWrite = new PIDOutput() {
+        public void pidWrite(double a) {
+            //System.out.println("PID output: " + a);
+            moveRightSpeed = a;
+            SmartDashboard.putNumber("MoveForward Output:", a);
+        }
+    };
 
     public MoveForward(AHRS _ahrs, double _dist, TalonSRX _left, TalonSRX _right) {
         ahrs = _ahrs;
         left = _left;
         right = _right;
         distance = _dist;
+    }
+
+    private double ticksToInches(double ticks) {
+        return (ticks / Constants.TICKS_PER_REV) * WHEEL_SIZE;
+    }
+    private double inchesToTicks(double inches) {
+        return (inches / WHEEL_SIZE) * Constants.TICKS_PER_REV;
     }
 
     @Override
@@ -66,31 +97,40 @@ public class MoveForward extends Command {
     @Override
     protected void initialize() {
         super.initialize();
+        double targetTicks = inchesToTicks(distance);
         ahrs.reset();
         System.err.println("initialize Move Forward");
-        moveController = new PIDController(0.0095, 0.00, 0.1, 0.00, angleSource, motorSpeedWrite, 0.02);
-        moveController.setInputRange(-1000 * Constants.TICKS_PER_REV, 1000 * Constants.TICKS_PER_REV);
-        moveController.setOutputRange(-.2, .2);
-        moveController.setAbsoluteTolerance(toleranceInches);
-        moveController.setContinuous(true);
-        moveController.setSetpoint(((-right.getSelectedSensorPosition(0)) + distance * Constants.TICKS_PER_REV));  //fix if given negative val
-        moveController.enable();
-        moveController.setAbsoluteTolerance(toleranceInches);
-        System.err.println("initialize Move Forward");
-        SmartDashboard.putNumber("expected dist:", moveController.getSetpoint());
+
+        moveLeftController = new PIDController(0.0002, 0.0, 0.0002, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        moveLeftController.setOutputRange(-.5, .5);
+        moveLeftController.setAbsoluteTolerance(TOLERANCE_TICKS);
+        moveLeftController.setContinuous(true);
+        moveLeftController.setSetpoint(((left.getSelectedSensorPosition(0)) + targetTicks));
+        moveLeftController.enable();
+
+        moveRightController = new PIDController(0.0002, 0.0, 0.0002, 0.00, rightSource, motorRightSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveRightController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        moveRightController.setOutputRange(-.5, .5);
+        moveRightController.setAbsoluteTolerance(TOLERANCE_TICKS);
+        moveRightController.setContinuous(true);
+        moveRightController.setSetpoint(((right.getSelectedSensorPosition(0)) + targetTicks));
+        moveRightController.enable();
     }
 
     @Override
     protected void end() {
         System.err.println("end Move Forward");
-        moveController.disable();
+        moveLeftController.disable();
+        moveRightController.disable();
         super.end();
     }
 
     @Override
     protected void interrupted() {
         System.err.println("interrupted Move Forward");
-        moveController.disable();
+        moveLeftController.disable();
+        moveRightController.disable();
         super.interrupted();
     }
 
@@ -98,12 +138,11 @@ public class MoveForward extends Command {
     protected void execute() {
         super.execute();
 
-        System.err.println("Speed: " + moveSpeed + " Get: " + moveController.get());
+        left.set(ControlMode.PercentOutput, moveLeftSpeed);
+        right.set(ControlMode.PercentOutput, moveRightSpeed);
 
-        left.set(ControlMode.PercentOutput, moveSpeed);
-        right.set(ControlMode.PercentOutput, -moveSpeed);
-
-        SmartDashboard.putNumber("Encoder:", -right.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Left Encoder:", left.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Right Encoder:", right.getSelectedSensorPosition(0));
 
 
         System.err.println("execute Move Forward");
@@ -113,13 +152,26 @@ public class MoveForward extends Command {
     @Override
     protected boolean isFinished() {
 
-        double current = -right.getSelectedSensorPosition(0);
-        double intended = current + (distance * Constants.TICKS_PER_REV);
-
-        if(Math.abs(Math.abs(current) - Math.abs(intended)) < toleranceInches) {
+        /*
+        if(Math.abs(Math.abs(current) - Math.abs(intended)) < TOLERANCE_TICKS) {
             moveController.disable();
+            left.set(ControlMode.PercentOutput, 0);
+            right.set(ControlMode.PercentOutput, 0);
             return true;
         }
+        */
+
+
+
+        if((moveLeftController.get() >= -0.05 && moveLeftController.get() <= 0.05 && moveLeftController.onTarget()) && (moveRightController.get() >= -0.05 &&
+                moveRightController.get() <= 0.05 && moveRightController.onTarget())) {
+            moveLeftController.disable();
+            moveRightController.disable();
+            return true;
+        }
+
+
+
 
         return false;
     }

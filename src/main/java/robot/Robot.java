@@ -4,6 +4,7 @@ import AutoModes.Commands.MoveForward;
 import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
+import AutoModes.Modes.RightSwitch;
 import Subsystems.DriveTrain;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -20,8 +21,6 @@ import java.io.File;
 
 
 public class Robot extends IterativeRobot {
-    private AHRS ahrs;
-
     public static File traj;
 
     public DriveTrain driveTrain = new DriveTrain();
@@ -39,17 +38,11 @@ public class Robot extends IterativeRobot {
         public static final String LEFT_SCALE = "Left Side Scale";
         public static final String POINT_TURN = "Point Turn";
         public static final String MOVE_FORWARD = "Move Forward";
+        public static final String RIGHT_SWITCH = "Right Switch";
     }
 
     @Override
     public void robotInit() {
-
-
-        try {
-            ahrs = new AHRS(SPI.Port.kMXP);
-        } catch (RuntimeException ex ) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
 
         /*
         Waypoint[] points = new Waypoint[] {
@@ -68,11 +61,12 @@ public class Robot extends IterativeRobot {
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, DriveTrain.ahrs));
+        autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
         //autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 3, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(DriveTrain.ahrs, 72, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 
@@ -90,7 +84,7 @@ public class Robot extends IterativeRobot {
             autonomousCommand.start();
         } else {
             System.err.println("Auto not selected!");
-            Command c = new PointTurn(ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain);
+            Command c = new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain);
             c.start();
         }
 

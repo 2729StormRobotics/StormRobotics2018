@@ -59,29 +59,28 @@ public class PointTurn extends Command {
 
     @Override
     protected void initialize() {
-        turnController = new PIDController(0.01, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite);
         ahrs.reset();
         System.err.println("initialize Point Turn");
         turnController = new PIDController(0.0095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
         turnController.setInputRange(-180.0, 180.0);
-        turnController.setOutputRange(-.2, 0.2);
+        turnController.setOutputRange(-.4, 0.4);
         turnController.setAbsoluteTolerance(toleranceDegrees);
         turnController.setContinuous(true);
-        turnController.setSetpoint(targetAngle);
+        turnController.setSetpoint(targetAngle + ahrs.getYaw());
         turnController.enable();
         System.err.println("initialize Point Turn");
     }
 
     @Override
     protected void end() {
-        System.err.println("end Move Forward");
+        System.err.println("end Point Turn");
         turnController.disable();
         super.end();
     }
 
     @Override
     protected void interrupted() {
-        System.err.println("interrupted Move Forward");
+        System.err.println("interrupted Point Turn");
         turnController.disable();
         super.interrupted();
     }
@@ -91,7 +90,7 @@ public class PointTurn extends Command {
         super.execute();
 
         left.set(ControlMode.PercentOutput, turnSpeed);
-        right.set(ControlMode.PercentOutput, turnSpeed);
+        right.set(ControlMode.PercentOutput, -turnSpeed);
 
         System.err.println("execute Point Turn");
     }
@@ -99,13 +98,11 @@ public class PointTurn extends Command {
 
     @Override
     protected boolean isFinished() {
-        return false;
-        /*
-        if (Math.abs(turnController.getError()) < toleranceDegrees){
+        if (turnController.get() >= -0.01 && turnController.get() <= 0.01 && turnController.onTarget()) {
             turnController.disable();
             return true;
         }
         return false;
-        */
+
     }
 }
