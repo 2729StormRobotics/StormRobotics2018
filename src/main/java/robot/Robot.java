@@ -4,6 +4,7 @@ import AutoModes.Commands.MoveForward;
 import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
+import AutoModes.Modes.RightSwitch;
 import Subsystems.DriveTrain;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
         public static final String MID_SWITCH = "Mid Switch";
         public static final String LEFT_SWITCH = "Left Side Switch";
         public static final String LEFT_SCALE = "Left Side Scale";
+        public static final String RIGHT_SWITCH = "Right Switch";
         public static final String POINT_TURN = "Point Turn";
         public static final String MOVE_FORWARD = "Move Forward";
     }
