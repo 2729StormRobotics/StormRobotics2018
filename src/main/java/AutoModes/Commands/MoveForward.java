@@ -15,7 +15,7 @@ public class MoveForward extends Command {
 
     private static final double WHEEL_SIZE = 4.0 * 3.14;
     private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 50;
-    private static final double TOLERANCE_DEGREES = 1.0;
+    private static final double TOLERANCE_DEGREES = 0.0;
 
     AHRS ahrs;
     TalonSRX left, right;
@@ -148,7 +148,7 @@ public class MoveForward extends Command {
         angleController.setOutputRange(-.5, 0.5);
         angleController.setAbsoluteTolerance(TOLERANCE_DEGREES);
         angleController.setContinuous(true);
-        angleController.setSetpoint(angle);
+        angleController.setSetpoint(angle + 0.0000000000000001);
         angleController.enable();
     }
 
@@ -211,6 +211,7 @@ public class MoveForward extends Command {
                 moveRightController.get() <= 0.05 && moveRightController.onTarget())) {
             moveLeftController.disable();
             moveRightController.disable();
+            angleController.disable();
             return true;
         }
 
