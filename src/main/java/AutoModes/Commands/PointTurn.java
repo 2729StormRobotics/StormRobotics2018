@@ -1,5 +1,7 @@
 package AutoModes.Commands;
 
+import Subsystems.DriveTrain;
+import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -12,7 +14,6 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PointTurn extends Command {
-    AHRS ahrs;
     TalonSRX left, right;
     double turnSpeed, targetAngle;
     PIDController turnController;
@@ -31,21 +32,22 @@ public class PointTurn extends Command {
         }
 
         public double pidGet() { // Angle Robot at
-            return ahrs.getYaw();
+            SmartDashboard.putBoolean("NavXDemo Connected", NavX.getNavx().isConnected());
+            return NavX.getNavx().getYaw();
         }
     };
 
     PIDOutput motorSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
+
             turnSpeed = a;  //change to -a later when .setInverted works
         }
     };
 
     static final double toleranceDegrees = 2.0;
 
-    public PointTurn(AHRS _ahrs, double angle, TalonSRX _left, TalonSRX _right) {
-        ahrs = _ahrs;
+    public PointTurn(double angle, TalonSRX _left, TalonSRX _right) {
         left = _left;
         right = _right;
         targetAngle = angle;
@@ -59,14 +61,14 @@ public class PointTurn extends Command {
 
     @Override
     protected void initialize() {
-        ahrs.reset();
+        NavX.getNavx().reset();
         System.err.println("initialize Point Turn");
         turnController = new PIDController(0.00095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
         turnController.setInputRange(-180.0, 180.0);
         turnController.setOutputRange(-.4, 0.4);
         turnController.setAbsoluteTolerance(toleranceDegrees);
         turnController.setContinuous(true);
-        turnController.setSetpoint(targetAngle + ahrs.getYaw());
+        turnController.setSetpoint(targetAngle + NavX.getNavx().getYaw());
         turnController.enable();
         System.err.println("initialize Point Turn");
     }

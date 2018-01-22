@@ -1,5 +1,6 @@
 package AutoModes.Commands;
 
+import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -21,11 +22,10 @@ public class ProfileFollower extends Command{
     EncoderFollower right;
     Trajectory leftTra;
     Trajectory rightTra;
-    AHRS navx;
     File motionProfile;
 
 
-    public ProfileFollower(TalonSRX _left, TalonSRX _right, AHRS navx, String csv){
+    public ProfileFollower(TalonSRX _left, TalonSRX _right, String csv){
 
         Waypoint[] points = new Waypoint[] {
                 new Waypoint(0, 0, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
@@ -40,7 +40,6 @@ public class ProfileFollower extends Command{
 //        traj = new File("Trajectory.traj");
 //        Pathfinder.writeToFile(traj, trajectory);
 
-        this.navx = navx;
 //        motionProfile = new File(csv);
 
 
@@ -88,7 +87,7 @@ public class ProfileFollower extends Command{
         System.err.println("Execute ProfileFollower.");
         double l = left.calculate(leftMotor.getSelectedSensorPosition(0));
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
-        double gyro_heading = navx.getRawGyroZ();
+        double gyro_heading = NavX.getNavx().getRawGyroZ();
         double desired_heading = Pathfinder.r2d(left.getHeading());
         double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
         double turn = 0.8 * (-1.0/80.0) * angleDifference;

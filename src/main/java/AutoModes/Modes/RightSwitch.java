@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class RightSwitch extends CommandGroup {
 
     public RightSwitch() {
-        addSequential(new MoveForward(DriveTrain.ahrs, 196.99, DriveTrain._leftMain, DriveTrain._rightMain));
-        addSequential(new PointTurn(DriveTrain.ahrs, -90, DriveTrain._leftMain,DriveTrain._rightMain));
-        addSequential(new MoveForward(DriveTrain.ahrs, 20.6, DriveTrain._leftMain, DriveTrain._rightMain));
+        addSequential(new MoveForward(196.99, DriveTrain._leftMain, DriveTrain._rightMain));
+        addSequential(new PointTurn(-90, DriveTrain._leftMain,DriveTrain._rightMain));
+        addSequential(new MoveForward(20.6, DriveTrain._leftMain, DriveTrain._rightMain));
     }
 }
