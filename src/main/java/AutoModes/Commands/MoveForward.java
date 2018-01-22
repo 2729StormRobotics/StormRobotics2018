@@ -148,8 +148,10 @@ public class MoveForward extends Command {
         angleController.setOutputRange(-.5, 0.5);
         angleController.setAbsoluteTolerance(TOLERANCE_DEGREES);
         angleController.setContinuous(true);
-        angleController.setSetpoint(angle + 0.0000000000000001);
+        angleController.setSetpoint(angle + 0.1);
         angleController.enable();
+        System.err.println("angleController enabled");
+        System.err.println("Starting Angle: " + angle + ", Setpoint: " + (angle + 0.1));
     }
 
     @Override
@@ -172,10 +174,15 @@ public class MoveForward extends Command {
     protected void execute() {
         super.execute();
 
+        if(!angleController.isEnabled()) {
+            angleController.enable();
+            System.err.println("angleController enabled again");
+        }
+
         if(turnSpeed > 0) {
-            moveLeftSpeed += turnSpeed;
+            moveLeftSpeed += Math.abs(turnSpeed);
         } else {
-            moveRightSpeed += turnSpeed;
+            moveRightSpeed += Math.abs(turnSpeed);
         }
 
         left.set(ControlMode.PercentOutput, moveLeftSpeed);
@@ -188,8 +195,6 @@ public class MoveForward extends Command {
         SmartDashboard.putNumber("Turn Speed: ", turnSpeed);
         SmartDashboard.putNumber("Angle:", ahrs.getYaw());
 
-
-        System.err.println("execute Move Forward");
     }
 
 
@@ -211,7 +216,7 @@ public class MoveForward extends Command {
                 moveRightController.get() <= 0.05 && moveRightController.onTarget())) {
             moveLeftController.disable();
             moveRightController.disable();
-            angleController.disable();
+            //angleController.disable();
             return true;
         }
 
