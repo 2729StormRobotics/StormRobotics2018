@@ -42,7 +42,7 @@ public class ProfileFollower extends Command{
 
         System.err.println("ProfileFollower.");
         this.navx = navx;
-        motionProfile = new File(csv);
+//        motionProfile = new File(csv);
         System.err.println("ProfileFollower: Set file.");
         System.err.println("Can read \"" + csv + "\": " + motionProfile.canRead());
         System.err.println("\"" + csv + "\" exists: " + motionProfile.exists());
