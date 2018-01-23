@@ -15,15 +15,7 @@ public class DriveTrain {
     public static final TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
     public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
-    public static AHRS ahrs;
-
     public DriveTrain() {
-        try {
-            ahrs = new AHRS(SPI.Port.kMXP);
-        } catch (RuntimeException ex ) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
-
         _rightMain.setInverted(true);
         _right2.setInverted(true);
         _left2.follow(_leftMain);

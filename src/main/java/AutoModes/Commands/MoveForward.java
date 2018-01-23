@@ -1,5 +1,7 @@
 package AutoModes.Commands;
 
+import Subsystems.DriveTrain;
+import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -17,7 +19,6 @@ public class MoveForward extends Command {
     private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 50;
     private static final double TOLERANCE_DEGREES = 0.01;
 
-    AHRS ahrs;
     TalonSRX left, right;
     double moveLeftSpeed, moveRightSpeed, turnSpeed, distance, angle;
     PIDController moveLeftController, moveRightController, angleController;
@@ -71,12 +72,12 @@ public class MoveForward extends Command {
         }
 
         public double pidGet() { // Angle Robot at
-            SmartDashboard.putBoolean("NavX Connected", ahrs.isConnected());
-            double a = ahrs.getYaw();
+            SmartDashboard.putBoolean("NavXDemo Connected", NavX.getNavx().isConnected());
+            double a = NavX.getNavx().getYaw();
             SmartDashboard.putNumber("Angle", a);
             SmartDashboard.putNumber("Yaw", a);
-            SmartDashboard.putNumber("Pitch", ahrs.getPitch());
-            SmartDashboard.putNumber("Roll", ahrs.getRoll());
+            SmartDashboard.putNumber("Pitch", NavX.getNavx().getPitch());
+            SmartDashboard.putNumber("Roll", NavX.getNavx().getRoll());
             SmartDashboard.updateValues();
             return a;
         }
@@ -106,8 +107,7 @@ public class MoveForward extends Command {
         }
     };
 
-    public MoveForward(AHRS _ahrs, double _dist, TalonSRX _left, TalonSRX _right) {
-        ahrs = _ahrs;
+    public MoveForward(double _dist, TalonSRX _left, TalonSRX _right) {
         left = _left;
         right = _right;
         distance = _dist;
@@ -130,11 +130,11 @@ public class MoveForward extends Command {
     protected void initialize() {
         super.initialize();
         double targetTicks = inchesToTicks(distance);
-        ahrs.reset();
+        NavX.getNavx().reset();
         System.err.println("initialize Move Forward");
 
 
-        angle = ahrs.getYaw();
+        angle = NavX.getNavx().getYaw();
 
         moveLeftController = new PIDController(0.0002, 0.0, 0.0002, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
@@ -152,9 +152,7 @@ public class MoveForward extends Command {
         moveRightController.setSetpoint(((right.getSelectedSensorPosition(0)) + targetTicks));
         moveRightController.enable();
 
-        // 0.005
-        // 0.5
-        angleController = new PIDController(1.0, 0.00, 0.5, 0.00, angleSource, motorSpeedWrite, 0.02);
+        angleController = new PIDController(0.005, 0.00, 0.5, 0.00, angleSource, motorSpeedWrite, 0.02);
         angleController.setInputRange(-180.0, 180.0);
         angleController.setOutputRange(-0.5, 0.5);
         angleController.setAbsoluteTolerance(TOLERANCE_DEGREES);
@@ -204,7 +202,7 @@ public class MoveForward extends Command {
         SmartDashboard.putNumber("MoveForward moveLeftSpeed", moveLeftSpeed);
         SmartDashboard.putNumber("MoveForward moveRightSpeed", moveRightSpeed);
         SmartDashboard.putNumber("Turn Speed", turnSpeed);
-        SmartDashboard.putNumber("Angle", ahrs.getYaw());
+        SmartDashboard.putNumber("Angle", NavX.getNavx().getYaw());
 
         SmartDashboard.putBoolean("Left PID Enabled", moveLeftController.isEnabled());
         SmartDashboard.putBoolean("Right PID Enabled", moveRightController.isEnabled());
@@ -237,6 +235,10 @@ public class MoveForward extends Command {
             moveLeftController.disable();
             moveRightController.disable();
             //angleController.disable();
+            SmartDashboard.putBoolean("Left PID Enabled", moveLeftController.isEnabled());
+            SmartDashboard.putBoolean("Right PID Enabled", moveRightController.isEnabled());
+            SmartDashboard.putBoolean("Angle PID Enabled", angleController.isEnabled());
+            SmartDashboard.updateValues();
             return true;
         }
 

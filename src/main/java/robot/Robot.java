@@ -21,8 +21,6 @@ import java.io.File;
 
 
 public class Robot extends IterativeRobot {
-    private AHRS ahrs;
-
     public static File traj;
 
     public DriveTrain driveTrain = new DriveTrain();
@@ -45,14 +43,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
-
-
-        try {
-            ahrs = new AHRS(SPI.Port.kMXP);
-        } catch (RuntimeException ex ) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
-
         /*
         Waypoint[] points = new Waypoint[] {
                 new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
@@ -70,12 +60,12 @@ public class Robot extends IterativeRobot {
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain, DriveTrain._rightMain));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain, DriveTrain.ahrs));
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(90, DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain));
         autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
-        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain, ahrs));
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(DriveTrain.ahrs, 90, DriveTrain._leftMain,DriveTrain._rightMain));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(DriveTrain.ahrs, 150, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
+        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(90, DriveTrain._leftMain,DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
 

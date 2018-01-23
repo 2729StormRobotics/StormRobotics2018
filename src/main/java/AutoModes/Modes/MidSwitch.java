@@ -8,7 +8,7 @@ public class MidSwitch extends CommandGroup{
     TalonSRX leftMotor;
     TalonSRX rightMotor;
 
-        public MidSwitch(TalonSRX left, TalonSRX right, AHRS ahrs){
+        public MidSwitch(TalonSRX left, TalonSRX right){
             TalonSRX leftMotor = left;
             TalonSRX rightMotor = right;
         }
