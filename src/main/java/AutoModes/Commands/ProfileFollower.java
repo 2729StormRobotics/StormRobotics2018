@@ -1,10 +1,15 @@
 package AutoModes.Commands;
 
+
+import Subsystems.DriveTrain;
+
+
 import Subsystems.NavX;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -95,6 +100,52 @@ public class ProfileFollower extends Command{
         System.out.println("Right: " + (r - turn));
         leftMotor.set(ControlMode.PercentOutput, l + turn);
         rightMotor.set(ControlMode.PercentOutput, -(r - turn));
+    }
+
+    /**
+     * The initialize method is called the first time this Command is run after being started.
+     */
+    @Override
+    protected void initialize() {
+        super.initialize();
+
+        Waypoint[] points = new Waypoint[] {
+                new Waypoint(0, 0, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+                new Waypoint(5, 3, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
+                new Waypoint(7, 7, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
+        };
+
+
+        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
+        Trajectory trajectory = Pathfinder.generate(points, config);
+
+        leftMotor = DriveTrain._leftMain;
+        rightMotor = DriveTrain._rightMain;
+
+        TankModifier modifier = new TankModifier(trajectory).modify(0.5);
+
+        left = new EncoderFollower(modifier.getLeftTrajectory());
+
+        right = new EncoderFollower(modifier.getRightTrajectory());
+
+        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+
+        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1000, 6);
+
+        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+
+        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1000, 6);
+
+
+        leftTra = modifier.getLeftTrajectory();
+
+        rightTra = modifier.getRightTrajectory();
+
+
+
+        for(int i = 0; i < trajectory.length(); i++){
+
+        }
     }
 
     @Override
