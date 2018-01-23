@@ -7,6 +7,7 @@ import Subsystems.DriveTrain;
 
 import Subsystems.NavX;
 
+import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -35,55 +36,6 @@ public class ProfileFollower extends Command{
 
     public ProfileFollower(TalonSRX _left, TalonSRX _right, String csv){
 
-        Waypoint[] points = new Waypoint[] {
-                new Waypoint(0, 0, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-                new Waypoint(10, 3, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
-                new Waypoint(12, 7, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
-        };
-
-
-        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
-        Trajectory trajectory = Pathfinder.generate(points, config);
-
-//        traj = new File("Trajectory.traj");
-//        Pathfinder.writeToFile(traj, trajectory);
-
-//        motionProfile = new File(csv);
-
-
-        leftMotor = _left;
-        rightMotor = _right;
-
-
-        //Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
-
-        try {
-            //Trajectory trajectory = Pathfinder.readFromCSV(motionProfile);
-            TankModifier modifier = new TankModifier(trajectory).modify(0.5);
-
-            left = new EncoderFollower(modifier.getLeftTrajectory());
-
-            right = new EncoderFollower(modifier.getRightTrajectory());
-
-            leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-
-            left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1000, 6);
-
-            rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-
-            right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1000, 6);
-
-
-            leftTra = modifier.getLeftTrajectory();
-
-            rightTra = modifier.getRightTrajectory();
-
-        } catch (Exception e) {
-            System.err.println("ProfileFollower: FAILED TO LOAD \"" + csv + "\" motion profile.");
-        }
-
-
-
     }
 
     /**
@@ -91,6 +43,7 @@ public class ProfileFollower extends Command{
      */
     @Override
     protected void execute() {
+        /*
         super.execute();
         System.err.println("Execute ProfileFollower.");
         double l = left.calculate(leftMotor.getSelectedSensorPosition(0));
@@ -104,8 +57,7 @@ public class ProfileFollower extends Command{
         System.out.println("Right: " + (r - turn));
         leftMotor.set(ControlMode.PercentOutput, l + turn);
         rightMotor.set(ControlMode.PercentOutput, -(r - turn));
-
-
+        */
 
     }
 
@@ -174,8 +126,12 @@ public class ProfileFollower extends Command{
                 leftPoint.isLastPoint = true;
                 rightPoint.isLastPoint = true;
             }
+
             leftMotor.pushMotionProfileTrajectory(leftPoint);
             rightMotor.pushMotionProfileTrajectory(rightPoint);
+
+            leftMotor.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
+            rightMotor.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
         }
     }
 
