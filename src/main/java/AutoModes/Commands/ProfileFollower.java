@@ -1,6 +1,7 @@
 package AutoModes.Commands;
 
 
+import AutoModes.Modes.RightSwitch;
 import Subsystems.DriveTrain;
 
 
@@ -16,6 +17,8 @@ import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
 import jaci.pathfinder.modifiers.TankModifier;
+
+import com.ctre.phoenix.motion.TrajectoryPoint;
 
 import java.io.File;
 
@@ -94,12 +97,16 @@ public class ProfileFollower extends Command{
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
         double gyro_heading = NavX.getNavx().getRawGyroZ();
         double desired_heading = Pathfinder.r2d(left.getHeading());
+
         double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
         double turn = 0.8 * (-1.0/80.0) * angleDifference;
         System.out.println("Left: " + (l + turn));
         System.out.println("Right: " + (r - turn));
         leftMotor.set(ControlMode.PercentOutput, l + turn);
         rightMotor.set(ControlMode.PercentOutput, -(r - turn));
+
+
+
     }
 
     /**
@@ -141,10 +148,34 @@ public class ProfileFollower extends Command{
 
         rightTra = modifier.getRightTrajectory();
 
-
+        TrajectoryPoint leftPoint = new TrajectoryPoint();
+        TrajectoryPoint rightPoint = new TrajectoryPoint();
 
         for(int i = 0; i < trajectory.length(); i++){
 
+            leftPoint.position = leftTra.segments[i].position;
+            rightPoint.position = rightTra.segments[i].position;
+
+            leftPoint.velocity = leftTra.segments[i].velocity;
+            rightPoint.velocity = rightTra.segments[i].velocity;
+
+            leftPoint.zeroPos = false;
+            rightPoint.zeroPos = false;
+
+            if (i == 0){
+                leftPoint.zeroPos = true;
+                rightPoint.zeroPos = true;
+            }
+
+            leftPoint.isLastPoint = false;
+            rightPoint.isLastPoint = false;
+
+            if (i + 1 == trajectory.length()) {
+                leftPoint.isLastPoint = true;
+                rightPoint.isLastPoint = true;
+            }
+            leftMotor.pushMotionProfileTrajectory(leftPoint);
+            rightMotor.pushMotionProfileTrajectory(rightPoint);
         }
     }
 

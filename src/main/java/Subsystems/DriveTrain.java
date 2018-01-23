@@ -5,9 +5,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 
-public class DriveTrain {
+public class DriveTrain extends Subsystem{
 
     public static final TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
     public static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
@@ -20,6 +21,11 @@ public class DriveTrain {
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+        
     }
 
     public static void stormDrive(double combinedSpeed, double turn){
