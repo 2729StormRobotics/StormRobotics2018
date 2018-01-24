@@ -31,7 +31,7 @@ public class ProfileFollower extends Command{
     Trajectory leftTra;
     Trajectory rightTra;
 
-    Notifier notifier = new Notifier(new PeriodicRunnable());
+
 
 
     public ProfileFollower(String csv){
@@ -47,6 +47,8 @@ public class ProfileFollower extends Command{
             DriveTrain._rightMain.processMotionProfileBuffer();
         }
     }
+
+    Notifier notifier = new Notifier(new PeriodicRunnable());
 
 
     /**
@@ -121,6 +123,20 @@ public class ProfileFollower extends Command{
 
             leftPoint.zeroPos = false;
             rightPoint.zeroPos = false;
+
+
+            TrajectoryPoint.TrajectoryDuration duration = TrajectoryPoint.TrajectoryDuration.Trajectory_Duration_0ms;
+            duration = duration.valueOf((int) leftTra.segments[i].dt);
+
+            leftPoint.timeDur = duration;
+            rightPoint.timeDur = duration;
+
+            leftPoint.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+            leftPoint.profileSlotSelect1 = 0;
+
+            rightPoint.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+            rightPoint.profileSlotSelect1 = 0;
+
 
             if (i == 0){
                 leftPoint.zeroPos = true;

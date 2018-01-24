@@ -34,7 +34,7 @@ public class DriveTrain extends Subsystem{
 
         int mult;
         if (combinedSpeed < 0)
-            mult = -1;
+            mult = 1;
         else
             mult = 1;
 
