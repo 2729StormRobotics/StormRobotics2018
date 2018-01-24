@@ -12,8 +12,8 @@ public class RightSwitch extends CommandGroup {
 
     public RightSwitch() {
         requires(Robot.navx);
-        addSequential(new MoveForward(196.99, DriveTrain._leftMain, DriveTrain._rightMain));
+        addSequential(new MoveForward(196.99));
         addSequential(new PointTurn(-90));
-        addSequential(new MoveForward(20.6, DriveTrain._leftMain, DriveTrain._rightMain));
+        addSequential(new MoveForward(20.6));
     }
 }
