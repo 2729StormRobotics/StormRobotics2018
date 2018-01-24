@@ -6,6 +6,7 @@ import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.RightSwitch;
 import Subsystems.DriveTrain;
+import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
@@ -30,6 +31,7 @@ public class Robot extends IterativeRobot {
     private double reverseSpeed;
     private double turnSpeed;
     public XboxController xboxDrive;
+    public static final NavX navx = new NavX();
 
 
     public static final class Auto{
@@ -68,8 +70,7 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
-
-
+        NavX.getNavx();
     }
 
     @Override
