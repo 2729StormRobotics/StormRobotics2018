@@ -34,8 +34,9 @@ public class ProfileFollower extends Command{
     File motionProfile;
 
 
-    public ProfileFollower(TalonSRX _left, TalonSRX _right, String csv){
-
+    public ProfileFollower(String csv){
+        DriveTrain._rightMain.changeMotionControlFramePeriod(5);
+        DriveTrain._leftMain.changeMotionControlFramePeriod(5);
     }
 
     /**

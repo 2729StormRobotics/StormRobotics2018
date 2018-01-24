@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PointTurn extends Command {
-    TalonSRX left, right;
     double turnSpeed, targetAngle;
     PIDController turnController;
 
@@ -47,9 +46,7 @@ public class PointTurn extends Command {
 
     static final double toleranceDegrees = 2.0;
 
-    public PointTurn(double angle, TalonSRX _left, TalonSRX _right) {
-        left = _left;
-        right = _right;
+    public PointTurn(double angle) {
         targetAngle = angle;
     }
 
@@ -91,8 +88,8 @@ public class PointTurn extends Command {
     protected void execute() {
         super.execute();
 
-        left.set(ControlMode.PercentOutput, turnSpeed);
-        right.set(ControlMode.PercentOutput, -turnSpeed);
+        DriveTrain._leftMain.set(ControlMode.PercentOutput, turnSpeed);
+        DriveTrain._rightMain.set(ControlMode.PercentOutput, -turnSpeed);
 
         System.err.println("execute Point Turn");
     }
