@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -26,17 +27,29 @@ import java.io.File;
 public class ProfileFollower extends Command{
 
     File traj;
-    TalonSRX leftMotor, rightMotor;
     EncoderFollower left;
     EncoderFollower right;
     Trajectory leftTra;
     Trajectory rightTra;
     File motionProfile;
 
+    Notifier notifier = new Notifier(new PeriodicRunnable());
 
-    public ProfileFollower(TalonSRX _left, TalonSRX _right, String csv){
 
+    public ProfileFollower(String csv){
+        DriveTrain._rightMain.changeMotionControlFramePeriod(5);
+        DriveTrain._leftMain.changeMotionControlFramePeriod(5);
+
+        notifier.startPeriodic(0.005);
     }
+
+    class PeriodicRunnable implements java.lang.Runnable {
+        public void run() {
+            DriveTrain._leftMain.processMotionProfileBuffer();
+            DriveTrain._rightMain.processMotionProfileBuffer();
+        }
+    }
+
 
     /**
      * The execute method is called repeatedly until this Command either finishes or is canceled.
@@ -78,22 +91,19 @@ public class ProfileFollower extends Command{
         Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
         Trajectory trajectory = Pathfinder.generate(points, config);
 
-        leftMotor = DriveTrain._leftMain;
-        rightMotor = DriveTrain._rightMain;
-
         TankModifier modifier = new TankModifier(trajectory).modify(0.5);
 
         left = new EncoderFollower(modifier.getLeftTrajectory());
 
         right = new EncoderFollower(modifier.getRightTrajectory());
 
-        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+        DriveTrain._leftMain.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
-        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1000, 6);
+        left.configureEncoder(DriveTrain._leftMain.getSelectedSensorPosition(0), 1000, 6);
 
-        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+        DriveTrain._rightMain.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
-        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1000, 6);
+        right.configureEncoder(DriveTrain._rightMain.getSelectedSensorPosition(0), 1000, 6);
 
 
         leftTra = modifier.getLeftTrajectory();
@@ -127,12 +137,14 @@ public class ProfileFollower extends Command{
                 rightPoint.isLastPoint = true;
             }
 
-            leftMotor.pushMotionProfileTrajectory(leftPoint);
-            rightMotor.pushMotionProfileTrajectory(rightPoint);
-
-            leftMotor.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
-            rightMotor.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
+            DriveTrain._leftMain.pushMotionProfileTrajectory(leftPoint);
+            DriveTrain._rightMain.pushMotionProfileTrajectory(rightPoint);
         }
+
+
+        DriveTrain._leftMain.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
+        DriveTrain._rightMain.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
+        
     }
 
     @Override
