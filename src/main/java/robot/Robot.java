@@ -4,6 +4,8 @@ import AutoModes.Commands.MoveForward;
 import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
+import AutoModes.Modes.RightSwitch;
+import Subsystems.DriveTrain;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
@@ -11,12 +13,17 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
+
+import java.io.File;
 
 
 public class Robot extends IterativeRobot {
-    private AHRS ahrs;
+    public static File traj;
 
-
+    public DriveTrain driveTrain = new DriveTrain();
 
     private SendableChooser autoChooser;
     private double forwardSpeed;
@@ -24,45 +31,44 @@ public class Robot extends IterativeRobot {
     private double turnSpeed;
     public XboxController xboxDrive;
 
-    private static final TalonSRX _leftMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_MAIN);
-    private static final TalonSRX _left2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_LEFT_2);
-
-    private static final TalonSRX _rightMain = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_RIGHT_MAIN);
-    private static final TalonSRX _right2 = new TalonSRX(RobotMap.PORT_MOTOR_DRIVE_RIGHT_2);
 
     public static final class Auto{
         public static final String MID_SWITCH = "Mid Switch";
         public static final String LEFT_SWITCH = "Left Side Switch";
         public static final String LEFT_SCALE = "Left Side Scale";
+        public static final String RIGHT_SWITCH = "Right Switch";
         public static final String POINT_TURN = "Point Turn";
         public static final String MOVE_FORWARD = "Move Forward";
     }
 
     @Override
     public void robotInit() {
-        try {
-            ahrs = new AHRS(SPI.Port.kMXP);
-        } catch (RuntimeException ex ) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
+        /*
+        Waypoint[] points = new Waypoint[] {
+                new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+                new Waypoint(-2, -2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
+                new Waypoint(0, 0, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
+        };
 
+        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
+        Trajectory trajectory = Pathfinder.generate(points, config);
 
-        _left2.follow(_leftMain);
-        _right2.follow(_rightMain);
+        traj = new File("Trajectory.traj");
+        Pathfinder.writeToFile(traj, trajectory);
+        */
 
-        //_rightMain.setInverted(true);
-
-        xboxDrive = new XboxController(RobotMap.PORT_XBOX_DRIVE);
-
+        xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(_leftMain, _rightMain, ahrs));
-        //autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(_leftMain, _rightMain, ahrs));
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(ahrs, 90, _leftMain, _rightMain));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(ahrs, 10, _leftMain, _rightMain)); //change distance
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(90, DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch(DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
+        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale(DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(90, DriveTrain._leftMain,DriveTrain._rightMain));
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150, DriveTrain._leftMain, DriveTrain._rightMain)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
+
 
     }
 
@@ -78,8 +84,7 @@ public class Robot extends IterativeRobot {
             autonomousCommand.start();
         } else {
             System.err.println("Auto not selected!");
-            Command c = new PointTurn(ahrs, 90, _leftMain, _rightMain);
-            c.start();
+            driveTrain.pointTurn(90);
         }
 
 
@@ -104,7 +109,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
 
-        Drives drive = new Drives(_leftMain, _rightMain);
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
@@ -112,7 +116,7 @@ public class Robot extends IterativeRobot {
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
-        drive.stormDrive(combinedSpeed, turnSpeed, true);
+        DriveTrain.stormDrive(combinedSpeed, turnSpeed);
 
     }
 
