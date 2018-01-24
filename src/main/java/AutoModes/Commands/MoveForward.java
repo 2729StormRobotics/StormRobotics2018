@@ -42,7 +42,7 @@ public class MoveForward extends Command {
         }
     };
 
-    static final double toleranceInches = 0.1;
+    static final double toleranceInches = 0.25;
 
     public MoveForward(AHRS _ahrs, double _dist, TalonSRX _left, TalonSRX _right) {
         ahrs = _ahrs;
@@ -62,9 +62,9 @@ public class MoveForward extends Command {
         super.initialize();
         ahrs.reset();
         System.err.println("initialize Move Forward");
-        moveController = new PIDController(0.0095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
+        moveController = new PIDController(0.005, 0.00, 0.0, 0.00, angleSource, motorSpeedWrite, 0.02);
         moveController.setInputRange(-1000, 1000);
-        moveController.setOutputRange(-.1, .1);
+        moveController.setOutputRange(-.2, .2);
         moveController.setAbsoluteTolerance(toleranceInches);
         moveController.setContinuous(true);
         moveController.setSetpoint(right.getSelectedSensorPosition(0) - distance);
