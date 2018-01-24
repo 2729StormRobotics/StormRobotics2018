@@ -18,7 +18,7 @@ import robot.Robot;
 public class MoveForward extends Command {
 
     private static final double WHEEL_SIZE = 4.0 * 3.14;
-    private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 50;
+    private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 5;
     private static final double TOLERANCE_DEGREES = 0.5;
 
     double moveLeftSpeed, moveRightSpeed, turnSpeed, distance, angle;
@@ -122,12 +122,12 @@ public class MoveForward extends Command {
     protected void initialize() {
         super.initialize();
         double targetTicks = inchesToTicks(distance);
-        NavX.getNavx().reset();
+        //NavX.getNavx().zeroYaw();
         System.err.println("initialize Move Forward");
 
         angle = NavX.getNavx().getYaw();
 
-        moveLeftController = new PIDController(0.0002, 0.0, 0.0002, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveLeftController = new PIDController(0.0002, 0.000002, 0.0002, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveLeftController.setOutputRange(-0.5, 0.5);
         moveLeftController.setAbsoluteTolerance(TOLERANCE_TICKS);
@@ -135,7 +135,7 @@ public class MoveForward extends Command {
         moveLeftController.setSetpoint(((DriveTrain._leftMain.getSelectedSensorPosition(0)) + targetTicks));
         moveLeftController.enable();
 
-        moveRightController = new PIDController(0.0002, 0.0, 0.0002, 0.00, rightSource, motorRightSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveRightController = new PIDController(0.0002, 0.000002, 0.0002, 0.00, rightSource, motorRightSpeedWrite, 0.02); //i: 0.000003 d: 0002
         moveRightController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveRightController.setOutputRange(-0.5, 0.5);
         moveRightController.setAbsoluteTolerance(TOLERANCE_TICKS);
@@ -173,6 +173,7 @@ public class MoveForward extends Command {
         System.err.println("end Move Forward");
         moveLeftController.disable();
         moveRightController.disable();
+        angleController.disable();
         super.end();
     }
 
@@ -181,6 +182,9 @@ public class MoveForward extends Command {
         System.err.println("interrupted Move Forward");
         moveLeftController.disable();
         moveRightController.disable();
+        angleController.disable();
+
+        DriveTrain.tankDrive(0, 0);
         super.interrupted();
     }
 
@@ -210,6 +214,9 @@ public class MoveForward extends Command {
         SmartDashboard.putNumber("AnglePID/F", angleController.getF());
         SmartDashboard.putBoolean("AnglePID/Enabled", angleController.isEnabled());
 
+
+        SmartDashboard.putNumber("Left Error", moveLeftController.getError());
+        SmartDashboard.putNumber("Right Error", moveRightController.getError());
         DriveTrain._leftMain.set(ControlMode.PercentOutput, moveLeftSpeed);
         DriveTrain._rightMain.set(ControlMode.PercentOutput, moveRightSpeed);
 
@@ -241,6 +248,8 @@ public class MoveForward extends Command {
             angleController.disable();
 
             System.out.println("DISABLE LEFT RIGHT & ANGLE");
+
+            DriveTrain.tankDrive(0, 0);
             return true;
         }
 

@@ -81,6 +81,7 @@ public class PointTurn extends Command {
     protected void interrupted() {
         System.err.println("interrupted Point Turn");
         turnController.disable();
+        DriveTrain.tankDrive(0, 0);
         super.interrupted();
     }
 
@@ -99,6 +100,8 @@ public class PointTurn extends Command {
     protected boolean isFinished() {
         if (turnController.get() >= -0.01 && turnController.get() <= 0.01 && turnController.onTarget()) {
             turnController.disable();
+
+            DriveTrain.tankDrive(0, 0);
             return true;
         }
         return false;

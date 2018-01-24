@@ -34,9 +34,9 @@ public class DriveTrain extends Subsystem{
 
         int mult;
         if (combinedSpeed < 0)
-            mult = 1;
-        else
             mult = -1;
+        else
+            mult = 1;
 
 
         if (Math.abs(turn) > 0.1)
@@ -61,6 +61,15 @@ public class DriveTrain extends Subsystem{
             _rightMain.set(ControlMode.PercentOutput, 0);
 
     }
+
+    public static void tankDrive(double leftSpeed, double rightSpeed){
+        tankDrive(leftSpeed,rightSpeed,false, 0.0);
+    }
+
+    public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues){
+        tankDrive(leftSpeed,rightSpeed,squareValues, 0.0);
+    }
+
 
     public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues, double tolerance){
 

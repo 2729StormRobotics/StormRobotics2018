@@ -110,6 +110,10 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
 
+        SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
+
+
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
