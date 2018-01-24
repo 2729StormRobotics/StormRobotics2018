@@ -218,12 +218,24 @@ public class MoveForward extends Command {
 
     @Override
     protected boolean isFinished() {
-        System.err.println("moveLeftController.onTarget(): " + moveLeftController.onTarget() + "moveLeftController.get(): " + moveLeftController.get());
-        System.err.println("moveRightController.onTarget(): " + moveRightController.onTarget() + "moveRightController.get(): " + moveRightController.get());
-        System.err.println("angleController.onTarget(): " + angleController.onTarget() + "angleController.get(): " + angleController.get());
+        //System.err.println("moveLeftController.onTarget(): " + moveLeftController.onTarget() + "moveLeftController.get(): " + moveLeftController.get());
+        //System.err.println("moveRightController.onTarget(): " + moveRightController.onTarget() + "moveRightController.get(): " + moveRightController.get());
+        //System.err.println("angleController.onTarget(): " + angleController.onTarget() + "angleController.get(): " + angleController.get());
 
+        /*
         if((moveLeftController.get() >= -0.075 && moveLeftController.get() <= 0.075) && (moveRightController.get() >= -0.075 &&
                 moveRightController.get() <= 0.075)) {
+            moveLeftController.disable();
+            moveRightController.disable();
+            angleController.disable();
+
+            System.out.println("DISABLE LEFT RIGHT & ANGLE");
+            return true;
+        }
+
+        */
+
+        if(Math.abs(moveLeftController.getError()) < TOLERANCE_TICKS && Math.abs(moveRightController.getError()) < TOLERANCE_TICKS){
             moveLeftController.disable();
             moveRightController.disable();
             angleController.disable();

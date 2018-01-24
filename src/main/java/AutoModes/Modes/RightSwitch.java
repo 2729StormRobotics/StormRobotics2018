@@ -11,7 +11,6 @@ import robot.Robot;
 public class RightSwitch extends CommandGroup {
 
     public RightSwitch() {
-        requires(Robot.navx);
         addSequential(new MoveForward(196.99));
         addSequential(new PointTurn(-90));
         addSequential(new MoveForward(20.6));
