@@ -26,12 +26,10 @@ import java.io.File;
 
 public class ProfileFollower extends Command{
 
-    File traj;
     EncoderFollower left;
     EncoderFollower right;
     Trajectory leftTra;
     Trajectory rightTra;
-    File motionProfile;
 
     Notifier notifier = new Notifier(new PeriodicRunnable());
 
@@ -144,7 +142,7 @@ public class ProfileFollower extends Command{
 
         DriveTrain._leftMain.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
         DriveTrain._rightMain.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
-        
+
     }
 
     @Override

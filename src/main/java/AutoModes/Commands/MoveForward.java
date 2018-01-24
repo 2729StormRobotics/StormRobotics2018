@@ -5,6 +5,7 @@ import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import com.sun.java.util.jar.pack.DriverResource;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -20,7 +21,6 @@ public class MoveForward extends Command {
     private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 50;
     private static final double TOLERANCE_DEGREES = 0.5;
 
-    TalonSRX left, right;
     double moveLeftSpeed, moveRightSpeed, turnSpeed, distance, angle;
     PIDController moveLeftController, moveRightController, angleController;
 
@@ -37,7 +37,7 @@ public class MoveForward extends Command {
         }
 
         public double pidGet() { // Encoder Position Robot @
-            return left.getSelectedSensorPosition(0);
+            return DriveTrain._leftMain.getSelectedSensorPosition(0);
 
         }
     };
@@ -55,7 +55,7 @@ public class MoveForward extends Command {
         }
 
         public double pidGet() { // Encoder Position Robot @
-            return right.getSelectedSensorPosition(0);
+            return DriveTrain._rightMain.getSelectedSensorPosition(0);
 
         }
     };
@@ -100,10 +100,8 @@ public class MoveForward extends Command {
         }
     };
 
-    public MoveForward(double _dist, TalonSRX _left, TalonSRX _right) {
+    public MoveForward(double _dist) {
         requires(Robot.navx);
-        left = _left;
-        right = _right;
         distance = _dist;
     }
 
@@ -134,7 +132,7 @@ public class MoveForward extends Command {
         moveLeftController.setOutputRange(-0.5, 0.5);
         moveLeftController.setAbsoluteTolerance(TOLERANCE_TICKS);
         moveLeftController.setContinuous(true);
-        moveLeftController.setSetpoint(((left.getSelectedSensorPosition(0)) + targetTicks));
+        moveLeftController.setSetpoint(((DriveTrain._leftMain.getSelectedSensorPosition(0)) + targetTicks));
         moveLeftController.enable();
 
         moveRightController = new PIDController(0.0002, 0.0, 0.0002, 0.00, rightSource, motorRightSpeedWrite, 0.02); //i: 0.000003 d: 0002
@@ -142,11 +140,11 @@ public class MoveForward extends Command {
         moveRightController.setOutputRange(-0.5, 0.5);
         moveRightController.setAbsoluteTolerance(TOLERANCE_TICKS);
         moveRightController.setContinuous(true);
-        moveRightController.setSetpoint(((right.getSelectedSensorPosition(0)) + targetTicks));
+        moveRightController.setSetpoint(((DriveTrain._rightMain.getSelectedSensorPosition(0)) + targetTicks));
         moveRightController.enable();
 
 
-        angleController = new PIDController(0.1, 0.0, 0.05, 0.0, angleSource, motorSpeedWrite, 0.02);
+        angleController = new PIDController(0.05, 0.0, 0.05, 0.0, angleSource, motorSpeedWrite, 0.02);
 
         angleController.setP(SmartDashboard.getNumber("AnglePID/P", 0.05));
         angleController.setI(SmartDashboard.getNumber("AnglePID/I", 0.0));
@@ -212,8 +210,8 @@ public class MoveForward extends Command {
         SmartDashboard.putNumber("AnglePID/F", angleController.getF());
         SmartDashboard.putBoolean("AnglePID/Enabled", angleController.isEnabled());
 
-        left.set(ControlMode.PercentOutput, moveLeftSpeed);
-        right.set(ControlMode.PercentOutput, moveRightSpeed);
+        DriveTrain._leftMain.set(ControlMode.PercentOutput, moveLeftSpeed);
+        DriveTrain._rightMain.set(ControlMode.PercentOutput, moveRightSpeed);
 
     }
 
