@@ -58,11 +58,10 @@ public class PointTurn extends Command {
 
     @Override
     protected void initialize() {
-        NavX.getNavx().reset();
         System.err.println("initialize Point Turn");
-        turnController = new PIDController(0.00095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
+        turnController = new PIDController(0.006, 0.0002, 0.005, 0.00, angleSource, motorSpeedWrite, 0.02);
         turnController.setInputRange(-180.0, 180.0);
-        turnController.setOutputRange(-.4, 0.4);
+        turnController.setOutputRange(-.75, .75);
         turnController.setAbsoluteTolerance(toleranceDegrees);
         turnController.setContinuous(true);
         turnController.setSetpoint(targetAngle + NavX.getNavx().getYaw());
@@ -74,6 +73,7 @@ public class PointTurn extends Command {
     protected void end() {
         System.err.println("end Point Turn");
         turnController.disable();
+        DriveTrain.tankDrive(0, 0);
         super.end();
     }
 
