@@ -97,7 +97,6 @@ public class Lift extends Command{
 
         if((elevatorController.get() >= -0.05 && elevatorController.get() <= 0.05 && elevatorController.onTarget())) {
             elevatorController.disable();
-            //angleController.disable();
             SmartDashboard.putBoolean("Elevator PID Enabled", elevatorController.isEnabled());
             SmartDashboard.updateValues();
             return true;

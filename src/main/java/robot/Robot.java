@@ -27,6 +27,8 @@ public class Robot extends IterativeRobot {
     public static File traj;
 
     public DriveTrain driveTrain = new DriveTrain();
+    public Elevator elevator = new Elevator();
+    public Hanger hanger = new Hanger();
 
     private SendableChooser autoChooser;
     private double forwardSpeed;
@@ -81,8 +83,6 @@ public class Robot extends IterativeRobot {
             driveTrain.pointTurn(90);
         }
 
-
-
     }
 
     @Override
@@ -117,8 +117,8 @@ public class Robot extends IterativeRobot {
         pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
 
         DriveTrain.stormDrive(combinedSpeed, turnSpeed);
-        Hanger.pull(pullSpeed);
-        Elevator.elevate(elevateSpeed, false, 0.01);
+        hanger.pull(pullSpeed);
+        elevator.elevate(elevateSpeed, false);
 
     }
 

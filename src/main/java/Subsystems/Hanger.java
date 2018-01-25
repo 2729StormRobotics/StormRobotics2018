@@ -15,10 +15,7 @@ public class Hanger extends Subsystem{
 
 
     public Hanger() {
-
     }
-
-
 
     protected void initDefaultCommand() {
 
@@ -32,17 +29,11 @@ public class Hanger extends Subsystem{
     }
 
     //@Override
-
-
     public static void hang(double pullSpeed, boolean squareValues, double tolerance){
 
         if(squareValues){
             pullSpeed = Math.pow(pullSpeed, 2);
         }
-
-
-
-
 
         _hang.set(ControlMode.PercentOutput, pullSpeed);
 
