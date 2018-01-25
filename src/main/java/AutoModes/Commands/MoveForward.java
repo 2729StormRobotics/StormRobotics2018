@@ -146,6 +146,7 @@ public class MoveForward extends Command {
 
         angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
 
+        /*
         angleController.setP(SmartDashboard.getNumber("AnglePID/P", 0.05));
         angleController.setI(SmartDashboard.getNumber("AnglePID/I", 0.0));
         angleController.setD(SmartDashboard.getNumber("AnglePID/D", 0.05));
@@ -157,6 +158,7 @@ public class MoveForward extends Command {
         SmartDashboard.putNumber("AnglePID/D", angleController.getD());
         SmartDashboard.putNumber("AnglePID/F", angleController.getF());
         SmartDashboard.putBoolean("AnglePID/Enabled", angleController.isEnabled());
+        */
 
         angleController.setInputRange(-180.0, 180.0);
         angleController.setOutputRange(-0.2, 0.2);
@@ -201,22 +203,7 @@ public class MoveForward extends Command {
         } else {
             moveRightSpeed += Math.abs(turnSpeed);
         }
-
-        angleController.setP(SmartDashboard.getNumber("AnglePID/P", angleController.getP()));
-        angleController.setI(SmartDashboard.getNumber("AnglePID/I", angleController.getI()));
-        angleController.setD(SmartDashboard.getNumber("AnglePID/D", angleController.getD()));
-        angleController.setF(SmartDashboard.getNumber("AnglePID/F", angleController.getF()));
-        angleController.setEnabled(SmartDashboard.getBoolean("AnglePID/Enabled", angleController.isEnabled()));
-
-        SmartDashboard.putNumber("AnglePID/P", angleController.getP());
-        SmartDashboard.putNumber("AnglePID/I", angleController.getI());
-        SmartDashboard.putNumber("AnglePID/D", angleController.getD());
-        SmartDashboard.putNumber("AnglePID/F", angleController.getF());
-        SmartDashboard.putBoolean("AnglePID/Enabled", angleController.isEnabled());
-
-
-        SmartDashboard.putNumber("Left Error", moveLeftController.getError());
-        SmartDashboard.putNumber("Right Error", moveRightController.getError());
+        
         DriveTrain._leftMain.set(ControlMode.PercentOutput, moveLeftSpeed);
         DriveTrain._rightMain.set(ControlMode.PercentOutput, moveRightSpeed);
 
