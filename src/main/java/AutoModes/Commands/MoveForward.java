@@ -127,7 +127,7 @@ public class MoveForward extends Command {
 
         angle = NavX.getNavx().getYaw();
 
-        moveLeftController = new PIDController(0.0002, 0.000002, 0.0002, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveLeftController = new PIDController(0.0002, 0.000004, 0.008, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveLeftController.setOutputRange(-0.5, 0.5);
         moveLeftController.setAbsoluteTolerance(TOLERANCE_TICKS);
@@ -135,7 +135,7 @@ public class MoveForward extends Command {
         moveLeftController.setSetpoint(((DriveTrain._leftMain.getSelectedSensorPosition(0)) + targetTicks));
         moveLeftController.enable();
 
-        moveRightController = new PIDController(0.0002, 0.000002, 0.0002, 0.00, rightSource, motorRightSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveRightController = new PIDController(0.0002, 0.000004, 0.008, 0.00, rightSource, motorRightSpeedWrite, 0.02); //i: 0.000003 d: 0002
         moveRightController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveRightController.setOutputRange(-0.5, 0.5);
         moveRightController.setAbsoluteTolerance(TOLERANCE_TICKS);
@@ -239,7 +239,6 @@ public class MoveForward extends Command {
             System.out.println("DISABLE LEFT RIGHT & ANGLE");
             return true;
         }
-
         */
 
         if(Math.abs(moveLeftController.getError()) < TOLERANCE_TICKS && Math.abs(moveRightController.getError()) < TOLERANCE_TICKS){
