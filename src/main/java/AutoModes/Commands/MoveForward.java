@@ -127,7 +127,7 @@ public class MoveForward extends Command {
 
         angle = NavX.getNavx().getYaw();
 
-        moveLeftController = new PIDController(0.0002, 0.000004, 0.008, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveLeftController = new PIDController(Constants.FORWARD_LEFT_P, Constants.FORWARD_LEFT_I, Constants.FORWARD_LEFT_D, Constants.FORWARD_LEFT_F, leftSource, motorLeftSpeedWrite, Constants.FORWARD_LEFT_PERIOD); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveLeftController.setOutputRange(-0.5, 0.5);
         moveLeftController.setAbsoluteTolerance(TOLERANCE_TICKS);
@@ -135,7 +135,7 @@ public class MoveForward extends Command {
         moveLeftController.setSetpoint(((DriveTrain._leftMain.getSelectedSensorPosition(0)) + targetTicks));
         moveLeftController.enable();
 
-        moveRightController = new PIDController(0.0002, 0.000004, 0.008, 0.00, rightSource, motorRightSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveRightController = new PIDController(Constants.FORWARD_RIGHT_P, Constants.FORWARD_RIGHT_I, Constants.FORWARD_RIGHT_D, Constants.FORWARD_RIGHT_F, rightSource, motorRightSpeedWrite, Constants.FORWARD_RIGHT_PERIOD); //i: 0.000003 d: 0002
         moveRightController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveRightController.setOutputRange(-0.5, 0.5);
         moveRightController.setAbsoluteTolerance(TOLERANCE_TICKS);
@@ -144,7 +144,7 @@ public class MoveForward extends Command {
         moveRightController.enable();
 
 
-        angleController = new PIDController(0.05, 0.0, 0.05, 0.0, angleSource, motorSpeedWrite, 0.02);
+        angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
 
         angleController.setP(SmartDashboard.getNumber("AnglePID/P", 0.05));
         angleController.setI(SmartDashboard.getNumber("AnglePID/I", 0.0));
