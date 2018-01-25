@@ -6,6 +6,8 @@ import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.RightSwitch;
 import Subsystems.DriveTrain;
+import Subsystems.Elevator;
+import Subsystems.Hanger;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
@@ -29,7 +31,10 @@ public class Robot extends IterativeRobot {
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
+    private double elevateSpeed;
+    private double pullSpeed;
     public XboxController xboxDrive;
+    public XboxController xboxDrive2;
 
 
     public static final class Auto{
@@ -58,13 +63,14 @@ public class Robot extends IterativeRobot {
         */
 
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
+        xboxDrive2 = new XboxController(Constants.PORT_XBOX_WEAPONS);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(90, DriveTrain._leftMain, DriveTrain._rightMain));
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(90));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch());
         autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale());
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(90, DriveTrain._leftMain,DriveTrain._rightMain));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(90));
         autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
@@ -112,11 +118,15 @@ public class Robot extends IterativeRobot {
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
-
+        elevateSpeed = xboxDrive.getX(GenericHID.Hand.kRight);
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
+        pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
+
         DriveTrain.stormDrive(combinedSpeed, turnSpeed);
+        Hanger.pull(pullSpeed);
+        Elevator.elevate(elevateSpeed, false, 0.01);
 
     }
 
