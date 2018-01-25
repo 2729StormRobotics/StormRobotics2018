@@ -7,6 +7,7 @@ import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.RightSwitch;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
+import Subsystems.NavX;
 import Subsystems.Hanger;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -35,6 +36,7 @@ public class Robot extends IterativeRobot {
     private double pullSpeed;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
+    public static final NavX navx = new NavX();
 
 
     public static final class Auto{
@@ -48,34 +50,20 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
-        /*
-        Waypoint[] points = new Waypoint[] {
-                new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-                new Waypoint(-2, -2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
-                new Waypoint(0, 0, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
-        };
-
-        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
-        Trajectory trajectory = Pathfinder.generate(points, config);
-
-        traj = new File("Trajectory.traj");
-        Pathfinder.writeToFile(traj, trajectory);
-        */
 
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
         xboxDrive2 = new XboxController(Constants.PORT_XBOX_WEAPONS);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(90));
+        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(180));
         autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch());
         autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale());
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(90));
+        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(180));
         autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150)); //change distance
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
-
-
+        NavX.getNavx();
     }
 
     @Override
@@ -114,6 +102,10 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+
+        SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
+
 
 
         double combinedSpeed = forwardSpeed - reverseSpeed;

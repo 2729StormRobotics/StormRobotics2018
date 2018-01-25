@@ -5,6 +5,7 @@ import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import com.sun.java.util.jar.pack.DriverResource;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -12,14 +13,13 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
-
-import javax.swing.*;
+import robot.Robot;
 
 public class MoveForward extends Command {
 
     private static final double WHEEL_SIZE = 4.0 * 3.14;
-    private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 50;
-    private static final double TOLERANCE_DEGREES = 0.01;
+    private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 5;
+    private static final double TOLERANCE_DEGREES = 0.5;
 
     double moveLeftSpeed, moveRightSpeed, turnSpeed, distance, angle;
     PIDController moveLeftController, moveRightController, angleController;
@@ -73,14 +73,7 @@ public class MoveForward extends Command {
         }
 
         public double pidGet() { // Angle Robot at
-            SmartDashboard.putBoolean("NavXDemo Connected", NavX.getNavx().isConnected());
-            double a = NavX.getNavx().getYaw();
-            SmartDashboard.putNumber("Angle", a);
-            SmartDashboard.putNumber("Yaw", a);
-            SmartDashboard.putNumber("Pitch", NavX.getNavx().getPitch());
-            SmartDashboard.putNumber("Roll", NavX.getNavx().getRoll());
-            SmartDashboard.updateValues();
-            return a;
+            return NavX.getNavx().getYaw();
         }
     };
 
@@ -88,9 +81,8 @@ public class MoveForward extends Command {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             turnSpeed = a;  //change to -a later when .setInverted works
-            System.err.println("Turn Speed: " + turnSpeed);
+
             SmartDashboard.putNumber("Turn Speed", turnSpeed);
-            SmartDashboard.updateValues();
         }
     };
 
@@ -109,6 +101,7 @@ public class MoveForward extends Command {
     };
 
     public MoveForward(double _dist) {
+        requires(Robot.navx);
         distance = _dist;
     }
 
@@ -129,31 +122,46 @@ public class MoveForward extends Command {
     protected void initialize() {
         super.initialize();
         double targetTicks = inchesToTicks(distance);
-        NavX.getNavx().reset();
+        //NavX.getNavx().zeroYaw();
         System.err.println("initialize Move Forward");
-
 
         angle = NavX.getNavx().getYaw();
 
-        moveLeftController = new PIDController(0.0002, 0.0, 0.0002, 0.00, leftSource, motorLeftSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveLeftController = new PIDController(Constants.FORWARD_LEFT_P, Constants.FORWARD_LEFT_I, Constants.FORWARD_LEFT_D, Constants.FORWARD_LEFT_F, leftSource, motorLeftSpeedWrite, Constants.FORWARD_LEFT_PERIOD); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        moveLeftController.setOutputRange(-.5, .5);
+        moveLeftController.setOutputRange(-0.5, 0.5);
         moveLeftController.setAbsoluteTolerance(TOLERANCE_TICKS);
         moveLeftController.setContinuous(true);
         moveLeftController.setSetpoint(((DriveTrain._leftMain.getSelectedSensorPosition(0)) + targetTicks));
         moveLeftController.enable();
 
-        moveRightController = new PIDController(0.0002, 0.0, 0.0002, 0.00, rightSource, motorRightSpeedWrite, 0.02); //i: 0.000003 d: 0002
+        moveRightController = new PIDController(Constants.FORWARD_RIGHT_P, Constants.FORWARD_RIGHT_I, Constants.FORWARD_RIGHT_D, Constants.FORWARD_RIGHT_F, rightSource, motorRightSpeedWrite, Constants.FORWARD_RIGHT_PERIOD); //i: 0.000003 d: 0002
         moveRightController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        moveRightController.setOutputRange(-.5, .5);
+        moveRightController.setOutputRange(-0.5, 0.5);
         moveRightController.setAbsoluteTolerance(TOLERANCE_TICKS);
         moveRightController.setContinuous(true);
         moveRightController.setSetpoint(((DriveTrain._rightMain.getSelectedSensorPosition(0)) + targetTicks));
         moveRightController.enable();
 
-        angleController = new PIDController(0.005, 0.00, 0.5, 0.00, angleSource, motorSpeedWrite, 0.02);
+
+        angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
+
+        /*
+        angleController.setP(SmartDashboard.getNumber("AnglePID/P", 0.05));
+        angleController.setI(SmartDashboard.getNumber("AnglePID/I", 0.0));
+        angleController.setD(SmartDashboard.getNumber("AnglePID/D", 0.05));
+        angleController.setF(SmartDashboard.getNumber("AnglePID/F", 0.0));
+        angleController.setEnabled(SmartDashboard.getBoolean("AnglePID/Enabled", true));
+
+        SmartDashboard.putNumber("AnglePID/P", angleController.getP());
+        SmartDashboard.putNumber("AnglePID/I", angleController.getI());
+        SmartDashboard.putNumber("AnglePID/D", angleController.getD());
+        SmartDashboard.putNumber("AnglePID/F", angleController.getF());
+        SmartDashboard.putBoolean("AnglePID/Enabled", angleController.isEnabled());
+        */
+
         angleController.setInputRange(-180.0, 180.0);
-        angleController.setOutputRange(-0.5, 0.5);
+        angleController.setOutputRange(-0.2, 0.2);
         angleController.setAbsoluteTolerance(TOLERANCE_DEGREES);
         angleController.setContinuous(true);
         angleController.setSetpoint(angle);
@@ -167,6 +175,7 @@ public class MoveForward extends Command {
         System.err.println("end Move Forward");
         moveLeftController.disable();
         moveRightController.disable();
+        angleController.disable();
         super.end();
     }
 
@@ -175,6 +184,9 @@ public class MoveForward extends Command {
         System.err.println("interrupted Move Forward");
         moveLeftController.disable();
         moveRightController.disable();
+        angleController.disable();
+
+        DriveTrain.tankDrive(0, 0);
         super.interrupted();
     }
 
@@ -184,7 +196,6 @@ public class MoveForward extends Command {
 
         if(!angleController.isEnabled()) {
             angleController.enable();
-            System.err.println("angleController enabled again");
         }
 
         if(turnSpeed > 0) {
@@ -192,61 +203,41 @@ public class MoveForward extends Command {
         } else {
             moveRightSpeed += Math.abs(turnSpeed);
         }
-
+        
         DriveTrain._leftMain.set(ControlMode.PercentOutput, moveLeftSpeed);
         DriveTrain._rightMain.set(ControlMode.PercentOutput, moveRightSpeed);
-
-        SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("MoveForward moveLeftSpeed", moveLeftSpeed);
-        SmartDashboard.putNumber("MoveForward moveRightSpeed", moveRightSpeed);
-        SmartDashboard.putNumber("Turn Speed", turnSpeed);
-        SmartDashboard.putNumber("Angle", NavX.getNavx().getYaw());
-
-        SmartDashboard.putBoolean("Left PID Enabled", moveLeftController.isEnabled());
-        SmartDashboard.putBoolean("Right PID Enabled", moveRightController.isEnabled());
-        SmartDashboard.putBoolean("Angle PID Enabled", angleController.isEnabled());
-        SmartDashboard.updateValues();
 
     }
 
 
     @Override
     protected boolean isFinished() {
-        SmartDashboard.putBoolean("Left PID Enabled", moveLeftController.isEnabled());
-        SmartDashboard.putBoolean("Right PID Enabled", moveRightController.isEnabled());
-        SmartDashboard.putBoolean("Angle PID Enabled", angleController.isEnabled());
-        SmartDashboard.updateValues();
+        //System.err.println("moveLeftController.onTarget(): " + moveLeftController.onTarget() + "moveLeftController.get(): " + moveLeftController.get());
+        //System.err.println("moveRightController.onTarget(): " + moveRightController.onTarget() + "moveRightController.get(): " + moveRightController.get());
+        //System.err.println("angleController.onTarget(): " + angleController.onTarget() + "angleController.get(): " + angleController.get());
 
         /*
-        if(Math.abs(Math.abs(current) - Math.abs(intended)) < TOLERANCE_TICKS) {
-            moveController.disable();
-            left.set(ControlMode.PercentOutput, 0);
-            right.set(ControlMode.PercentOutput, 0);
+        if((moveLeftController.get() >= -0.075 && moveLeftController.get() <= 0.075) && (moveRightController.get() >= -0.075 &&
+                moveRightController.get() <= 0.075)) {
+            moveLeftController.disable();
+            moveRightController.disable();
+            angleController.disable();
+
+            System.out.println("DISABLE LEFT RIGHT & ANGLE");
             return true;
         }
         */
 
-
-
-        if((moveLeftController.get() >= -0.05 && moveLeftController.get() <= 0.05 && moveLeftController.onTarget()) && (moveRightController.get() >= -0.05 &&
-                moveRightController.get() <= 0.05 && moveRightController.onTarget())) {
+        if(Math.abs(moveLeftController.getError()) < TOLERANCE_TICKS && Math.abs(moveRightController.getError()) < TOLERANCE_TICKS){
             moveLeftController.disable();
             moveRightController.disable();
-            //angleController.disable();
-            SmartDashboard.putBoolean("Left PID Enabled", moveLeftController.isEnabled());
-            SmartDashboard.putBoolean("Right PID Enabled", moveRightController.isEnabled());
-            SmartDashboard.putBoolean("Angle PID Enabled", angleController.isEnabled());
-            SmartDashboard.updateValues();
+            angleController.disable();
+
+            System.out.println("DISABLE LEFT RIGHT & ANGLE");
+
+            DriveTrain.tankDrive(0, 0);
             return true;
         }
-
-
-        SmartDashboard.putBoolean("Left PID Enabled", moveLeftController.isEnabled());
-        SmartDashboard.putBoolean("Right PID Enabled", moveRightController.isEnabled());
-        SmartDashboard.putBoolean("Angle PID Enabled", angleController.isEnabled());
-        SmartDashboard.updateValues();
-
 
         return false;
     }

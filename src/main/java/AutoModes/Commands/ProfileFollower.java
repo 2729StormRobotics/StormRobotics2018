@@ -1,16 +1,11 @@
 package AutoModes.Commands;
 
-
-import AutoModes.Modes.RightSwitch;
 import Subsystems.DriveTrain;
 
-
-import Subsystems.NavX;
 
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
@@ -26,14 +21,12 @@ import java.io.File;
 
 public class ProfileFollower extends Command{
 
-    File traj;
     EncoderFollower left;
     EncoderFollower right;
     Trajectory leftTra;
     Trajectory rightTra;
-    File motionProfile;
 
-    Notifier notifier = new Notifier(new PeriodicRunnable());
+
 
 
     public ProfileFollower(String csv){
@@ -49,6 +42,8 @@ public class ProfileFollower extends Command{
             DriveTrain._rightMain.processMotionProfileBuffer();
         }
     }
+
+    Notifier notifier = new Notifier(new PeriodicRunnable());
 
 
     /**
@@ -71,7 +66,6 @@ public class ProfileFollower extends Command{
         leftMotor.set(ControlMode.PercentOutput, l + turn);
         rightMotor.set(ControlMode.PercentOutput, -(r - turn));
         */
-
     }
 
     /**
@@ -82,9 +76,8 @@ public class ProfileFollower extends Command{
         super.initialize();
 
         Waypoint[] points = new Waypoint[] {
-                new Waypoint(0, 0, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-                new Waypoint(5, 3, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
-                new Waypoint(7, 7, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
+                new Waypoint(0, 12.5, Pathfinder.d2r(0)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+                new Waypoint(11.5, 9, 0)                     // Waypoint @ x=0, y=0,   exit angle=0 radians
         };
 
 
@@ -124,6 +117,20 @@ public class ProfileFollower extends Command{
             leftPoint.zeroPos = false;
             rightPoint.zeroPos = false;
 
+
+            TrajectoryPoint.TrajectoryDuration duration = TrajectoryPoint.TrajectoryDuration.Trajectory_Duration_0ms;
+            duration = duration.valueOf((int) leftTra.segments[i].dt);
+
+            leftPoint.timeDur = duration;
+            rightPoint.timeDur = duration;
+
+            leftPoint.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+            leftPoint.profileSlotSelect1 = 0;
+
+            rightPoint.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+            rightPoint.profileSlotSelect1 = 0;
+
+
             if (i == 0){
                 leftPoint.zeroPos = true;
                 rightPoint.zeroPos = true;
@@ -144,7 +151,7 @@ public class ProfileFollower extends Command{
 
         DriveTrain._leftMain.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
         DriveTrain._rightMain.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
-        
+
     }
 
     @Override

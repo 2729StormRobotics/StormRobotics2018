@@ -43,5 +43,10 @@ public class Elevator extends Subsystem{
     }
 
 
+public class Elevator extends Subsystem {
 
+    @Override
+    protected void initDefaultCommand() {
+
+    }
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import robot.Constants;
 
 public class PointTurn extends Command {
     double turnSpeed, targetAngle;
@@ -44,7 +45,6 @@ public class PointTurn extends Command {
         }
     };
 
-    static final double toleranceDegrees = 2.0;
 
     public PointTurn(double angle) {
         targetAngle = angle;
@@ -58,12 +58,11 @@ public class PointTurn extends Command {
 
     @Override
     protected void initialize() {
-        NavX.getNavx().reset();
         System.err.println("initialize Point Turn");
-        turnController = new PIDController(0.00095, 0.00, 0.00, 0.00, angleSource, motorSpeedWrite, 0.02);
+        turnController = new PIDController(Constants.TURNCONTROLLER_P, Constants.TURNCONTROLLER_I, Constants.TURNCONTROLLER_D, Constants.TURNCONTROLLER_F, angleSource, motorSpeedWrite, Constants.TURNCONTROLLER_PERIOD);
         turnController.setInputRange(-180.0, 180.0);
-        turnController.setOutputRange(-.4, 0.4);
-        turnController.setAbsoluteTolerance(toleranceDegrees);
+        turnController.setOutputRange(-.75, .75);
+        turnController.setAbsoluteTolerance(Constants.POINT_TURN_TOLERANCE);
         turnController.setContinuous(true);
         turnController.setSetpoint(targetAngle + NavX.getNavx().getYaw());
         turnController.enable();
@@ -74,6 +73,7 @@ public class PointTurn extends Command {
     protected void end() {
         System.err.println("end Point Turn");
         turnController.disable();
+        DriveTrain.tankDrive(0, 0);
         super.end();
     }
 
@@ -81,6 +81,7 @@ public class PointTurn extends Command {
     protected void interrupted() {
         System.err.println("interrupted Point Turn");
         turnController.disable();
+        DriveTrain.tankDrive(0, 0);
         super.interrupted();
     }
 
@@ -99,6 +100,8 @@ public class PointTurn extends Command {
     protected boolean isFinished() {
         if (turnController.get() >= -0.01 && turnController.get() <= 0.01 && turnController.onTarget()) {
             turnController.disable();
+
+            DriveTrain.tankDrive(0, 0);
             return true;
         }
         return false;

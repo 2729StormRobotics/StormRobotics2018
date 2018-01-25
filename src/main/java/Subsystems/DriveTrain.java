@@ -62,6 +62,15 @@ public class DriveTrain extends Subsystem{
 
     }
 
+    public static void tankDrive(double leftSpeed, double rightSpeed){
+        tankDrive(leftSpeed,rightSpeed,false, 0.0);
+    }
+
+    public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues){
+        tankDrive(leftSpeed,rightSpeed,squareValues, 0.0);
+    }
+
+
     public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues, double tolerance){
 
         if(squareValues){
