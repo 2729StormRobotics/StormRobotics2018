@@ -36,7 +36,7 @@ public class DriveTrain extends Subsystem{
         if (combinedSpeed < 0)
             mult = 1;
         else
-            mult = 1;
+            mult = -1;
 
 
         if (Math.abs(turn) > 0.1)
