@@ -1,16 +1,11 @@
 package AutoModes.Commands;
 
-
-import AutoModes.Modes.RightSwitch;
 import Subsystems.DriveTrain;
 
-
-import Subsystems.NavX;
 
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
@@ -71,7 +66,6 @@ public class ProfileFollower extends Command{
         leftMotor.set(ControlMode.PercentOutput, l + turn);
         rightMotor.set(ControlMode.PercentOutput, -(r - turn));
         */
-
     }
 
     /**
@@ -82,9 +76,8 @@ public class ProfileFollower extends Command{
         super.initialize();
 
         Waypoint[] points = new Waypoint[] {
-                new Waypoint(0, 0, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-                new Waypoint(5, 3, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
-                new Waypoint(7, 7, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
+                new Waypoint(0, 12.5, Pathfinder.d2r(0)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+                new Waypoint(11.5, 9, 0)                     // Waypoint @ x=0, y=0,   exit angle=0 radians
         };
 
 
