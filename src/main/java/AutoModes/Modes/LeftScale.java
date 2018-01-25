@@ -1,6 +1,7 @@
 package AutoModes.Modes;
 
 import AutoModes.Commands.ProfileFollower;
+import AutoModes.Commands.ProfileFollowerOld;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -11,7 +12,8 @@ public class LeftScale extends CommandGroup {
 
     public LeftScale() {
         System.err.println("LeftScale.");
-        addSequential(new ProfileFollower("/home/lvuser/MotionProfiles/LeftScale/_left.csv"));
+        addSequential(new ProfileFollowerOld("/home/lvuser/MotionProfiles/LeftScale/_left_detailed.csv",
+                "/home/lvuser/MotionProfiles/LeftScale/_right_detailed.csv"));
         //addSequential(new ProfileFollower(left, right, navx, Robot.traj));
     }
 

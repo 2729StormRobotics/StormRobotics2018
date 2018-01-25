@@ -5,6 +5,7 @@ import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
 import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.RightSwitch;
+import AutoModes.Modes.TestMode;
 import Subsystems.DriveTrain;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -24,7 +25,7 @@ import java.io.File;
 public class Robot extends IterativeRobot {
     public static File traj;
 
-    public DriveTrain driveTrain = new DriveTrain();
+    public static final DriveTrain driveTrain = new DriveTrain();
 
     private SendableChooser autoChooser;
     private double forwardSpeed;
@@ -41,6 +42,7 @@ public class Robot extends IterativeRobot {
         public static final String RIGHT_SWITCH = "Right Switch";
         public static final String POINT_TURN = "Point Turn";
         public static final String MOVE_FORWARD = "Move Forward";
+        public static final String TEST_MODE = "Test Mode";
     }
 
     @Override
@@ -68,6 +70,9 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(180));
         autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150)); //change distance
+        autoChooser.addObject(Auto.TEST_MODE, new TestMode());
+
+
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
         NavX.getNavx();
