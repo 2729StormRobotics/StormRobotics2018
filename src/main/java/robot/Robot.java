@@ -7,7 +7,9 @@ import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.RightSwitch;
 import AutoModes.Modes.TestMode;
 import Subsystems.DriveTrain;
+import Subsystems.Elevator;
 import Subsystems.NavX;
+import Subsystems.Hanger;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
@@ -25,13 +27,18 @@ import java.io.File;
 public class Robot extends IterativeRobot {
     public static File traj;
 
-    public static final DriveTrain driveTrain = new DriveTrain();
+    public DriveTrain driveTrain = new DriveTrain();
+    public Elevator elevator = new Elevator();
+    public Hanger hanger = new Hanger();
 
     private SendableChooser autoChooser;
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
+    private double elevateSpeed;
+    private double pullSpeed;
     public XboxController xboxDrive;
+    public XboxController xboxDrive2;
     public static final NavX navx = new NavX();
 
 
@@ -62,6 +69,7 @@ public class Robot extends IterativeRobot {
         */
 
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
+        xboxDrive2 = new XboxController(Constants.PORT_XBOX_WEAPONS);
 
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(180));
@@ -122,11 +130,15 @@ public class Robot extends IterativeRobot {
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
-
+        elevateSpeed = xboxDrive.getX(GenericHID.Hand.kRight);
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
+        pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
+
         DriveTrain.stormDrive(combinedSpeed, turnSpeed);
+        hanger.pull(pullSpeed);
+        elevator.elevate(elevateSpeed, false);
 
     }
 

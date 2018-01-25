@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import robot.Constants;
 
 public class PointTurn extends Command {
     double turnSpeed, targetAngle;
@@ -44,7 +45,6 @@ public class PointTurn extends Command {
         }
     };
 
-    static final double toleranceDegrees = 2.0;
 
     public PointTurn(double angle) {
         targetAngle = angle;
@@ -59,10 +59,10 @@ public class PointTurn extends Command {
     @Override
     protected void initialize() {
         System.err.println("initialize Point Turn");
-        turnController = new PIDController(0.006, 0.0002, 0.005, 0.00, angleSource, motorSpeedWrite, 0.02);
+        turnController = new PIDController(Constants.TURNCONTROLLER_P, Constants.TURNCONTROLLER_I, Constants.TURNCONTROLLER_D, Constants.TURNCONTROLLER_F, angleSource, motorSpeedWrite, Constants.TURNCONTROLLER_PERIOD);
         turnController.setInputRange(-180.0, 180.0);
         turnController.setOutputRange(-.75, .75);
-        turnController.setAbsoluteTolerance(toleranceDegrees);
+        turnController.setAbsoluteTolerance(Constants.POINT_TURN_TOLERANCE);
         turnController.setContinuous(true);
         turnController.setSetpoint(targetAngle + NavX.getNavx().getYaw());
         turnController.enable();
