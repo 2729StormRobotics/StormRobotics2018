@@ -37,7 +37,7 @@ public class ProfileFollower extends Command {  //Something wrong with gyro
 
 
     public ProfileFollower(String csv) {
-        requires(Robot.driveTrain);
+        //requires(Robot.driveTrain);
         DriveTrain._rightMain.changeMotionControlFramePeriod(5);
         DriveTrain._leftMain.changeMotionControlFramePeriod(5);
 
