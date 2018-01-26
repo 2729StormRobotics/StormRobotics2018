@@ -60,6 +60,9 @@ public class DriveTrain extends Subsystem{
         else
             _rightMain.set(ControlMode.PercentOutput, 0);
 
+        _leftMain.configOpenloopRamp(2, 10000);
+        _rightMain.configOpenloopRamp(2, 10000);
+
     }
 
     public static void tankDrive(double leftSpeed, double rightSpeed){

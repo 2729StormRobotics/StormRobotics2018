@@ -29,40 +29,61 @@ public class ProfileFollowerOld extends Command{
 
 
     public ProfileFollowerOld(String leftCSV, String rightCSV){
-
-
         leftMotionProfile = new File(leftCSV);
         rightMotionProfile = new File(rightCSV);
 
-
         leftMotor = DriveTrain._leftMain;
         rightMotor = DriveTrain._rightMain;
+        leftTra = Pathfinder.readFromCSV(leftMotionProfile);
+        rightTra = Pathfinder.readFromCSV(rightMotionProfile);
 
+        left = new EncoderFollower(leftTra);
+        right = new EncoderFollower(rightTra);
 
-        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
+        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024, 0.1016);
 
-        try {
-            Trajectory leftTrajectory = Pathfinder.readFromCSV(leftMotionProfile);
-            Trajectory rightTrajectory = Pathfinder.readFromCSV(rightMotionProfile);
+        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.1016);
 
-            left = new EncoderFollower(leftTrajectory);
+        double max_velocity = 2;
+        left.configurePIDVA(1.0, 0.0, 0.5, 1 / max_velocity, 0);
+        right.configurePIDVA(1.0, 0.0, 0.5, 1 / max_velocity, 0);
+    }
 
-            right = new EncoderFollower(rightTrajectory);
+    /**
+     * The initialize method is called the first time this Command is run after being started.
+     */
+    @Override
+    protected void initialize() {
+        super.initialize();
+        NavX.getNavx().zeroYaw();
+    }
 
-            leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+    /**
+     * Called when the command ended peacefully. This is where you may want to wrap up loose ends,
+     * like shutting off a motor that was being used in the command.
+     */
+    @Override
+    protected void end() {
+        super.end();
+        DriveTrain.tankDrive(0,0);
+    }
 
-            left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024, 4);
-
-            rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-
-            right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 4);
-
-        } catch (Exception e) {
-            System.err.println("ProfileFollower: FAILED TO LOAD \"" + rightCSV + "\" motion profile.");
-        }
-
-
-
+    /**
+     * Called when the command ends because somebody called {@link Command#cancel() cancel()} or
+     * another command shared the same requirements as this one, and booted it out.
+     * <p>
+     * <p>This is where you may want to wrap up loose ends, like shutting off a motor that was being
+     * used in the command.
+     * <p>
+     * <p>Generally, it is useful to simply call the {@link Command#end() end()} method within this
+     * method, as done here.
+     */
+    @Override
+    protected void interrupted() {
+        super.interrupted();
+        end();
     }
 
     /**
@@ -74,14 +95,15 @@ public class ProfileFollowerOld extends Command{
         System.err.println("Execute ProfileFollower.");
         double l = left.calculate(leftMotor.getSelectedSensorPosition(0));
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
-        double gyro_heading = NavX.getNavx().getYaw();
-        double desired_heading = Pathfinder.r2d(left.getHeading());
-        double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
-        double turn = 0.8 * (-1.0/80.0) * angleDifference;
-        System.out.println("Left: " + (l + turn));
-        System.out.println("Right: " + (r - turn));
-        leftMotor.set(ControlMode.PercentOutput, l + turn);
-        rightMotor.set(ControlMode.PercentOutput, -(r - turn));
+        //double gyro_heading = NavX.getNavx().getYaw();
+        //double desired_heading = Pathfinder.r2d(left.getHeading());
+        //double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
+        //double turn = 0.8 * (-1.0/80.0) * angleDifference;
+        System.out.println("Left: " + (l));// + turn));
+        System.out.println("Right: " + (r));// - turn));
+        DriveTrain.tankDrive(l, r);
+        //leftMotor.set(ControlMode.PercentOutput, l);// + turn);
+        //rightMotor.set(ControlMode.PercentOutput, -(r));// - turn));
     }
 
     @Override
