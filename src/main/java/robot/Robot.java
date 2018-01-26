@@ -27,7 +27,7 @@ import java.io.File;
 public class Robot extends IterativeRobot {
     public static File traj;
 
-    public DriveTrain driveTrain = new DriveTrain();
+    public static DriveTrain driveTrain = new DriveTrain();
     public Elevator elevator = new Elevator();
     public Hanger hanger = new Hanger();
 
@@ -79,7 +79,6 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(180));
         autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150)); //change distance
         autoChooser.addObject(Auto.TEST_MODE, new TestMode());
-
 
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
