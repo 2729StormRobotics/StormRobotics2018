@@ -23,6 +23,12 @@ deploy {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 // Defining my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
 // and NavX.
 dependencies {
@@ -31,6 +37,10 @@ dependencies {
     compile navx()
 	compile openrio.powerup.matchData()
     compile pathfinder()
+
+    compile name: 'json-simple-1.1.1'
+
+    //runtime fileTree(dir: 'libs', include: '*.jar')
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

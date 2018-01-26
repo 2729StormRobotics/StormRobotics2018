@@ -7,21 +7,25 @@ import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.command.Command;
 import robot.Robot;
+import util.SrxMotionProfile;
+import util.SrxTrajectory;
+import util.SrxTrajectoryImporter;
 
 import java.io.IOException;
 import java.text.ParseException;
 
 //Taken from Team 319's repository
 
-public class ProfileFollowerWeStole {
+public class ProfileFollowerWeStole extends Command{
     private String trajectoryName = "";
     private int kMinPointsInTalon = 5;
 
     private boolean isFinished = false;
 
-    //private SrxTrajectory trajectoryToFollow = null;
-    //private SrxTrajectoryImporter importer = new SrxTrajectoryImporter("/home/lvuser/Autos");
+    private SrxTrajectory trajectoryToFollow = null;
+    private SrxTrajectoryImporter importer = new SrxTrajectoryImporter("/home/lvuser/MotionProfiles/BobTest");
 
     private MotionProfileStatus rightStatus = new MotionProfileStatus();
     private MotionProfileStatus leftStatus = new MotionProfileStatus();
@@ -67,23 +71,17 @@ public class ProfileFollowerWeStole {
         SrxNotifier.startPeriodic(.005);
 
         if(trajectoryToFollow == null) {
+            this.trajectoryToFollow = importer.importSrxTrajectory(trajectoryName);
 
-            try
-            {
-                this.trajectoryToFollow = importer.importSrxTrajectory(trajectoryName);
-            }
-            catch (IOException | ParseException e) {
-                System.out.println("Failed to import trajectory.");
-                e.printStackTrace();
-                isFinished = true;
-                return;
-            }
         }
 
-        int pidfSlot = Robot.drivetrain.HIGH_GEAR_PROFILE;
+        //int pidfSlot = Robot.drivetrain.HIGH_GEAR_PROFILE;
 
-        fillTalonBuffer(Robot.drivetrain.rightLead, this.trajectoryToFollow.rightProfile, pidfSlot);
-        fillTalonBuffer(Robot.drivetrain.leftLead, this.trajectoryToFollow.leftProfile, pidfSlot);
+        if(trajectoryToFollow == null) {
+            System.err.println("TRAJECTORY IS STILL NULL!");
+        }
+        fillTalonBuffer(DriveTrain._rightMain, this.trajectoryToFollow.rightProfile, 0);
+        fillTalonBuffer(DriveTrain._leftMain, this.trajectoryToFollow.leftProfile, 0);
 
     }
 
@@ -104,6 +102,7 @@ public class ProfileFollowerWeStole {
         }
         else if (rightStatus.btmBufferCnt > kMinPointsInTalon && leftStatus.btmBufferCnt > kMinPointsInTalon)
         {
+            System.out.println("Enabling");
             // if we have enough points in the talon, go.
             setValue = SetValueMotionProfile.Enable;
         }
