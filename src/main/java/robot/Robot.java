@@ -70,7 +70,7 @@ public class Robot extends IterativeRobot {
 
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(180));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch());
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch('L'));
         autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(180));
@@ -114,15 +114,18 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
+        DriveTrain.dashboardStats();
     }
 
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
+        DriveTrain.dashboardStats();
     }
 
     @Override
     public void teleopPeriodic() {
+        DriveTrain.dashboardStats();
 
         SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
@@ -139,10 +142,10 @@ public class Robot extends IterativeRobot {
         DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed);
         hanger.pull(pullSpeed);
         elevator.elevate(elevateSpeed, false);
-
     }
 
     @Override
     public void testPeriodic() {
+        DriveTrain.dashboardStats();
     }
 }

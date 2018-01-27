@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
+import robot.Robot;
 
 import java.io.File;
 
@@ -22,6 +23,8 @@ public class ProfileFollower extends Command {
 
 
     public ProfileFollower(String leftCSV, String rightCSV) {
+        requires(Robot.driveTrain);
+        requires(Robot.navx);
         leftMotionProfile = new File(leftCSV);
         rightMotionProfile = new File(rightCSV);
 
@@ -29,19 +32,6 @@ public class ProfileFollower extends Command {
         rightMotor = DriveTrain._rightMain;
         leftTra = Pathfinder.readFromCSV(leftMotionProfile);
         rightTra = Pathfinder.readFromCSV(rightMotionProfile);
-
-        left = new EncoderFollower(leftTra);
-        right = new EncoderFollower(rightTra);
-
-        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024, 0.1016);
-
-        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.1016);
-
-        double max_velocity = 2;
-        left.configurePIDVA(1.0, 0.0, 0.5, 1 / max_velocity, 0);
-        right.configurePIDVA(1.0, 0.0, 0.5, 1 / max_velocity, 0);
     }
 
     /**
@@ -50,6 +40,18 @@ public class ProfileFollower extends Command {
     @Override
     protected void initialize() {
         super.initialize();
+        left = new EncoderFollower(leftTra);
+        right = new EncoderFollower(rightTra);
+
+        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024, 0.1016 * 3.279);
+
+        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.1016 * 3.279);
+
+        double max_velocity = 15;
+        left.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
+        right.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
         NavX.getNavx().zeroYaw();
     }
 
@@ -60,7 +62,7 @@ public class ProfileFollower extends Command {
     @Override
     protected void end() {
         super.end();
-        DriveTrain.tankDrive(0, 0);
+        DriveTrain.tankDrive(0, 0, false, 0);
     }
 
     /**
@@ -86,6 +88,8 @@ public class ProfileFollower extends Command {
     protected void execute() {
         super.execute();
         System.err.println("Execute ProfileFollower.");
+        DriveTrain._leftMain.configOpenloopRamp(0, 500);
+        DriveTrain._rightMain.configOpenloopRamp(0, 500);
         double l = left.calculate(leftMotor.getSelectedSensorPosition(0));
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
         //double gyro_heading = NavX.getNavx().getYaw();
