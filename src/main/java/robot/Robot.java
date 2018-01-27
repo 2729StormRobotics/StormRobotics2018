@@ -34,6 +34,8 @@ public class Robot extends IterativeRobot {
     private double turnSpeed;
     private double elevateSpeed;
     private double pullSpeed;
+    public boolean accelerationDisable = false;
+    public boolean aButtonPressed = false;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
     public static final NavX navx = new NavX();
@@ -137,9 +139,24 @@ public class Robot extends IterativeRobot {
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
+        if(xboxDrive.getAButtonPressed()){
+            System.out.println("Yip");
+           // aButtonPressed = true;
+            if(!accelerationDisable){
+                accelerationDisable = true;
+            }
+            else{
+                accelerationDisable = false;
+            }
+        }
+
+        SmartDashboard.putBoolean("Accel Disable", accelerationDisable);
+
+       // aButtonPressed = !xboxDrive.getAButtonReleased();
+
         pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
 
-        DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed);
+        DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
         hanger.pull(pullSpeed);
         elevator.elevate(elevateSpeed, false);
     }
