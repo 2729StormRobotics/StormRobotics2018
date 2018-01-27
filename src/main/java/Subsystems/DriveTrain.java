@@ -103,6 +103,9 @@ public class DriveTrain extends Subsystem {
         if(!accelerationDisable) {
             _leftMain.configOpenloopRamp(1, 10000);
             _rightMain.configOpenloopRamp(1, 10000);
+        } else {
+            _leftMain.configOpenloopRamp(0, 10000);
+            _rightMain.configOpenloopRamp(0, 10000);
         }
 
     }
@@ -117,6 +120,8 @@ public class DriveTrain extends Subsystem {
 
 
     public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues, double tolerance) {
+        _leftMain.configOpenloopRamp(0, 10000);
+        _rightMain.configOpenloopRamp(0, 10000);
 
         if (squareValues) {
             leftSpeed = Math.pow(leftSpeed, 2);
