@@ -704,3 +704,5 @@ __pycache__/
 
 
 # End of https://www.gitignore.io/api/git,vim,osx,java,linux,maven,xcode,emacs,gradle,eclipse,windows,netbeans,notepadpp,intellij+all,visualstudio,visualstudiocode
+
+!/libs/*.jar
