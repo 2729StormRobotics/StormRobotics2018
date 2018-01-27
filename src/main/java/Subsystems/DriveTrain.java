@@ -35,10 +35,14 @@ public class DriveTrain extends Subsystem {
     }
 
     public static void stormDrive(double combinedSpeed, double acceleration, double turn) {
-        stormDrive(combinedSpeed, acceleration, turn, MOTOR_TOLERANCE_DEFAULT);
+        stormDrive(combinedSpeed, acceleration, turn, false, MOTOR_TOLERANCE_DEFAULT);
     }
 
-    public static void stormDrive(double combinedSpeed, double acceleration, double turn, double tolerance) {
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable) {
+        stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
+    }
+
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance) {
         //Left and Right triggers control speed.  Steer with joystick
         turn = turn * Math.abs(turn);
 
@@ -62,20 +66,14 @@ public class DriveTrain extends Subsystem {
 
         DriveTrain.setMotorTolerance(tolerance);
 
-        if (Math.abs(leftSpeed) > 0.05) {
-            _leftMain.set(ControlMode.PercentOutput, leftSpeed);
-        } else {
-            _leftMain.set(ControlMode.PercentOutput, 0);
-        }
+        _leftMain.set(ControlMode.PercentOutput, leftSpeed);
+        _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 
-        if (Math.abs(rightSpeed) > 0.05) {
-            _rightMain.set(ControlMode.PercentOutput, rightSpeed);
-        } else {
-            _rightMain.set(ControlMode.PercentOutput, 0);
+        System.out.println(accelerationDisable);
+        if(!accelerationDisable) {
+            _leftMain.configOpenloopRamp(1, 10000);
+            _rightMain.configOpenloopRamp(1, 10000);
         }
-
-        _leftMain.configOpenloopRamp(0, 10000);
-        _rightMain.configOpenloopRamp(0, 10000);
 
     }
 
