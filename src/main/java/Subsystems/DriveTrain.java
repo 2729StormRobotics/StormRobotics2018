@@ -8,7 +8,11 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 
-public class DriveTrain extends Subsystem{
+public class DriveTrain extends Subsystem {
+
+    public static final double MOTOR_TOLERANCE_MAX = 0.25;
+    public static final double MOTOR_TOLERANCE_DEFAULT = 0.04;
+    public static final double MOTOR_TOLERANCE_MIN = 0.01;
 
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
     private static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
@@ -27,10 +31,14 @@ public class DriveTrain extends Subsystem{
 
     @Override
     protected void initDefaultCommand() {
-        
+
     }
 
-    public static void stormDrive(double combinedSpeed, double acceleration, double turn){
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn) {
+        stormDrive(combinedSpeed, acceleration, turn, MOTOR_TOLERANCE_DEFAULT);
+    }
+
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn, double tolerance) {
         //Left and Right triggers control speed.  Steer with joystick
         turn = turn * Math.abs(turn);
 
@@ -52,45 +60,60 @@ public class DriveTrain extends Subsystem{
         double rightSpeed = combinedSpeed + turn;
         rightSpeed = rightSpeed * Math.abs(rightSpeed);
 
-        if(Math.abs(leftSpeed) > 0.05)
-            //_leftMain.configOpenloopRamp();
-            //_leftMain.configClosedloopRamp();
+        DriveTrain.setMotorTolerance(tolerance);
+
+        if (Math.abs(leftSpeed) > 0.05) {
             _leftMain.set(ControlMode.PercentOutput, leftSpeed);
-        else
+        } else {
             _leftMain.set(ControlMode.PercentOutput, 0);
+        }
 
-        if(Math.abs(rightSpeed) > 0.05)
+        if (Math.abs(rightSpeed) > 0.05) {
             _rightMain.set(ControlMode.PercentOutput, rightSpeed);
-        else
+        } else {
             _rightMain.set(ControlMode.PercentOutput, 0);
+        }
 
-        _leftMain.configOpenloopRamp(2, 10000);
-        _rightMain.configOpenloopRamp(2, 10000);
+        _leftMain.configOpenloopRamp(0, 10000);
+        _rightMain.configOpenloopRamp(0, 10000);
 
     }
 
-    public static void tankDrive(double leftSpeed, double rightSpeed){
-        tankDrive(leftSpeed,rightSpeed,false, 0.0);
+    public static void tankDrive(double leftSpeed, double rightSpeed) {
+        tankDrive(leftSpeed, rightSpeed, false, MOTOR_TOLERANCE_DEFAULT);
     }
 
-    public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues){
-        tankDrive(leftSpeed,rightSpeed,squareValues, 0.0);
+    public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues) {
+        tankDrive(leftSpeed, rightSpeed, squareValues, MOTOR_TOLERANCE_DEFAULT);
     }
 
 
-    public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues, double tolerance){
+    public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues, double tolerance) {
 
-        if(squareValues){
+        if (squareValues) {
             leftSpeed = Math.pow(leftSpeed, 2);
             rightSpeed = Math.pow(rightSpeed, 2);
         }
+
+        DriveTrain.setMotorTolerance(tolerance);
 
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 
     }
 
-    public void pointTurn(double degrees){
+    private static void setMotorTolerance(double tolerance) {
+        if (tolerance > MOTOR_TOLERANCE_MAX) {
+            tolerance = MOTOR_TOLERANCE_MAX;
+        } else if (tolerance < MOTOR_TOLERANCE_MIN) {
+            tolerance = MOTOR_TOLERANCE_MIN;
+        }
+
+        _leftMain.configNeutralDeadband(tolerance, 500);
+        _rightMain.configNeutralDeadband(tolerance, 500);
+    }
+
+    public void pointTurn(double degrees) {
 
     }
 

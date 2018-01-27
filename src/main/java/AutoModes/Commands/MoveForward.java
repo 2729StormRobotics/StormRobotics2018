@@ -3,9 +3,6 @@ package AutoModes.Commands;
 import Subsystems.DriveTrain;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
-//import com.sun.java.util.jar.pack.DriverResource;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -26,6 +23,7 @@ public class MoveForward extends Command {
 
     PIDSource leftSource = new PIDSource() {
         PIDSourceType pidST;
+
         @Override
         public void setPIDSourceType(PIDSourceType pidSource) {
             pidST = pidSource;
@@ -44,6 +42,7 @@ public class MoveForward extends Command {
 
     PIDSource rightSource = new PIDSource() {
         PIDSourceType pidST;
+
         @Override
         public void setPIDSourceType(PIDSourceType pidSource) {
             pidST = pidSource;
@@ -62,6 +61,7 @@ public class MoveForward extends Command {
 
     PIDSource angleSource = new PIDSource() {
         PIDSourceType pidST;
+
         @Override
         public void setPIDSourceType(PIDSourceType pidSource) {
             pidST = pidSource;
@@ -108,6 +108,7 @@ public class MoveForward extends Command {
     private double ticksToInches(double ticks) {
         return (ticks / Constants.TICKS_PER_REV) * WHEEL_SIZE;
     }
+
     private double inchesToTicks(double inches) {
         return (inches / WHEEL_SIZE) * Constants.TICKS_PER_REV;
     }
@@ -194,11 +195,11 @@ public class MoveForward extends Command {
     protected void execute() {
         super.execute();
 
-        if(!angleController.isEnabled()) {
+        if (!angleController.isEnabled()) {
             angleController.enable();
         }
 
-        if(turnSpeed > 0) {
+        if (turnSpeed > 0) {
             moveLeftSpeed += Math.abs(turnSpeed);
         } else {
             moveRightSpeed += Math.abs(turnSpeed);
@@ -228,7 +229,7 @@ public class MoveForward extends Command {
         }
         */
 
-        if(Math.abs(moveLeftController.getError()) < TOLERANCE_TICKS && Math.abs(moveRightController.getError()) < TOLERANCE_TICKS){
+        if (Math.abs(moveLeftController.getError()) < TOLERANCE_TICKS && Math.abs(moveRightController.getError()) < TOLERANCE_TICKS) {
             moveLeftController.disable();
             moveRightController.disable();
             angleController.disable();

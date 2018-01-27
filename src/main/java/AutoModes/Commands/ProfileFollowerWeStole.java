@@ -8,17 +8,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
-import robot.Robot;
 import util.SrxMotionProfile;
 import util.SrxTrajectory;
 import util.SrxTrajectoryImporter;
 
-import java.io.IOException;
-import java.text.ParseException;
-
 //Taken from Team 319's repository
 
-public class ProfileFollowerWeStole extends Command{
+public class ProfileFollowerWeStole extends Command {
     private String trajectoryName = "";
     private int kMinPointsInTalon = 5;
 
@@ -70,14 +66,14 @@ public class ProfileFollowerWeStole extends Command{
 
         SrxNotifier.startPeriodic(.005);
 
-        if(trajectoryToFollow == null) {
+        if (trajectoryToFollow == null) {
             this.trajectoryToFollow = importer.importSrxTrajectory(trajectoryName);
 
         }
 
         //int pidfSlot = Robot.drivetrain.HIGH_GEAR_PROFILE;
 
-        if(trajectoryToFollow == null) {
+        if (trajectoryToFollow == null) {
             System.err.println("TRAJECTORY IS STILL NULL!");
         }
         fillTalonBuffer(DriveTrain._rightMain, this.trajectoryToFollow.rightProfile, 0);
@@ -94,21 +90,16 @@ public class ProfileFollowerWeStole extends Command{
         //System.out.println("Top buffer count: " + rightStatus.topBufferCnt);
 
 
-        if (rightStatus.isUnderrun || leftStatus.isUnderrun)
-        {
+        if (rightStatus.isUnderrun || leftStatus.isUnderrun) {
             // if either MP has underrun, stop both
             System.out.println("Motion profile has underrun!");
             setValue = SetValueMotionProfile.Disable;
-        }
-        else if (rightStatus.btmBufferCnt > kMinPointsInTalon && leftStatus.btmBufferCnt > kMinPointsInTalon)
-        {
+        } else if (rightStatus.btmBufferCnt > kMinPointsInTalon && leftStatus.btmBufferCnt > kMinPointsInTalon) {
             System.out.println("Enabling");
             // if we have enough points in the talon, go.
             setValue = SetValueMotionProfile.Enable;
-        }
-        else if (rightStatus.activePointValid && rightStatus.isLast && leftStatus.activePointValid
-                && leftStatus.isLast)
-        {
+        } else if (rightStatus.activePointValid && rightStatus.isLast && leftStatus.activePointValid
+                && leftStatus.isLast) {
             // if both profiles are at their last points, hold the last point
             setValue = SetValueMotionProfile.Hold;
         }
@@ -160,7 +151,7 @@ public class ProfileFollowerWeStole extends Command{
         TrajectoryPoint point = new TrajectoryPoint();
 
         for (int i = 0; i < prof.numPoints; ++i) {
-			/* for each point, fill our structure and pass it to API */
+            /* for each point, fill our structure and pass it to API */
             point.position = prof.points[i][0];
             point.velocity = prof.points[i][1];
             point.timeDur = TrajectoryPoint.TrajectoryDuration.Trajectory_Duration_10ms;
@@ -173,8 +164,8 @@ public class ProfileFollowerWeStole extends Command{
             point.isLastPoint = false;
             if ((i + 1) == prof.numPoints)
                 point.isLastPoint = true; /*
-											 * set this to true on the last point
-											 */
+                 * set this to true on the last point
+                 */
 
             talon.pushMotionProfileTrajectory(point);
         }

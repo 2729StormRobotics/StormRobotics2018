@@ -19,7 +19,7 @@ public class NavX extends Subsystem {
                 navx = new AHRS(SPI.Port.kMXP);
                 System.out.println("NavX Connected: " + navx.isConnected());
                 SmartDashboard.putBoolean("NavX Connected", NavX.getNavx().isConnected());
-            } catch (RuntimeException ex ) {
+            } catch (RuntimeException ex) {
                 DriverStation.reportError("Error instantiating navX MXP: " + ex.getMessage(), true);
             }
         }

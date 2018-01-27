@@ -1,7 +1,6 @@
 package AutoModes.Commands;
 
 
-import Subsystems.DriveTrain;
 import Subsystems.Elevator;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.PIDController;
@@ -11,13 +10,14 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Lift extends Command{
+public class Lift extends Command {
 
     double elevatorSpeed, height;
     PIDController elevatorController;
 
     PIDSource elevatorSource = new PIDSource() {
         PIDSourceType pidST;
+
         @Override
         public void setPIDSourceType(PIDSourceType pidSource) {
             pidST = pidSource;
@@ -53,7 +53,7 @@ public class Lift extends Command{
         elevatorController = new PIDController(0.0002, 0.0, 0.0002, 0.00, elevatorSource, elevatorWrite, 0.02); //i: 0.000003 d: 0002
         elevatorController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         elevatorController.setOutputRange(-.5, .5);
-       //elevatorController.setAbsoluteTolerance(TOLERANCE_TICKS);
+        //elevatorController.setAbsoluteTolerance(TOLERANCE_TICKS);
         elevatorController.setContinuous(true);
         elevatorController.setSetpoint(((Elevator._left.getSelectedSensorPosition(0))));
         elevatorController.enable();
@@ -62,7 +62,7 @@ public class Lift extends Command{
     protected void execute() {
         super.execute();
 
-        if(!elevatorController.isEnabled()) {
+        if (!elevatorController.isEnabled()) {
             elevatorController.enable();
             System.err.println("moveElevator enabled again");
         }
@@ -94,8 +94,7 @@ public class Lift extends Command{
         */
 
 
-
-        if((elevatorController.get() >= -0.05 && elevatorController.get() <= 0.05 && elevatorController.onTarget())) {
+        if ((elevatorController.get() >= -0.05 && elevatorController.get() <= 0.05 && elevatorController.onTarget())) {
             elevatorController.disable();
             SmartDashboard.putBoolean("Elevator PID Enabled", elevatorController.isEnabled());
             SmartDashboard.updateValues();

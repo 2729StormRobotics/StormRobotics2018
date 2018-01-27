@@ -1,25 +1,22 @@
 package robot;
 
 import AutoModes.Commands.MoveForward;
+import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
-import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.RightSwitch;
 import AutoModes.Modes.TestMode;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
-import Subsystems.NavX;
 import Subsystems.Hanger;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.*;
+import Subsystems.NavX;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
 
 import java.io.File;
 
@@ -42,7 +39,7 @@ public class Robot extends IterativeRobot {
     public static final NavX navx = new NavX();
 
 
-    public static final class Auto{
+    public static final class Auto {
         public static final String MID_SWITCH = "Mid Switch";
         public static final String LEFT_SWITCH = "Left Side Switch";
         public static final String LEFT_SCALE = "Left Side Scale";
@@ -85,11 +82,11 @@ public class Robot extends IterativeRobot {
         NavX.getNavx();
 
 
-
     }
 
     @Override
-    public void disabledInit() { }
+    public void disabledInit() {
+    }
 
     @Override
     public void autonomousInit() {
@@ -104,19 +101,21 @@ public class Robot extends IterativeRobot {
         }
 
 
-
     }
 
     @Override
-    public void teleopInit() { }
+    public void teleopInit() {
+    }
 
     @Override
-    public void testInit() { }
+    public void testInit() {
+    }
 
 
     @Override
-    public void disabledPeriodic() { }
-    
+    public void disabledPeriodic() {
+    }
+
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
@@ -127,7 +126,6 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
-
 
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
@@ -145,5 +143,6 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void testPeriodic() { }
+    public void testPeriodic() {
+    }
 }
