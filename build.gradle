@@ -3,15 +3,16 @@ plugins {
     id "eclipse"
     id "idea"
     id "jaci.openrio.gradle.GradleRIO" version "2018.01.22"
+    id "net.ltgt.errorprone" version "0.0.13"
 }
 
 compileJava {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
     options.compilerArgs << "-Xlint:all"
 }
 
 compileTestJava {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
     options.compilerArgs << "-Xlint:all"
 }
 
@@ -34,6 +35,7 @@ deploy {
 }
 
 repositories {
+    mavenCentral()
     flatDir {
         dirs 'libs'
     }
@@ -49,6 +51,7 @@ dependencies {
     compile pathfinder()
 
     compile name: 'json-simple-1.1.1'
+    errorprone 'com.google.errorprone:error_prone_core:2.2.0'
 
     //runtime fileTree(dir: 'libs', include: '*.jar')
 }
@@ -74,3 +77,4 @@ task wrapper(type: Wrapper) {
 telemetry {
     reportTelemetry = false
 }
+
