@@ -21,6 +21,8 @@ public class DriveTrain extends Subsystem{
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
+
+
     }
 
     @Override
@@ -28,7 +30,7 @@ public class DriveTrain extends Subsystem{
         
     }
 
-    public static void stormDrive(double combinedSpeed, double turn){
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn){
         //Left and Right triggers control speed.  Steer with joystick
         turn = turn * Math.abs(turn);
 
@@ -51,6 +53,8 @@ public class DriveTrain extends Subsystem{
         rightSpeed = rightSpeed * Math.abs(rightSpeed);
 
         if(Math.abs(leftSpeed) > 0.05)
+            //_leftMain.configOpenloopRamp();
+            //_leftMain.configClosedloopRamp();
             _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         else
             _leftMain.set(ControlMode.PercentOutput, 0);
@@ -59,6 +63,8 @@ public class DriveTrain extends Subsystem{
             _rightMain.set(ControlMode.PercentOutput, rightSpeed);
         else
             _rightMain.set(ControlMode.PercentOutput, 0);
+
+
 
     }
 

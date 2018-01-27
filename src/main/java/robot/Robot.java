@@ -83,6 +83,9 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
         NavX.getNavx();
+
+
+
     }
 
     @Override
@@ -135,7 +138,7 @@ public class Robot extends IterativeRobot {
 
         pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
 
-        DriveTrain.stormDrive(combinedSpeed, turnSpeed);
+        DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed);
         hanger.pull(pullSpeed);
         elevator.elevate(elevateSpeed, false);
 
