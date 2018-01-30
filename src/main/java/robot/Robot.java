@@ -76,7 +76,7 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(180));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150)); //change distance
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(262)); //change distance
         autoChooser.addObject(Auto.TEST_MODE, new TestMode());
 
 

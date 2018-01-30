@@ -162,7 +162,7 @@ public class MoveForward extends Command {
         */
 
         angleController.setInputRange(-180.0, 180.0);
-        angleController.setOutputRange(-0.2, 0.2);
+        angleController.setOutputRange(-0.3, 0.3);
         angleController.setAbsoluteTolerance(TOLERANCE_DEGREES);
         angleController.setContinuous(true);
         angleController.setSetpoint(angle);

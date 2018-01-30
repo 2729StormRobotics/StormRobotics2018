@@ -2,6 +2,7 @@ package AutoModes.Commands;
 
 import Subsystems.DriveTrain;
 import Subsystems.NavX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Command;
@@ -92,15 +93,15 @@ public class ProfileFollower extends Command {
         DriveTrain._rightMain.configOpenloopRamp(0, 500);
         double l = left.calculate(leftMotor.getSelectedSensorPosition(0));
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
-        //double gyro_heading = NavX.getNavx().getYaw();
-        //double desired_heading = Pathfinder.r2d(left.getHeading());
-        //double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
-        //double turn = 0.8 * (-1.0/80.0) * angleDifference;
+        double gyro_heading = NavX.getNavx().getYaw();
+        double desired_heading = Pathfinder.r2d(left.getHeading());
+        double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
+        double turn = 0.8 * (-1.0/80.0) * angleDifference;
         System.out.println("Left: " + (l));// + turn));
         System.out.println("Right: " + (r));// - turn));
         DriveTrain.tankDrive(l, r, false, 0);
-        //leftMotor.set(ControlMode.PercentOutput, l);// + turn);
-        //rightMotor.set(ControlMode.PercentOutput, -(r));// - turn));
+        leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
+        rightMotor.set(ControlMode.PercentOutput, (r + turn));// - turn));
     }
 
     @Override

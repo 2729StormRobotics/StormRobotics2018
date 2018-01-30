@@ -18,7 +18,7 @@ public class Constants {
     public static final int TICKS_PER_REV                       = 1024;
 
     public static final double TURNCONTROLLER_P                 = 0.006;
-    public static final double TURNCONTROLLER_I                 = 0.006;
+    public static final double TURNCONTROLLER_I                 = 0.00;
     public static final double TURNCONTROLLER_D                 = 0.0002;
     public static final double TURNCONTROLLER_F                 = 0.0;
     public static final double TURNCONTROLLER_PERIOD            = 0.02;
