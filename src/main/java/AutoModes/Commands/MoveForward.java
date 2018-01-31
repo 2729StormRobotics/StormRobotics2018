@@ -73,7 +73,8 @@ public class MoveForward extends Command {
         }
 
         public double pidGet() { // Angle Robot at
-            return NavX.getNavx().getYaw();
+            return 0;
+            // return NavX.getNavx().getYaw();
         }
     };
 
@@ -101,7 +102,7 @@ public class MoveForward extends Command {
     };
 
     public MoveForward(double _dist) {
-        requires(Robot.navx);
+        //requires(Robot.navx);
         distance = _dist;
     }
 
@@ -126,7 +127,7 @@ public class MoveForward extends Command {
         //NavX.getNavx().zeroYaw();
         System.err.println("initialize Move Forward");
 
-        angle = NavX.getNavx().getYaw();
+        //angle = NavX.getNavx().getYaw();
 
         moveLeftController = new PIDController(Constants.FORWARD_LEFT_P, Constants.FORWARD_LEFT_I, Constants.FORWARD_LEFT_D, Constants.FORWARD_LEFT_F, leftSource, motorLeftSpeedWrite, Constants.FORWARD_LEFT_PERIOD); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);

@@ -8,9 +8,15 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 12;//Back right
 
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 5;//Elevator 1
-    public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 6;//Elevator 2
+    public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 10;//Elevator 2
 
     public static final int PORT_MOTOR_DRIVE_HANG_MAIN 		    = 7;//Hanger
+
+    public static final int PORT_MOTOR_INTAKE_LEFT              = 4; //Intake Left
+    public static final int PORT_MOTOR_INTAKE_RIGHT             = 6; //Intake Right
+
+    public static final int PORT_MOTOR_OUTPUT_LEFT              = 10; //Output Left
+    public static final int PORT_MOTOR_OUTPUT_RIGHT              = 11;//Output Right
 
     public static final int PORT_XBOX_DRIVE                     = 0;
     public static final int PORT_XBOX_WEAPONS                   = 1;
@@ -41,5 +47,6 @@ public class Constants {
     public static final double FORWARD_ANGLE_D                  = 0.05;
     public static final double FORWARD_ANGLE_F                  = 0.0;
     public static final double FORWARD_ANGLE_PERIOD             = 0.02;
+
 
 }

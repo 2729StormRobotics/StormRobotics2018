@@ -55,7 +55,7 @@ public class Lift extends Command {
         elevatorController.setOutputRange(-.5, .5);
         //elevatorController.setAbsoluteTolerance(TOLERANCE_TICKS);
         elevatorController.setContinuous(true);
-        elevatorController.setSetpoint(((Elevator._left.getSelectedSensorPosition(0))));
+        elevatorController.setSetpoint(((Elevator._elevatorLeft.getSelectedSensorPosition(0))));
         elevatorController.enable();
     }
 
@@ -68,10 +68,10 @@ public class Lift extends Command {
         }
 
 
-        Elevator._left.set(ControlMode.PercentOutput, elevatorSpeed);
+        Elevator._elevatorLeft.set(ControlMode.PercentOutput, elevatorSpeed);
 
-        SmartDashboard.putNumber("Left Encoder", Elevator._left.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Right Encoder", Elevator._right.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Left Encoder", Elevator._elevatorLeft.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Right Encoder", Elevator._elevatorRight.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Speed", elevatorSpeed);
 
         SmartDashboard.putBoolean("Left PID Enabled", elevatorController.isEnabled());

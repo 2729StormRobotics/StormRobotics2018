@@ -6,10 +6,7 @@ import AutoModes.Modes.LeftScale;
 import AutoModes.Modes.MidSwitch;
 import AutoModes.Modes.RightSwitch;
 import AutoModes.Modes.TestMode;
-import Subsystems.DriveTrain;
-import Subsystems.Elevator;
-import Subsystems.Hanger;
-import Subsystems.NavX;
+import Subsystems.*;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,9 +21,10 @@ import java.io.File;
 public class Robot extends IterativeRobot {
     public static File traj;
 
-    public static DriveTrain driveTrain = new DriveTrain();
-    public Elevator elevator = new Elevator();
-    public Hanger hanger = new Hanger();
+    //public static DriveTrain driveTrain = new DriveTrain();
+    //public static Elevator elevator = new Elevator();
+    //public static Hanger hanger = new Hanger();
+    public static Intake intake = new Intake();
 
     private SendableChooser autoChooser;
     private double forwardSpeed;
@@ -34,8 +32,14 @@ public class Robot extends IterativeRobot {
     private double turnSpeed;
     private double elevateSpeed;
     private double pullSpeed;
-    public boolean accelerationDisable = false;
-    public boolean aButtonPressed = false;
+    private double hookSpeed;
+    private int output;
+   // private int outputBackward;
+    private boolean intakeOn;
+    private boolean lowGear;
+    public boolean accelerationDisable;
+    public boolean autonomousOn;
+    boolean listenToA;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
     public static final NavX navx = new NavX();
@@ -72,18 +76,21 @@ public class Robot extends IterativeRobot {
 
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(180));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch('L'));
+        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch('R'));
         autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Auto.POINT_TURN, new PointTurn(180));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(262)); //change distance
+        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(150)); //change distance
         autoChooser.addObject(Auto.TEST_MODE, new TestMode());
 
 
         SmartDashboard.putData("Autonomous Modes", autoChooser);
         NavX.getNavx();
 
-
+        listenToA = true;
+        accelerationDisable = false;
+        intakeOn = false;
+        lowGear = false;
     }
 
     @Override
@@ -92,6 +99,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        autonomousOn = true;
         Command autonomousCommand = (Command) autoChooser.getSelected();
 
         if (autonomousCommand != null) {
@@ -99,7 +107,7 @@ public class Robot extends IterativeRobot {
             autonomousCommand.start();
         } else {
             System.err.println("Auto not selected!");
-            driveTrain.pointTurn(90);
+            //DriveTrain.pointTurn(90);
         }
 
 
@@ -107,6 +115,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        autonomousOn = false;
     }
 
     @Override
@@ -132,37 +141,50 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
 
+        double intakeL = 0.0;
+        intakeL = SmartDashboard.getNumber("Intake Speed", 0.0);
+        Intake.fwoo(intakeL);
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
+
+        //Controller 1: Driver
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
         elevateSpeed = xboxDrive.getX(GenericHID.Hand.kRight);
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
+        lowGear = xboxDrive.getBumper(XboxController.Hand.kLeft);
 
-        if(xboxDrive.getAButtonPressed()){
-            System.out.println("Yip");
-           // aButtonPressed = true;
-            if(!accelerationDisable){
-                accelerationDisable = true;
-            }
-            else{
-                accelerationDisable = false;
-            }
-        }
+        //Controller 2
+        elevateSpeed = xboxDrive2.getX(GenericHID.Hand.kRight);  //elevator right stick
+        pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kLeft);  //winch left trigger
+        intakeOn = xboxDrive2.getBumper(XboxController.Hand.kLeft);  //intake left bumper
+        hookSpeed = xboxDrive2.getX(GenericHID.Hand.kLeft);  //hook set lift thing right stick
+        output = xboxDrive.getPOV(); //block output d-pad
+        //elevator.output(output);
 
+
+
+        toggleAcceleration();
         SmartDashboard.putBoolean("Accel Disable", accelerationDisable);
 
-       // aButtonPressed = !xboxDrive.getAButtonReleased();
 
         pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
 
         DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
-        hanger.pull(pullSpeed);
-        elevator.elevate(elevateSpeed, false);
+        Hanger.pull(pullSpeed);
+        Elevator.elevate(elevateSpeed, false);
+
     }
 
     @Override
     public void testPeriodic() {
         DriveTrain.dashboardStats();
+    }
+
+    private void toggleAcceleration(){
+        boolean aIsPressed = xboxDrive.getAButtonPressed();
+        if(aIsPressed && listenToA){
+            accelerationDisable = ! accelerationDisable;
+        }
     }
 }
