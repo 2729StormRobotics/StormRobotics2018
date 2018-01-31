@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
 
 public class PointTurn extends Command {
-    double turnSpeed, targetAngle;
+    double turnSpeed, targetAngle, er;
     PIDController turnController;
 
     PIDSource angleSource = new PIDSource() {
@@ -30,7 +30,6 @@ public class PointTurn extends Command {
         }
 
         public double pidGet() { // Angle Robot at
-            SmartDashboard.putBoolean("NavXDemo Connected", NavX.getNavx().isConnected());
             return NavX.getNavx().getYaw();
         }
     };
@@ -49,57 +48,58 @@ public class PointTurn extends Command {
     }
 
     @Override
-    public synchronized void start() {
-        super.start();
-        System.err.println("start Point Turn");
-    }
-
-    @Override
     protected void initialize() {
-        System.err.println("initialize Point Turn");
-        turnController = new PIDController(Constants.TURNCONTROLLER_P, Constants.TURNCONTROLLER_I, Constants.TURNCONTROLLER_D, Constants.TURNCONTROLLER_F, angleSource, motorSpeedWrite, Constants.TURNCONTROLLER_PERIOD);
+        super.initialize();
+        turnController = new PIDController(
+                Constants.TURNCONTROLLER_P,
+                Constants.TURNCONTROLLER_I,
+                Constants.TURNCONTROLLER_D,
+                Constants.TURNCONTROLLER_F,
+                angleSource,
+                motorSpeedWrite,
+                Constants.TURNCONTROLLER_PERIOD);
         turnController.setInputRange(-180.0, 180.0);
-        turnController.setOutputRange(-.75, .75);
+        turnController.setOutputRange(-.80, .80);
         turnController.setAbsoluteTolerance(Constants.POINT_TURN_TOLERANCE);
         turnController.setContinuous(true);
         turnController.setSetpoint(targetAngle + NavX.getNavx().getYaw());
         turnController.enable();
-        System.err.println("initialize Point Turn");
+        System.err.println("start Point Turn");
     }
 
     @Override
     protected void end() {
+        super.end();
         System.err.println("end Point Turn");
         turnController.disable();
+        turnController = null;
         DriveTrain.tankDrive(0, 0);
-        super.end();
     }
 
     @Override
     protected void interrupted() {
-        System.err.println("interrupted Point Turn");
-        turnController.disable();
-        DriveTrain.tankDrive(0, 0);
         super.interrupted();
+        System.err.println("interrupted Point Turn");
+        end();
     }
 
     @Override
     protected void execute() {
         super.execute();
 
-        DriveTrain._leftMain.set(ControlMode.PercentOutput, turnSpeed);
-        DriveTrain._rightMain.set(ControlMode.PercentOutput, -turnSpeed);
+        DriveTrain.tankDrive(turnSpeed, -turnSpeed, false, 0);
 
-        System.err.println("execute Point Turn");
+        SmartDashboard.putNumber("Error: ", er - NavX.getNavx().getYaw());
     }
 
 
     @Override
     protected boolean isFinished() {
-        if (turnController.get() >= -0.01 && turnController.get() <= 0.01 && turnController.onTarget()) {
+        if (Math.abs(turnController.getError()) < Constants.POINT_TURN_TOLERANCE) {
             turnController.disable();
 
             DriveTrain.tankDrive(0, 0);
+            System.err.println("finish Point Turn");
             return true;
         }
         return false;
