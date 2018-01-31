@@ -25,10 +25,10 @@ public class Constants {
 
     public static final double TURNCONTROLLER_P                 = 0.006;
     public static final double TURNCONTROLLER_I                 = 0.0000;
-    public static final double TURNCONTROLLER_D                 = 0.0002;
+    public static final double TURNCONTROLLER_D                 = 0.00005;
     public static final double TURNCONTROLLER_F                 = 0.0;
     public static final double TURNCONTROLLER_PERIOD            = 0.02;
-    public static final double POINT_TURN_TOLERANCE             = 0.5;
+    public static final double POINT_TURN_TOLERANCE             = 2.0;
 
     public static final double FORWARD_LEFT_P                   = 0.0002;
     public static final double FORWARD_LEFT_I                   = 0.000004;
@@ -44,7 +44,7 @@ public class Constants {
 
     public static final double FORWARD_ANGLE_P                  = 0.05;
     public static final double FORWARD_ANGLE_I                  = 0.0;
-    public static final double FORWARD_ANGLE_D                  = 0.05;
+    public static final double FORWARD_ANGLE_D                  = 0.04;
     public static final double FORWARD_ANGLE_F                  = 0.0;
     public static final double FORWARD_ANGLE_PERIOD             = 0.02;
 

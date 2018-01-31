@@ -12,8 +12,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
 
 public class PointTurn extends Command {
-    double turnSpeed, targetAngle, er;
+    double turnSpeed, targetAngle;
     PIDController turnController;
+
+    public PointTurn(double angle) { //Accepts only values between (-180, 180)
+        targetAngle = angle;
+    }
 
     PIDSource angleSource = new PIDSource() {
         PIDSourceType pidST;
@@ -42,11 +46,6 @@ public class PointTurn extends Command {
         }
     };
 
-
-    public PointTurn(double angle) {
-        targetAngle = angle;
-    }
-
     @Override
     protected void initialize() {
         super.initialize();
@@ -62,7 +61,18 @@ public class PointTurn extends Command {
         turnController.setOutputRange(-.80, .80);
         turnController.setAbsoluteTolerance(Constants.POINT_TURN_TOLERANCE);
         turnController.setContinuous(true);
-        turnController.setSetpoint(targetAngle + NavX.getNavx().getYaw());
+
+        double setpoint = targetAngle + NavX.getNavx().getYaw();
+
+        if (setpoint > 180)
+            setpoint = NavX.getNavx().getYaw() + targetAngle - 360;
+        else if (setpoint < -180)
+            setpoint = NavX.getNavx().getYaw() - targetAngle + 360;
+
+
+        turnController.setSetpoint(setpoint);
+        System.out.println("Starting At: " + NavX.getNavx().getYaw());
+        System.out.println("Starting with setpoint: " + turnController.getSetpoint());
         turnController.enable();
         System.err.println("start Point Turn");
     }
@@ -72,7 +82,7 @@ public class PointTurn extends Command {
         super.end();
         System.err.println("end Point Turn");
         turnController.disable();
-        turnController = null;
+        //turnController = null;
         DriveTrain.tankDrive(0, 0);
     }
 
@@ -86,12 +96,12 @@ public class PointTurn extends Command {
     @Override
     protected void execute() {
         super.execute();
+        SmartDashboard.putNumber("Target", turnController.getSetpoint());
+        turnController.getDeltaSetpoint();
 
         DriveTrain.tankDrive(turnSpeed, -turnSpeed, false, 0);
-
-        SmartDashboard.putNumber("Error: ", er - NavX.getNavx().getYaw());
+        SmartDashboard.putNumber("Error: ", turnController.getError());
     }
-
 
     @Override
     protected boolean isFinished() {
@@ -103,6 +113,5 @@ public class PointTurn extends Command {
             return true;
         }
         return false;
-
     }
 }

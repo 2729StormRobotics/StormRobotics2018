@@ -45,6 +45,10 @@ public class NavX extends Subsystem {
         }
     }
 
+    public static void dashboardStats() {
+        SmartDashboard.putNumber("NavX/Gyro/Yaw", NavX.getNavx().getYaw());
+    }
+
     @Override
     protected void initDefaultCommand() {
         periodic();

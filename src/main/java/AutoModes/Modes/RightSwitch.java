@@ -10,5 +10,6 @@ public class RightSwitch extends CommandGroup {
         addSequential(new MoveForward(154));
         addSequential(new PointTurn(-90), 3);
         addSequential(new MoveForward(20.6));
+
     }
 }

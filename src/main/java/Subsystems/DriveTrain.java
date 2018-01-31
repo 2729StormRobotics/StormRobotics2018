@@ -72,9 +72,6 @@ public class DriveTrain extends Subsystem {
         stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
     }
 
-    /*
-        Double acceleration doesn't seem to do anything, we could probably remove it
-     */
     public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance) {
         //Left and Right triggers control speed.  Steer with joystick
         turn = turn * Math.abs(turn);
@@ -102,15 +99,10 @@ public class DriveTrain extends Subsystem {
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 
-       // System.out.println(accelerationDisable);
         if(!accelerationDisable) {
             _leftMain.configOpenloopRamp(1, 10000);
             _rightMain.configOpenloopRamp(1, 10000);
         } else {
-            _leftMain.configOpenloopRamp(0, 10000);
-            _rightMain.configOpenloopRamp(0, 10000);
-        }
-        else{
             _leftMain.configOpenloopRamp(0, 10000);
             _rightMain.configOpenloopRamp(0, 10000);
         }
