@@ -27,6 +27,7 @@ public class DriveTrain extends Subsystem {
     public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
     public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
+    public static Solenoid _PTO = new Solenoid(0); //set a pto port constant
 
     public DriveTrain() {
         _rightMain.setInverted(true);
@@ -58,6 +59,7 @@ public class DriveTrain extends Subsystem {
         stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
     }
     public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, boolean forceLow) {
+//        _PTO.set(false);
         combinedSpeed = shift(combinedSpeed, forceLow);
         stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
     }
@@ -157,6 +159,7 @@ public class DriveTrain extends Subsystem {
 
     }
     public static void hang(double pullSpeed) {
+        _PTO.set(true);
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
         _rightMain.set(ControlMode.PercentOutput, pullSpeed);
 

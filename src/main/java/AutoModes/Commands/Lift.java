@@ -4,6 +4,7 @@ package AutoModes.Commands;
 import Subsystems.Dashboard;
 import Subsystems.Elevator;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.sun.tools.internal.jxc.ap.Const;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -34,7 +35,7 @@ public class Lift extends Command {
             /*
                 get input from potentiometer
              */
-            return 0.000000234562;  //just an arbitrary number bc it needed to return something
+            return Elevator._elevatorLeft.getSelectedSensorPosition(0);  //just an arbitrary number bc it needed to return something
         }
     };
     PIDOutput elevatorWrite = new PIDOutput() {
@@ -48,7 +49,20 @@ public class Lift extends Command {
         super.start();
         System.err.println("start Lift");
     }
+    protected void end() {
+        System.err.println("end Lift");
+        elevatorController.disable();
+        super.end();
+    }
 
+    @Override
+    protected void interrupted() {
+        System.err.println("interrupted Lift");
+        elevatorController.disable();
+
+        Elevator._elevatorLeft.set(ControlMode.PercentOutput, 0);
+        super.interrupted();
+    }
     protected void initialize() {
         super.initialize();
         elevatorController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D, Constants.ELEVATOR_F, elevatorSource, elevatorWrite, Constants.ELEVATOR_PERIOD); //i: 0.000003 d: 0002
@@ -72,17 +86,9 @@ public class Lift extends Command {
 
     @Override
     protected boolean isFinished() {
-        /*
-        if(Math.abs(Math.abs(current) - Math.abs(intended)) < TOLERANCE_TICKS) {
-            moveController.disable();
-            left.set(ControlMode.PercentOutput, 0);
-            right.set(ControlMode.PercentOutput, 0);
-            return true;
-        }
-        */
-
-        if ((elevatorController.get() >= -0.05 && elevatorController.get() <= 0.05 && elevatorController.onTarget())) {
+        if (Math.abs(elevatorController.getError()) < Constants.TOLERANCE_TICKS) {
             elevatorController.disable();
+            Elevator._elevatorLeft.set(ControlMode.PercentOutput, 0);
             return true;
         }
         return false;

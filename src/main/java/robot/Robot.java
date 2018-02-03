@@ -188,17 +188,20 @@ public class Robot extends IterativeRobot {
         togglePneumatics();
         toggleHang();
 
-        DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
+        if(readyToHang){
+            DriveTrain.hang(pullSpeed);
+        }
+       // else {
+            DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
 
-        //Use this DriveTrain.stormDrive to be able to shift gears
-        //DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable, forceLowGear);
-
+            //Use this DriveTrain.stormDrive to be able to shift gears
+            //DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable, forceLowGear);
+       // }
         hanger.setHanger(hookSetSpeed);
         elevator.elevate(elevateSpeed, false);
-        intake.fwoo(Constants.INTAKE_SPEED);
+        if(intakeOn) intake.fwoo(Constants.INTAKE_SPEED);
         intake.intakeUpDown(armControl);
         elevator.elevate(elevateSpeed, false);
-        if(readyToHang) DriveTrain.hang(pullSpeed);
 
         if (xboxDrive.getXButtonPressed() || xboxDrive2.getXButtonPressed()) System.out.println("Doubt");
     }
