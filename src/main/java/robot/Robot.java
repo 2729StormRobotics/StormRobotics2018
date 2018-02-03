@@ -2,21 +2,20 @@ package robot;
 
 import AutoModes.Commands.MoveForward;
 import AutoModes.Commands.PointTurn;
-import AutoModes.Modes.LeftScale;
-import AutoModes.Modes.MidSwitch;
-import AutoModes.Modes.RightSwitch;
-import AutoModes.Modes.TestMode;
-import Subsystems.DriveTrain;
-import Subsystems.Elevator;
-import Subsystems.Hanger;
-import Subsystems.NavX;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.XboxController;
+import AutoModes.Modes.*;
+import Subsystems.*;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.opencv.core.Mat;
+import util.AutoPosition;
+import util.AutoPreference;
+import util.DebugLevel;
 
 import java.io.File;
 
@@ -25,64 +24,57 @@ public class Robot extends IterativeRobot {
     public static File traj;
 
     public static DriveTrain driveTrain = new DriveTrain();
-    public Elevator elevator = new Elevator();
-    public Hanger hanger = new Hanger();
+    public static Elevator elevator = new Elevator();
+    public static Hanger hanger = new Hanger();
+    public static NavX navx = new NavX();
+    public static Intake intake = new Intake();
+
 
     private SendableChooser autoChooser;
+    private SendableChooser positionChooser;
+    private SendableChooser preferenceChooser;
+
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
     private double elevateSpeed;
     private double pullSpeed;
     public boolean accelerationDisable = false;
-    public boolean aButtonPressed = false;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
-    public static final NavX navx = new NavX();
-
-
-    public static final class Auto {
-        public static final String MID_SWITCH = "Mid Switch";
-        public static final String LEFT_SWITCH = "Left Side Switch";
-        public static final String LEFT_SCALE = "Left Side Scale";
-        public static final String RIGHT_SWITCH = "Right Switch";
-        public static final String POINT_TURN = "Point Turn";
-        public static final String MOVE_FORWARD = "Move Forward";
-        public static final String TEST_MODE = "Test Mode";
-    }
 
     @Override
     public void robotInit() {
-        /*
-        Waypoint[] points = new Waypoint[] {
-                new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
-                new Waypoint(-2, -2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
-                new Waypoint(0, 0, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
-        };
-
-        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
-        Trajectory trajectory = Pathfinder.generate(points, config);
-
-        traj = new File("Trajectory.traj");
-        Pathfinder.writeToFile(traj, trajectory);
-        */
-
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
         xboxDrive2 = new XboxController(Constants.PORT_XBOX_WEAPONS);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch('L'));
-        autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
-        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale());
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(262)); //change distance
-        autoChooser.addObject(Auto.TEST_MODE, new TestMode());
+        autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
+        autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
+        autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
+        autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
+        autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        autoChooser.addObject(Constants.TEST_MODE, new TestMode());
+        autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
 
+        positionChooser = new SendableChooser<AutoPosition>();
+        positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
+        positionChooser.addObject(AutoPosition.LEFT.getName(), AutoPosition.LEFT);
+        positionChooser.addObject(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
+        positionChooser.addObject(AutoPosition.RIGHT.getName(), AutoPosition.RIGHT);
 
-        SmartDashboard.putData("Autonomous Modes", autoChooser);
+        preferenceChooser = new SendableChooser<AutoPreference>();
+        preferenceChooser.addDefault(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
+        preferenceChooser.addObject(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
+        preferenceChooser.addObject(AutoPreference.SCALE.getName(), AutoPreference.SCALE);
+
+        SmartDashboard.putData("Test Autonomous Modes", autoChooser);
+        SmartDashboard.putData("Auto Position", positionChooser);
+        SmartDashboard.putData("Auto Preference", preferenceChooser);
+
         NavX.getNavx();
-
 
     }
 
@@ -92,15 +84,42 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        Command autonomousCommand = (Command) autoChooser.getSelected();
+        String gameData;
+        gameData = DriverStation.getInstance().getGameSpecificMessage();
+        char switchSide = gameData.charAt(0);
+        char scaleSide = gameData.charAt(1);
 
-        if (autonomousCommand != null) {
+        Command autonomousCommand = (Command) autoChooser.getSelected();
+        AutoPosition position = (AutoPosition) positionChooser.getSelected();
+        AutoPreference preference = (AutoPreference) preferenceChooser.getSelected();
+
+
+        if (!autonomousCommand.getName().equalsIgnoreCase(Constants.FOLLOW_PREF)) {
             System.err.println("Auto " + autoChooser.getSelected() + " selected!");
             autonomousCommand.start();
-        } else {
-            System.err.println("Auto not selected!");
-            driveTrain.pointTurn(90);
+            return;
         }
+
+        switch (position + "-" + preference) {
+            case "Left-Scale":
+                autonomousCommand = new LeftScale();
+                break;
+            case "Left-Switch":
+                //autonomousCommand = new LeftSwitch(); (Didn't make Left Switch yet)
+                break;
+            case "Mid-Switch":
+                autonomousCommand = new MidSwitch(switchSide);
+                break;
+            case "Right-Scale":
+                autonomousCommand = new RightScale();
+                break;
+            case "Right-Switch":
+                autonomousCommand = new RightSwitch();
+                break;
+            default: break;
+        }
+
+        autonomousCommand.start();
 
 
     }
@@ -134,7 +153,6 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
 
-
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
         elevateSpeed = xboxDrive.getX(GenericHID.Hand.kRight);
@@ -142,7 +160,6 @@ public class Robot extends IterativeRobot {
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
         if(xboxDrive.getAButtonPressed()){
-           // aButtonPressed = true;
             if(!accelerationDisable){
                 accelerationDisable = true;
             }
@@ -163,5 +180,23 @@ public class Robot extends IterativeRobot {
     @Override
     public void testPeriodic() {
         DriveTrain.dashboardStats();
+    }
+
+    public void cameraInit() {
+        new Thread(() -> {
+            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+            camera.setResolution(640, 480);
+
+            CvSink cvSink = CameraServer.getInstance().getVideo();
+            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+
+            Mat source = new Mat();
+            Mat output = new Mat();
+
+            while(!Thread.interrupted()) {
+                cvSink.grabFrame(source);
+                outputStream.putFrame(output);
+            }
+        }).start();
     }
 }
