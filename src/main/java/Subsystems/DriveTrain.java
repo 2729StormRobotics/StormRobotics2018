@@ -159,6 +159,10 @@ public class DriveTrain extends Subsystem {
     public static void hang(double pullSpeed) {
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
         _rightMain.set(ControlMode.PercentOutput, pullSpeed);
-
+        if(pullSpeed > 0) {
+            LEDs.hanging = true;
+        } else {
+            LEDs.hanging = false;
+        }
     }
 }

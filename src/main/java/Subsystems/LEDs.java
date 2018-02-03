@@ -2,10 +2,10 @@ package Subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import robot.Robot;
 
 public class LEDs {
+
+    public static boolean hanging, shooting, elevating, elevatingUp, arming, armsUp, gearing, gearHigh, allianceRed;
 
     public static SerialPort ledOut = new SerialPort(9600, SerialPort.Port.kMXP);
     private static byte ledCode[] = {(byte) 255};
