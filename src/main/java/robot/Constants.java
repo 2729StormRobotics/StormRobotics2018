@@ -30,6 +30,10 @@ public class Constants {
 
     public static final int TICKS_PER_REV                       = 1024;
 
+    public static final double WHEEL_SIZE = 4.0 * 3.14;
+    public static final double TOLERANCE_TICKS = (TICKS_PER_REV) / 5;
+    public static final double TOLERANCE_DEGREES = 0.5;
+
     public static final double TURNCONTROLLER_P                 = 0.006;
     public static final double TURNCONTROLLER_I                 = 0.0000;
     public static final double TURNCONTROLLER_D                 = 0.00005;
@@ -61,6 +65,12 @@ public class Constants {
     //do some calculations to determine optimal levels of motor output for shifting up and down
     public static final double SHIFT_UP                         = 0.8;
     public static final double SHIFT_DOWN                       = 0.4;
+    public static final double ELEVATOR_P                 = 0.0002;
+    public static final double ELEVATOR_I                 = 0.0000;
+    public static final double ELEVATOR_D                 = 0.00005;
+    public static final double ELEVATOR_F                 = 0.0;
+    public static final double ELEVATOR_PERIOD            = 0.02;
+    public static final double ELEVATOR_TOLERANCE             = 2.0;
 
     public static final String MID_SWITCH = "Mid Switch";
     public static final String LEFT_SCALE = "Left Side Scale";

@@ -14,10 +14,6 @@ import robot.Robot;
 
 public class MoveForward extends Command {
 
-    private static final double WHEEL_SIZE = 4.0 * 3.14;
-    private static final double TOLERANCE_TICKS = (Constants.TICKS_PER_REV) / 5;
-    private static final double TOLERANCE_DEGREES = 0.5;
-
     double moveLeftSpeed, moveRightSpeed, turnSpeed, distance, angle;
     PIDController moveLeftController, moveRightController, angleController;
 
@@ -107,11 +103,11 @@ public class MoveForward extends Command {
     }
 
     private double ticksToInches(double ticks) {
-        return (ticks / Constants.TICKS_PER_REV) * WHEEL_SIZE;
+        return (ticks / Constants.TICKS_PER_REV) * Constants.WHEEL_SIZE;
     }
 
     private double inchesToTicks(double inches) {
-        return (inches / WHEEL_SIZE) * Constants.TICKS_PER_REV;
+        return (inches / Constants.WHEEL_SIZE) * Constants.TICKS_PER_REV;
     }
 
     @Override
@@ -132,7 +128,7 @@ public class MoveForward extends Command {
         moveLeftController = new PIDController(Constants.FORWARD_LEFT_P, Constants.FORWARD_LEFT_I, Constants.FORWARD_LEFT_D, Constants.FORWARD_LEFT_F, leftSource, motorLeftSpeedWrite, Constants.FORWARD_LEFT_PERIOD); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveLeftController.setOutputRange(-0.5, 0.5);
-        moveLeftController.setAbsoluteTolerance(TOLERANCE_TICKS);
+        moveLeftController.setAbsoluteTolerance(Constants.TOLERANCE_TICKS);
         moveLeftController.setContinuous(true);
         moveLeftController.setSetpoint(((DriveTrain._leftMain.getSelectedSensorPosition(0)) + targetTicks));
         moveLeftController.enable();
@@ -140,7 +136,7 @@ public class MoveForward extends Command {
         moveRightController = new PIDController(Constants.FORWARD_RIGHT_P, Constants.FORWARD_RIGHT_I, Constants.FORWARD_RIGHT_D, Constants.FORWARD_RIGHT_F, rightSource, motorRightSpeedWrite, Constants.FORWARD_RIGHT_PERIOD); //i: 0.000003 d: 0002
         moveRightController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         moveRightController.setOutputRange(-0.5, 0.5);
-        moveRightController.setAbsoluteTolerance(TOLERANCE_TICKS);
+        moveRightController.setAbsoluteTolerance(Constants.TOLERANCE_TICKS);
         moveRightController.setContinuous(true);
         moveRightController.setSetpoint(((DriveTrain._rightMain.getSelectedSensorPosition(0)) + targetTicks));
         moveRightController.enable();
@@ -148,23 +144,9 @@ public class MoveForward extends Command {
 
         angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
 
-        /*
-        angleController.setP(SmartDashboard.getNumber("AnglePID/P", 0.05));
-        angleController.setI(SmartDashboard.getNumber("AnglePID/I", 0.0));
-        angleController.setD(SmartDashboard.getNumber("AnglePID/D", 0.05));
-        angleController.setF(SmartDashboard.getNumber("AnglePID/F", 0.0));
-        angleController.setEnabled(SmartDashboard.getBoolean("AnglePID/Enabled", true));
-
-        SmartDashboard.putNumber("AnglePID/P", angleController.getP());
-        SmartDashboard.putNumber("AnglePID/I", angleController.getI());
-        SmartDashboard.putNumber("AnglePID/D", angleController.getD());
-        SmartDashboard.putNumber("AnglePID/F", angleController.getF());
-        SmartDashboard.putBoolean("AnglePID/Enabled", angleController.isEnabled());
-        */
-
         angleController.setInputRange(-180.0, 180.0);
         angleController.setOutputRange(-0.3, 0.3);
-        angleController.setAbsoluteTolerance(TOLERANCE_DEGREES);
+        angleController.setAbsoluteTolerance(Constants.TOLERANCE_DEGREES);
         angleController.setContinuous(true);
         angleController.setSetpoint(angle);
         angleController.enable();
@@ -230,7 +212,7 @@ public class MoveForward extends Command {
         }
         */
 
-        if (Math.abs(moveLeftController.getError()) < TOLERANCE_TICKS && Math.abs(moveRightController.getError()) < TOLERANCE_TICKS) {
+        if (Math.abs(moveLeftController.getError()) < Constants.TOLERANCE_TICKS && Math.abs(moveRightController.getError()) < Constants.TOLERANCE_TICKS) {
             moveLeftController.disable();
             moveRightController.disable();
             angleController.disable();
