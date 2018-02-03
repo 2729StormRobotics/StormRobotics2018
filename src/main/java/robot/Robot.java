@@ -74,6 +74,10 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto Position", positionChooser);
         SmartDashboard.putData("Auto Preference", preferenceChooser);
 
+
+        //cameraInit();
+
+        
         NavX.getNavx();
 
     }
@@ -182,21 +186,22 @@ public class Robot extends IterativeRobot {
         DriveTrain.dashboardStats();
     }
 
-    public void cameraInit() {
-        new Thread(() -> {
-            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-            camera.setResolution(640, 480);
-
-            CvSink cvSink = CameraServer.getInstance().getVideo();
-            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
-
-            Mat source = new Mat();
-            Mat output = new Mat();
-
-            while(!Thread.interrupted()) {
-                cvSink.grabFrame(source);
-                outputStream.putFrame(output);
-            }
-        }).start();
-    }
+//    public void cameraInit() {
+//        new Thread(() -> {
+//            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+//            camera.setResolution(640, 480);
+//
+//            CvSink cvSink =
+//            .getInstance().getVideo();
+//            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+//
+//            Mat source = new Mat();
+//            Mat output = new Mat();
+//
+//            while(!Thread.interrupted()) {
+//                cvSink.grabFrame(source);
+//                outputStream.putFrame(output);
+//            }
+//        }).start();
+//    }
 }
