@@ -33,6 +33,15 @@ public class Elevator extends Subsystem {
 
         _elevatorLeft.set(ControlMode.PercentOutput, liftSpeed);
 
+        if(liftSpeed > 0){
+            LEDs.elevating = true;
+            LEDs.elevatingUp = true;
+        } else if(liftSpeed < 0){
+            LEDs.elevating = true;
+            LEDs.elevatingUp = false;
+        } else {
+            LEDs.elevating = false;
+        }
 
     }
     public static void output(double dPadValue){
@@ -40,12 +49,15 @@ public class Elevator extends Subsystem {
         if(dPadValue == 315 || dPadValue == 0 || dPadValue == 45){
             outputSpeed = 1.0;
         }
-        else if(dPadValue == 135 || dPadValue == 180 || dPadValue == 225){
-            outputSpeed = -1.0;
-        }
         else{
             outputSpeed = 0.0;
         }
         _elevatorLeft.set(ControlMode.PercentOutput, outputSpeed);
+
+        if(outputSpeed > 0){
+            LEDs.shooting = true;
+        } else {
+            LEDs.shooting = false;
+        }
     }
 }

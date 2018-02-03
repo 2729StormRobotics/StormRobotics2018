@@ -37,6 +37,10 @@ public class Intake extends Subsystem{
     public static void intakeUpDown(boolean pneumaticStatus){
         sLeft.set(pneumaticStatus);
         sRight.set(pneumaticStatus);
+
+        if(!pneumaticStatus){
+
+        }
     }
 
     protected void initDefaultCommand() {

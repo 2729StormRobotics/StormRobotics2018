@@ -162,6 +162,10 @@ public class DriveTrain extends Subsystem {
         _PTO.set(true);
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
         _rightMain.set(ControlMode.PercentOutput, pullSpeed);
-
+        if(pullSpeed > 0) {
+            LEDs.hanging = true;
+        } else {
+            LEDs.hanging = false;
+        }
     }
 }

@@ -24,6 +24,8 @@ public class Hanger extends Subsystem {
             _hang.set(ControlMode.PercentOutput, speed);
         else
             _hang.set(ControlMode.PercentOutput, 0);
+
+
     }
 
     //@Override
