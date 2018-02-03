@@ -16,7 +16,8 @@ import org.opencv.core.Mat;
 import util.AutoPosition;
 import util.AutoPreference;
 import util.DebugLevel;
-
+import Subsystems.*;
+import java.rmi.Remote;
 import java.io.File;
 
 
@@ -39,7 +40,14 @@ public class Robot extends IterativeRobot {
     private double turnSpeed;
     private double elevateSpeed;
     private double pullSpeed;
-    public boolean accelerationDisable = false;
+    private double hookSpeed;
+    private int output;
+    private boolean intakeOn;
+    private boolean forceLowGear;
+    public static boolean armControl;
+    public boolean accelerationDisable;
+    public boolean autonomousOn;
+    boolean listenToA;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
 
@@ -75,7 +83,11 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto Preference", preferenceChooser);
 
         NavX.getNavx();
-
+        listenToA = true;
+        accelerationDisable = false;
+        intakeOn = false;
+        forceLowGear = false;
+        armControl = false;
     }
 
     @Override
@@ -116,7 +128,8 @@ public class Robot extends IterativeRobot {
             case "Right-Switch":
                 autonomousCommand = new RightSwitch();
                 break;
-            default: break;
+            default:
+                break;
         }
 
         autonomousCommand.start();
@@ -158,31 +171,53 @@ public class Robot extends IterativeRobot {
         elevateSpeed = xboxDrive.getX(GenericHID.Hand.kRight);
         forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
+        forceLowGear = xboxDrive.getBumper(XboxController.Hand.kLeft);
 
-        if(xboxDrive.getAButtonPressed()){
-            if(!accelerationDisable){
-                accelerationDisable = true;
+        //Controller 2
+        elevateSpeed = xboxDrive2.getX(GenericHID.Hand.kRight);  //elevator right stick
+        pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kLeft);  //winch left trigger
+        intakeOn = xboxDrive2.getBumper(XboxController.Hand.kLeft);  //intake left bumper
+        hookSpeed = xboxDrive2.getX(GenericHID.Hand.kLeft);  //hook set lift thing right stick
+        output = xboxDrive.getPOV(); //block output d-pad
+        pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
+        //elevator.output(output);   THIS WILL BE NEEDED LATER DO NOT DELETE
+
+        if (xboxDrive.getXButtonPressed() || xboxDrive2.getXButtonPressed()) {
+            System.out.println("Doubt");
+            if (xboxDrive.getAButtonPressed()) {
+                if (!accelerationDisable) {
+                    accelerationDisable = true;
+                } else {
+                    accelerationDisable = false;
+                }
             }
-            else{
-                accelerationDisable = false;
-            }
+
+            SmartDashboard.putBoolean("Accel Disable", accelerationDisable);
+
+            pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
+            toggleAcceleration();
+            togglePneumatics();
+            SmartDashboard.putBoolean("Intake Penumatics", armControl);
+            DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
+            hanger.pull(pullSpeed);
+            elevator.elevate(elevateSpeed, false);
+            Intake.fwoo(Constants.INTAKE_SPEED);
+            Hanger.pull(pullSpeed);
+            Elevator.elevate(elevateSpeed, false);
+            Intake.intakeUpDown(armControl);
+            DriveTrain.shift(forceLowGear);
         }
 
-        SmartDashboard.putBoolean("Accel Disable", accelerationDisable);
 
-        pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
 
-        DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
-        hanger.pull(pullSpeed);
-        elevator.elevate(elevateSpeed, false);
     }
 
     @Override
-    public void testPeriodic() {
+    public void testPeriodic () {
         DriveTrain.dashboardStats();
     }
 
-    public void cameraInit() {
+    public void cameraInit () {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
             camera.setResolution(640, 480);
@@ -193,10 +228,26 @@ public class Robot extends IterativeRobot {
             Mat source = new Mat();
             Mat output = new Mat();
 
-            while(!Thread.interrupted()) {
+            while (!Thread.interrupted()) {
                 cvSink.grabFrame(source);
                 outputStream.putFrame(output);
             }
         }).start();
     }
-}
+    private void toggleAcceleration(){
+        boolean aIsPressed = xboxDrive.getAButtonPressed();
+        if(aIsPressed /*&& listenToA*/){
+            accelerationDisable = ! accelerationDisable;
+        }
+    }
+    private void togglePneumatics(){
+        if(xboxDrive2.getYButtonPressed()) {
+            armControl = !armControl;
+        }
+
+
+
+    }
+
+    }
+

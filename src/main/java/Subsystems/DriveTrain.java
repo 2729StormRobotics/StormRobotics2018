@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
@@ -17,17 +18,23 @@ public class DriveTrain extends Subsystem {
     public static final double MOTOR_TOLERANCE_DEFAULT = 0.04;
     public static final double MOTOR_TOLERANCE_MIN = 0.01;
 
+    public static boolean high;
+
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
     private static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
 
     public static TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
     private static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
+    public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
+
     public DriveTrain() {
         _rightMain.setInverted(true);
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
+        high = false;
+        _gearShift.set(false);
     }
 
     @Override
@@ -152,8 +159,14 @@ public class DriveTrain extends Subsystem {
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
 
-    public void pointTurn(double degrees) {
+    //    public void pointTurn(double degrees) {
+//
+//    }
 
+    public static void shift(boolean forceLow) {
+        boolean foo = high;
+        if (forceLow) foo = false;
+
+        _gearShift.set(foo);
     }
-
 }
