@@ -17,8 +17,8 @@ addons:
       name: "2729StormRobotics/StormRobotics2018"
       description: "Robot code for the FIRST FRC 2018 game, Power Up"
     notification_email: skareer@outlook.com
-    build_command_prepend: "./gradlew clean"
-    build_command: "./gradlew build assemble buildDependents buildNeeded classes jar"
+    build_command_prepend: "gradle --stop && ./gradlew --stop && ./gradlew --no-daemon clean"
+    build_command: "./gradlew --no-daemon build assemble buildDependents buildNeeded classes jar"
     branch_pattern: master
   apt:
     packages:
