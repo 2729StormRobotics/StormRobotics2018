@@ -45,27 +45,14 @@ public class DriveTrain extends Subsystem {
     }
 
     public static void dashboardStats() {
-            SmartDashboard.putNumber("Encoder Left", _leftMain.getSelectedSensorPosition(0));
-            SmartDashboard.putNumber("Encoder Left Velocity", _leftMain.getSelectedSensorVelocity(0));
-            SmartDashboard.putNumber("Encoder Right", _rightMain.getSelectedSensorPosition(0));
-            SmartDashboard.putNumber("Encoder Right Velocity", _rightMain.getSelectedSensorVelocity(0));
 
-            DriveTrain.dashboardMotorControllerInfo("Motor/right/main/", _rightMain);
-            DriveTrain.dashboardMotorControllerInfo("Motor/right/2/", _right2);
-            DriveTrain.dashboardMotorControllerInfo("Motor/left/main/", _leftMain);
-            DriveTrain.dashboardMotorControllerInfo("Motor/left/2/", _left2);
+        Dashboard.sendEncoders();
 
-    }
+        Dashboard.sendMotorControllerInfo("Motor/right/main/", _rightMain);
+        Dashboard.sendMotorControllerInfo("Motor/right/2/", _right2);
+        Dashboard.sendMotorControllerInfo("Motor/left/main/", _leftMain);
+        Dashboard.sendMotorControllerInfo("Motor/left/2/", _left2);
 
-    private static void dashboardMotorControllerInfo(String category, TalonSRX talon) {
-        SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
-        SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
-        SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
-        SmartDashboard.putNumber(category + "Output Current", talon.getOutputCurrent());
-        SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
-        SmartDashboard.putString(category + "control Mode", talon.getControlMode().toString());
-        SmartDashboard.putNumber(category + "Temperature", talon.getTemperature());
-        SmartDashboard.putBoolean(category + "Inverted", talon.getInverted());
     }
 
     public static void stormDrive(double combinedSpeed, double acceleration, double turn) {

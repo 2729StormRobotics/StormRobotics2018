@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.opencv.core.Mat;
 import util.AutoPosition;
 import util.AutoPreference;
-import util.DebugLevel;
 
 import java.io.File;
 
@@ -30,16 +29,16 @@ public class Robot extends IterativeRobot {
     public static Intake intake = new Intake();
 
 
-    private SendableChooser autoChooser;
-    private SendableChooser positionChooser;
-    private SendableChooser preferenceChooser;
+    public static SendableChooser autoChooser;
+    public static SendableChooser positionChooser;
+    public static SendableChooser preferenceChooser;
 
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
     private double elevateSpeed;
     private double pullSpeed;
-    public boolean accelerationDisable = false;
+    public static boolean accelerationDisable = false;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
 
@@ -70,10 +69,8 @@ public class Robot extends IterativeRobot {
         preferenceChooser.addObject(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
         preferenceChooser.addObject(AutoPreference.SCALE.getName(), AutoPreference.SCALE);
 
-        SmartDashboard.putData("Test Autonomous Modes", autoChooser);
-        SmartDashboard.putData("Auto Position", positionChooser);
-        SmartDashboard.putData("Auto Preference", preferenceChooser);
-
+        Dashboard.sendChooser();
+        cameraInit();
         NavX.getNavx();
 
     }
@@ -93,21 +90,22 @@ public class Robot extends IterativeRobot {
         AutoPosition position = (AutoPosition) positionChooser.getSelected();
         AutoPreference preference = (AutoPreference) preferenceChooser.getSelected();
 
+        System.out.println(autonomousCommand.getName());
 
-        if (!autonomousCommand.getName().equalsIgnoreCase(Constants.FOLLOW_PREF)) {
+        if (!autonomousCommand.getName().equalsIgnoreCase("DummyCommand")) {
             System.err.println("Auto " + autoChooser.getSelected() + " selected!");
             autonomousCommand.start();
             return;
         }
 
-        switch (position + "-" + preference) {
+        switch (position.getName() + "-" + preference.getName()) {
             case "Left-Scale":
                 autonomousCommand = new LeftScale();
                 break;
             case "Left-Switch":
-                //autonomousCommand = new LeftSwitch(); (Didn't make Left Switch yet)
+                autonomousCommand = new LeftSwitch();
                 break;
-            case "Mid-Switch":
+            case "Middle-Switch":
                 autonomousCommand = new MidSwitch(switchSide);
                 break;
             case "Right-Scale":
@@ -120,7 +118,7 @@ public class Robot extends IterativeRobot {
         }
 
         autonomousCommand.start();
-
+        System.out.println("Running" + autonomousCommand.getName());
 
     }
 
@@ -150,8 +148,7 @@ public class Robot extends IterativeRobot {
         DriveTrain.dashboardStats();
         NavX.dashboardStats();
 
-        SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
+        Dashboard.sendEncoders();
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
@@ -162,13 +159,12 @@ public class Robot extends IterativeRobot {
         if(xboxDrive.getAButtonPressed()){
             if(!accelerationDisable){
                 accelerationDisable = true;
-            }
-            else{
+            } else {
                 accelerationDisable = false;
             }
         }
 
-        SmartDashboard.putBoolean("Accel Disable", accelerationDisable);
+        Dashboard.checkAccel();
 
         pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
 

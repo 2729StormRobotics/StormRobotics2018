@@ -58,6 +58,7 @@ public class NavX extends Subsystem {
     @Override
     public void periodic() {
         super.periodic();
+        SmartDashboard.putNumber("NavX/Gyro/Yaw",  NavX.getNavx().getYaw());
         NavX.connect();
     }
 
