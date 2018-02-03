@@ -18,11 +18,9 @@ public class Constants {
     public static final int PORT_MOTOR_OUTPUT_LEFT              = 13; //Output Left
     public static final int PORT_MOTOR_OUTPUT_RIGHT             = 14;//Output Right
 
+    public static final int PORT_SOLENOID_INTAKE            = 0;//Left Solenoid
 
-    public static final int PORT_SOLENOID_INTAKE_LEFT              = 12;//Left Solenoid
-    public static final int PORT_SOLENOID_INTAKE_RIGHT              = 13;//Right Solenoid
-
-    public static final int PORT_SOLENOID_GEARSHIFT             = 14;
+    public static final int PORT_SOLENOID_GEARSHIFT             = 1;
 
 
     public static final int PORT_XBOX_DRIVE                     = 0;

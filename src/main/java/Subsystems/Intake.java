@@ -19,11 +19,10 @@ public class Intake extends Subsystem{
 //    Compressor cLeft = new Compressor();
 //    Compressor cRight = new Compressor();
 
-    public static Solenoid sLeft = new Solenoid(Constants.PORT_SOLENOID_INTAKE_LEFT);
-    public static Solenoid sRight = new Solenoid(Constants.PORT_SOLENOID_INTAKE_RIGHT);
+    public static Solenoid sol;
 
     public Intake(){
-
+        sol = new Solenoid(Constants.PORT_SOLENOID_INTAKE);
         // use these to invert motors if needed
         _intakeRight.setInverted(true);
 //        _intakeLeft.setInverted(true);
@@ -35,12 +34,7 @@ public class Intake extends Subsystem{
     }
 
     public static void intakeUpDown(boolean pneumaticStatus){
-        sLeft.set(pneumaticStatus);
-        sRight.set(pneumaticStatus);
-
-        if(!pneumaticStatus){
-
-        }
+        sol.set(pneumaticStatus);
     }
 
     protected void initDefaultCommand() {
@@ -48,6 +42,7 @@ public class Intake extends Subsystem{
     }
 
     public static void fwoo(double intakeSpeed){
+        //System.out.println("Intake Speed: " + intakeSpeed);
         _intakeLeft.set(ControlMode.PercentOutput, intakeSpeed);
     }
 }

@@ -70,8 +70,7 @@ public class MoveForward extends Command {
         }
 
         public double pidGet() { // Angle Robot at
-            return 0;
-            // return NavX.getNavx().getYaw();
+            return NavX.getNavx().getYaw();
         }
     };
 

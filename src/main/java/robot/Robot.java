@@ -19,10 +19,10 @@ import util.DebugLevel;
 public class Robot extends IterativeRobot {
 
     public static DriveTrain driveTrain = new DriveTrain();
-    public static Elevator elevator = new Elevator();
-    public static Hanger hanger = new Hanger();
+    public static Elevator _elevator = new Elevator();
+    public static Hanger _hanger = new Hanger();
     public static NavX navx = new NavX();
-    public static Intake intake = new Intake();
+    public static Intake _intake = new Intake();
 
 
     public static SendableChooser autoChooser;
@@ -49,6 +49,8 @@ public class Robot extends IterativeRobot {
     public static boolean readyToHang;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
+
+    boolean temp = false;
 
     @Override
     public void robotInit() {
@@ -103,8 +105,14 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
-        char switchSide = gameData.charAt(0);
-        char scaleSide = gameData.charAt(1);
+        char switchSide = ' ';
+        char scaleSide = ' ';
+        try {
+            switchSide = gameData.charAt(0);
+            scaleSide = gameData.charAt(1);
+        } catch (IndexOutOfBoundsException ex) {
+            System.out.println("No Game Data");
+        }
 
         Command autonomousCommand = (Command) autoChooser.getSelected();
         AutoPosition position = (AutoPosition) positionChooser.getSelected();
@@ -197,11 +205,15 @@ public class Robot extends IterativeRobot {
             //Use this DriveTrain.stormDrive to be able to shift gears
             //DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable, forceLowGear);
        // }
-        hanger.setHanger(hookSetSpeed);
-        elevator.elevate(elevateSpeed, false);
-        if(intakeOn) intake.fwoo(Constants.INTAKE_SPEED);
-        intake.intakeUpDown(armControl);
-        elevator.elevate(elevateSpeed, false);
+        _hanger.setHanger(hookSetSpeed);
+        _elevator.elevate(elevateSpeed, false);
+        if(intakeOn) _intake.fwoo(Constants.INTAKE_SPEED);
+        _elevator.elevate(elevateSpeed, false);
+
+        if(xboxDrive.getYButtonPressed()) {
+            temp = !temp;
+            _intake.intakeUpDown(temp);
+        }
 
         if (xboxDrive.getXButtonPressed() || xboxDrive2.getXButtonPressed()) System.out.println("Doubt");
     }
@@ -225,7 +237,11 @@ public class Robot extends IterativeRobot {
     }
 
     public void checkBug() {
-        switch(bug.getName()) {
+        String s = "Info";
+        if(bug != null && bug.getName() != null) {
+            s = bug.getName();
+        }
+        switch(s) {
             case "Info":
                 Dashboard.sendEncoders();
                 Dashboard.sendNavXInfo();
@@ -256,7 +272,7 @@ public class Robot extends IterativeRobot {
 
     private void toggleAcceleration(){
         boolean aIsPressed = xboxDrive.getAButtonPressed();
-        if(aIsPressed /*&& listenToA*/){
+        if(aIsPressed){
             accelerationDisable = ! accelerationDisable;
         }
     }
@@ -267,7 +283,8 @@ public class Robot extends IterativeRobot {
         }
     }
     private void togglePneumatics(){
-        if(xboxDrive2.getYButtonPressed()) {
+        boolean yIsPressed = xboxDrive2.getYButtonPressed();
+        if(yIsPressed) {
             armControl = !armControl;
         }
 

@@ -35,7 +35,7 @@ public class DriveTrain extends Subsystem {
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
         high = false;
-        _gearShift.set(false);
+        //_gearShift.set(false);
     }
 
     @Override

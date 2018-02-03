@@ -18,11 +18,10 @@ public class Elevator extends Subsystem {
         _outputRight.follow(_outputLeft);
     }
 
+    @Override
     protected void initDefaultCommand() {
 
     }
-
-    //@Override
 
 
     public static void elevate(double liftSpeed, boolean squareValues) {
@@ -44,6 +43,7 @@ public class Elevator extends Subsystem {
         }
 
     }
+
     public static void output(double dPadValue){
         double outputSpeed = 0.0;
         if(dPadValue == 315 || dPadValue == 0 || dPadValue == 45){
