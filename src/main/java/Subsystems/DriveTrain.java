@@ -57,6 +57,10 @@ public class DriveTrain extends Subsystem {
     public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable) {
         stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
     }
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, boolean forceLow) {
+        combinedSpeed = shift(combinedSpeed, forceLow);
+        stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
+    }
 
     /*
         Double acceleration doesn't seem to do anything, we could probably remove it

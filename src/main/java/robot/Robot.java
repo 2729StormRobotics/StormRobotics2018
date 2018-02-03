@@ -184,28 +184,31 @@ public class Robot extends IterativeRobot {
         pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
         //elevator.output(output);   THIS WILL BE NEEDED LATER DO NOT DELETE
 
-        if (xboxDrive.getXButtonPressed() || xboxDrive2.getXButtonPressed()) {
-            System.out.println("Doubt");
-            if (xboxDrive.getAButtonPressed()) {
-                if (!accelerationDisable) {
-                    accelerationDisable = true;
-                } else {
-                    accelerationDisable = false;
-                }
+        if (xboxDrive.getAButtonPressed()) {
+            if (!accelerationDisable) {
+                accelerationDisable = true;
+            } else {
+                accelerationDisable = false;
             }
-            pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
-            toggleAcceleration();
-            togglePneumatics();
-            DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
-            hanger.pull(pullSpeed);
-            elevator.elevate(elevateSpeed, false);
-            Intake.fwoo(Constants.INTAKE_SPEED);
-            Hanger.pull(pullSpeed);
-            Elevator.elevate(elevateSpeed, false);
-            Intake.intakeUpDown(armControl);
         }
 
+        toggleAcceleration();
+        togglePneumatics();
+        DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
 
+        //Use this DriveTrain.stormDrive to be able to shift gears
+        //DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable, forceLowGear);
+
+        hanger.pull(pullSpeed);
+        elevator.elevate(elevateSpeed, false);
+        Intake.fwoo(Constants.INTAKE_SPEED);
+        Hanger.pull(pullSpeed);
+        Elevator.elevate(elevateSpeed, false);
+        Intake.intakeUpDown(armControl);
+
+        if (xboxDrive.getXButtonPressed() || xboxDrive2.getXButtonPressed()) {
+            System.out.println("Doubt");
+        }
 
     }
 

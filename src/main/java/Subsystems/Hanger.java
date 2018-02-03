@@ -8,11 +8,11 @@ import robot.Constants;
 public class Hanger extends Subsystem {
 
 
-    public static final TalonSRX _hang = new TalonSRX(Constants.PORT_MOTOR_DRIVE_HANG_MAIN); //formerly _leftMain
-    //public static final TalonSRX _right = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_2);  //formerly _left2
+    public static  TalonSRX _hang;
 
 
     public Hanger() {
+        _hang = new TalonSRX(Constants.PORT_MOTOR_DRIVE_HANG_MAIN);
     }
 
     protected void initDefaultCommand() {
@@ -27,14 +27,8 @@ public class Hanger extends Subsystem {
     }
 
     //@Override
-    public static void hang(double pullSpeed, boolean squareValues, double tolerance) {
-
-        if (squareValues) {
-            pullSpeed = Math.pow(pullSpeed, 2);
-        }
-
+    public static void hang(double pullSpeed) {
         _hang.set(ControlMode.PercentOutput, pullSpeed);
-
     }
 
 
