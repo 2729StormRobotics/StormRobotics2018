@@ -62,6 +62,7 @@ public class DriveTrain extends Subsystem {
         SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
         SmartDashboard.putString(category + "control Mode", talon.getControlMode().toString());
         SmartDashboard.putNumber(category + "Temperature", talon.getTemperature());
+        SmartDashboard.putBoolean(category + "Inverted", talon.getInverted());
     }
 
     public static void stormDrive(double combinedSpeed, double acceleration, double turn) {

@@ -3,6 +3,7 @@ package Subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,7 +17,7 @@ public class NavX extends Subsystem {
     private static void connect() {
         if (navx == null || !navx.isConnected()) {
             try {
-                navx = new AHRS(SPI.Port.kMXP);
+                navx = new AHRS(SerialPort.Port.kUSB);
                 System.out.println("NavX Connected: " + navx.isConnected());
                 SmartDashboard.putBoolean("NavX Connected", NavX.getNavx().isConnected());
             } catch (RuntimeException ex) {

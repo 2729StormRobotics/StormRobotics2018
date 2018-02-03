@@ -15,8 +15,8 @@ public class Constants {
     public static final int PORT_MOTOR_INTAKE_LEFT              = 4; //Intake Left
     public static final int PORT_MOTOR_INTAKE_RIGHT             = 6; //Intake Right
 
-    public static final int PORT_MOTOR_OUTPUT_LEFT              = 10; //Output Left
-    public static final int PORT_MOTOR_OUTPUT_RIGHT              = 11;//Output Right
+    public static final int PORT_MOTOR_OUTPUT_LEFT              = 13; //Output Left
+    public static final int PORT_MOTOR_OUTPUT_RIGHT             = 14;//Output Right
 
     public static final int PORT_XBOX_DRIVE                     = 0;
     public static final int PORT_XBOX_WEAPONS                   = 1;
