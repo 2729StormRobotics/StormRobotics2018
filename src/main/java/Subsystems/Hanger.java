@@ -19,7 +19,7 @@ public class Hanger extends Subsystem {
 
     }
 
-    public static void pull(double speed) {
+    public static void setHanger(double speed) {
         if (Math.abs(speed) > 0.05)
             _hang.set(ControlMode.PercentOutput, speed);
         else
@@ -27,9 +27,7 @@ public class Hanger extends Subsystem {
     }
 
     //@Override
-    public static void hang(double pullSpeed) {
-        _hang.set(ControlMode.PercentOutput, pullSpeed);
-    }
+
 
 
 }

@@ -44,7 +44,6 @@ public class Intake extends Subsystem{
     }
 
     public static void fwoo(double intakeSpeed){
-        System.out.println("Intake Speed: " + intakeSpeed);
         _intakeLeft.set(ControlMode.PercentOutput, intakeSpeed);
     }
 }

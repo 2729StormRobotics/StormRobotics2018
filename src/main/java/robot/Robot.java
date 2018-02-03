@@ -16,13 +16,7 @@ import util.AutoPosition;
 import util.AutoPreference;
 import util.DebugLevel;
 
-import Subsystems.*;
-import java.rmi.Remote;
-import java.io.File;
-
-
 public class Robot extends IterativeRobot {
-    public static File traj;
 
     public static DriveTrain driveTrain = new DriveTrain();
     public static Elevator elevator = new Elevator();
@@ -43,7 +37,8 @@ public class Robot extends IterativeRobot {
     private double pullSpeed;
     private DebugLevel bug;
 
-    private double hookSpeed;
+    private double hookSetSpeed;
+
     public static boolean accelerationDisable = false;
     private int output;
     private boolean intakeOn;
@@ -51,6 +46,7 @@ public class Robot extends IterativeRobot {
     public static boolean armControl;
     public boolean autonomousOn;
     boolean listenToA;
+    public static boolean readyToHang;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
 
@@ -96,6 +92,7 @@ public class Robot extends IterativeRobot {
         intakeOn = false;
         forceLowGear = false;
         armControl = false;
+        readyToHang = false;
     }
 
     @Override
@@ -179,37 +176,31 @@ public class Robot extends IterativeRobot {
         elevateSpeed = xboxDrive2.getX(GenericHID.Hand.kRight);  //elevator right stick
         pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kLeft);  //winch left trigger
         intakeOn = xboxDrive2.getBumper(XboxController.Hand.kLeft);  //intake left bumper
-        hookSpeed = xboxDrive2.getX(GenericHID.Hand.kLeft);  //hook set lift thing right stick
+        hookSetSpeed = xboxDrive2.getX(GenericHID.Hand.kLeft);  //hook set lift thing right stick
         output = xboxDrive.getPOV(); //block output d-pad
-        pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
+        if(xboxDrive2.getBButtonPressed()){
+
+        }
         //elevator.output(output);   THIS WILL BE NEEDED LATER DO NOT DELETE
 
-        if (xboxDrive.getAButtonPressed()) {
-            if (!accelerationDisable) {
-                accelerationDisable = true;
-            } else {
-                accelerationDisable = false;
-            }
-        }
 
         toggleAcceleration();
         togglePneumatics();
+        toggleHang();
+
         DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
 
         //Use this DriveTrain.stormDrive to be able to shift gears
         //DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable, forceLowGear);
 
-        hanger.pull(pullSpeed);
+        hanger.setHanger(hookSetSpeed);
         elevator.elevate(elevateSpeed, false);
-        Intake.fwoo(Constants.INTAKE_SPEED);
-        Hanger.pull(pullSpeed);
-        Elevator.elevate(elevateSpeed, false);
-        Intake.intakeUpDown(armControl);
+        intake.fwoo(Constants.INTAKE_SPEED);
+        intake.intakeUpDown(armControl);
+        elevator.elevate(elevateSpeed, false);
+        if(readyToHang) DriveTrain.hang(pullSpeed);
 
-        if (xboxDrive.getXButtonPressed() || xboxDrive2.getXButtonPressed()) {
-            System.out.println("Doubt");
-        }
-
+        if (xboxDrive.getXButtonPressed() || xboxDrive2.getXButtonPressed()) System.out.println("Doubt");
     }
 
     public void cameraInit() {
@@ -264,6 +255,12 @@ public class Robot extends IterativeRobot {
         boolean aIsPressed = xboxDrive.getAButtonPressed();
         if(aIsPressed /*&& listenToA*/){
             accelerationDisable = ! accelerationDisable;
+        }
+    }
+    private void toggleHang(){
+        boolean bIsPressed = xboxDrive2.getBButton();
+        if(bIsPressed){
+            readyToHang = !readyToHang;
         }
     }
     private void togglePneumatics(){
