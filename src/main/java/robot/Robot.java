@@ -38,23 +38,8 @@ public class Robot extends IterativeRobot {
     private double elevateSpeed;
     private double pullSpeed;
     public boolean accelerationDisable = false;
-    public boolean aButtonPressed = false;
     public XboxController xboxDrive;
     public XboxController xboxDrive2;
-
-
-
-    public static final class Auto {
-        public static final String MID_SWITCH = "Mid Switch";
-        public static final String LEFT_SCALE = "Left Side Scale";
-        public static final String LEFT_SWITCH = "Left Side Switch";
-        public static final String RIGHT_SCALE = "Right Scale";
-        public static final String RIGHT_SWITCH = "Right Switch";
-        public static final String POINT_TURN = "Point Turn";
-        public static final String MOVE_FORWARD = "Move Forward";
-        public static final String TEST_MODE = "Test Mode";
-        public static final String FOLLOW_PREF = "Follow Other Selection";
-    }
 
     @Override
     public void robotInit() {
@@ -62,15 +47,15 @@ public class Robot extends IterativeRobot {
         xboxDrive2 = new XboxController(Constants.PORT_XBOX_WEAPONS);
 
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Auto.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Auto.MID_SWITCH, new MidSwitch('L'));
-        autoChooser.addObject(Auto.RIGHT_SWITCH, new RightSwitch());
-        autoChooser.addObject(Auto.LEFT_SCALE, new LeftScale());
-        autoChooser.addObject(Auto.RIGHT_SCALE, new RightScale());
-        autoChooser.addObject(Auto.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Auto.MOVE_FORWARD, new MoveForward(262)); //change distance
-        autoChooser.addObject(Auto.TEST_MODE, new TestMode());
-        autoChooser.addObject(Auto.FOLLOW_PREF, AutoPreference.FOLLOW);
+        autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
+        autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
+        autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
+        autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
+        autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        autoChooser.addObject(Constants.TEST_MODE, new TestMode());
+        autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
 
         positionChooser = new SendableChooser<AutoPosition>();
         autoChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
@@ -83,14 +68,11 @@ public class Robot extends IterativeRobot {
         preferenceChooser.addObject(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
         preferenceChooser.addObject(AutoPreference.SCALE.getName(), AutoPreference.SCALE);
 
-
-
         SmartDashboard.putData("Test Autonomous Modes", autoChooser);
         SmartDashboard.putData("Auto Position", positionChooser);
         SmartDashboard.putData("Auto Preference", positionChooser);
 
         NavX.getNavx();
-
 
     }
 
@@ -102,17 +84,40 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
+        char switchSide = gameData.charAt(0);
+        char scaleSide = gameData.charAt(1);
 
         Command autonomousCommand = (Command) autoChooser.getSelected();
         AutoPosition position = (AutoPosition) positionChooser.getSelected();
         AutoPreference preference = (AutoPreference) preferenceChooser.getSelected();
 
-        if (autonomousCommand.getName() && autonomousCommand != null) {
+
+        if (!autonomousCommand.getName().equalsIgnoreCase(Constants.FOLLOW_PREF)) {
             System.err.println("Auto " + autoChooser.getSelected() + " selected!");
             autonomousCommand.start();
-        } else {
-            System.err.println("Auto not selected!");
+            return;
         }
+
+        switch (position + "-" + preference) {
+            case "Left-Scale":
+                autonomousCommand = new LeftScale();
+                break;
+            case "Left-Switch":
+                //autonomousCommand = new LeftSwitch(); (Didn't make Left Switch yet)
+                break;
+            case "Mid-Switch":
+                autonomousCommand = new MidSwitch(switchSide);
+                break;
+            case "Right-Scale":
+                autonomousCommand = new RightScale();
+                break;
+            case "Right-Switch":
+                autonomousCommand = new RightSwitch();
+                break;
+            default: break;
+        }
+
+        autonomousCommand.start();
 
 
     }
@@ -146,7 +151,6 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Left Encoder", DriveTrain._leftMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Right Encoder", DriveTrain._rightMain.getSelectedSensorPosition(0));
 
-
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
         elevateSpeed = xboxDrive.getX(GenericHID.Hand.kRight);
@@ -154,7 +158,6 @@ public class Robot extends IterativeRobot {
         reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
 
         if(xboxDrive.getAButtonPressed()){
-           // aButtonPressed = true;
             if(!accelerationDisable){
                 accelerationDisable = true;
             }

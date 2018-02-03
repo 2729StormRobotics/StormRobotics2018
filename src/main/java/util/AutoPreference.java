@@ -2,9 +2,7 @@ package util;
 
 public enum AutoPreference {
     SCALE("Scale"),
-    SWITCH("Switch"),
-    FOLLOW("Follow");
-
+    SWITCH("Switch");
 
     private final String name;
 

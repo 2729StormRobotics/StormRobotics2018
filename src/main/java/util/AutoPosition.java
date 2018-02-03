@@ -7,9 +7,7 @@ public enum AutoPosition {
 
     private final String name;
 
-    AutoPosition(String name) {
-        this.name = name;
-    }
+    AutoPosition(String name) { this.name = name; }
 
     public String getName() {
         return name;

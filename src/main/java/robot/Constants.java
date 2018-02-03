@@ -48,5 +48,15 @@ public class Constants {
     public static final double FORWARD_ANGLE_F                  = 0.0;
     public static final double FORWARD_ANGLE_PERIOD             = 0.02;
 
+    public static final String MID_SWITCH = "Mid Switch";
+    public static final String LEFT_SCALE = "Left Side Scale";
+    public static final String LEFT_SWITCH = "Left Side Switch";
+    public static final String RIGHT_SCALE = "Right Scale";
+    public static final String RIGHT_SWITCH = "Right Switch";
+    public static final String POINT_TURN = "Point Turn";
+    public static final String MOVE_FORWARD = "Move Forward";
+    public static final String TEST_MODE = "Test Mode";
+    public static final String FOLLOW_PREF = "Follow";
+
 
 }
