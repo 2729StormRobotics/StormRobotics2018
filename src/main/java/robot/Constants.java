@@ -65,12 +65,16 @@ public class Constants {
     //do some calculations to determine optimal levels of motor output for shifting up and down
     public static final double SHIFT_UP                         = 0.8;
     public static final double SHIFT_DOWN                       = 0.4;
+
     public static final double ELEVATOR_P                 = 0.0002;
     public static final double ELEVATOR_I                 = 0.0000;
     public static final double ELEVATOR_D                 = 0.00005;
     public static final double ELEVATOR_F                 = 0.0;
     public static final double ELEVATOR_PERIOD            = 0.02;
     public static final double ELEVATOR_TOLERANCE             = 2.0;
+
+    public static final double SHIFT_UP_MULT              =0.406;
+    public static final double SHIFT_DOWN_MULT            =2.06;
 
     public static final String MID_SWITCH = "Mid Switch";
     public static final String LEFT_SCALE = "Left Side Scale";

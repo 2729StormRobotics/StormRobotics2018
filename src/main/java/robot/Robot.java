@@ -89,7 +89,7 @@ public class Robot extends IterativeRobot {
         debugChooser.addObject(DebugLevel.ALL.getName(), DebugLevel.ALL);
 
         Dashboard.sendChooser();
-        cameraInit();
+       // cameraInit();
         NavX.getNavx();
         listenToA = true;
         accelerationDisable = false;
@@ -203,7 +203,6 @@ public class Robot extends IterativeRobot {
             Hanger.pull(pullSpeed);
             Elevator.elevate(elevateSpeed, false);
             Intake.intakeUpDown(armControl);
-            DriveTrain.shift(forceLowGear);
         }
 
 

@@ -63,6 +63,9 @@ public class DriveTrain extends Subsystem {
      */
     public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance) {
         //Left and Right triggers control speed.  Steer with joystick
+
+        combinedSpeed = shift(combinedSpeed, false);
+
         turn = turn * Math.abs(turn);
 
         int mult;
@@ -134,10 +137,19 @@ public class DriveTrain extends Subsystem {
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
 
-    public static void shift(boolean forceLow) {
+    public static double shift(double speed, boolean forceLow) {
         boolean foo = high;
         if (forceLow) foo = false;
 
+        if(speed <= Constants.SHIFT_DOWN || forceLow){
+            speed *= Constants.SHIFT_DOWN_MULT;
+        }
+        else if(speed >= Constants.SHIFT_UP){
+            speed *= Constants.SHIFT_UP_MULT;
+        }
+
         _gearShift.set(foo);
+        return speed;
+
     }
 }
