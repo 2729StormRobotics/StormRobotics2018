@@ -1,6 +1,9 @@
 package Subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import robot.Robot;
 
 public class LEDs {
 
@@ -62,9 +65,9 @@ public class LEDs {
         ledOut.write(ledCode, 1);
     }
 
-    public static void lightUp(String mode){lightUp(mode, false);}
+    private static void lightUp(String mode){lightUp(mode, false);}
 
-    public static void lightUp(String mode, boolean state){
+    private static void lightUp(String mode, boolean state){
 
         switch (mode){
             case "hang":
@@ -91,4 +94,13 @@ public class LEDs {
         }
 
     }
+
+    public static void checkStatus() {
+
+        String alliance = DriverStation.getInstance().getAlliance().toString();
+
+
+
+    }
+
 }
