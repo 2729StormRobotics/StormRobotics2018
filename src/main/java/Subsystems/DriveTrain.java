@@ -112,6 +112,10 @@ public class DriveTrain extends Subsystem {
 
     }
 
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance, boolean forceLow) {
+
+    }
+
     public static void tankDrive(double leftSpeed, double rightSpeed) {
         tankDrive(leftSpeed, rightSpeed, false, MOTOR_TOLERANCE_DEFAULT);
     }
