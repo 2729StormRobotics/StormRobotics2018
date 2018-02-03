@@ -4,16 +4,18 @@ import AutoModes.Commands.MoveForward;
 import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.*;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.opencv.core.Mat;
 import util.AutoPosition;
 import util.AutoPreference;
+import util.DebugLevel;
 
 import java.io.File;
 
@@ -58,10 +60,10 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
 
         positionChooser = new SendableChooser<AutoPosition>();
-        autoChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
-        autoChooser.addObject(AutoPosition.LEFT.getName(), AutoPosition.LEFT);
-        autoChooser.addObject(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
-        autoChooser.addObject(AutoPosition.RIGHT.getName(), AutoPosition.RIGHT);
+        positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
+        positionChooser.addObject(AutoPosition.LEFT.getName(), AutoPosition.LEFT);
+        positionChooser.addObject(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
+        positionChooser.addObject(AutoPosition.RIGHT.getName(), AutoPosition.RIGHT);
 
         preferenceChooser = new SendableChooser<AutoPreference>();
         preferenceChooser.addDefault(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
@@ -70,7 +72,7 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putData("Test Autonomous Modes", autoChooser);
         SmartDashboard.putData("Auto Position", positionChooser);
-        SmartDashboard.putData("Auto Preference", positionChooser);
+        SmartDashboard.putData("Auto Preference", preferenceChooser);
 
         NavX.getNavx();
 
@@ -178,5 +180,23 @@ public class Robot extends IterativeRobot {
     @Override
     public void testPeriodic() {
         DriveTrain.dashboardStats();
+    }
+
+    public void cameraInit() {
+        new Thread(() -> {
+            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+            camera.setResolution(640, 480);
+
+            CvSink cvSink = CameraServer.getInstance().getVideo();
+            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+
+            Mat source = new Mat();
+            Mat output = new Mat();
+
+            while(!Thread.interrupted()) {
+                cvSink.grabFrame(source);
+                outputStream.putFrame(output);
+            }
+        }).start();
     }
 }

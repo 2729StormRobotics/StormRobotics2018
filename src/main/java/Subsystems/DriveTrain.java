@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
+import robot.Robot;
+import util.DebugLevel;
 
 public class DriveTrain extends Subsystem {
 
@@ -43,15 +45,16 @@ public class DriveTrain extends Subsystem {
     }
 
     public static void dashboardStats() {
-        SmartDashboard.putNumber("Encoder Left", _leftMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Encoder Left Velocity", _leftMain.getSelectedSensorVelocity(0));
-        SmartDashboard.putNumber("Encoder Right", _rightMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Encoder Right Velocity", _rightMain.getSelectedSensorVelocity(0));
+            SmartDashboard.putNumber("Encoder Left", _leftMain.getSelectedSensorPosition(0));
+            SmartDashboard.putNumber("Encoder Left Velocity", _leftMain.getSelectedSensorVelocity(0));
+            SmartDashboard.putNumber("Encoder Right", _rightMain.getSelectedSensorPosition(0));
+            SmartDashboard.putNumber("Encoder Right Velocity", _rightMain.getSelectedSensorVelocity(0));
 
-        DriveTrain.dashboardMotorControllerInfo("Motor/right/main/", _rightMain);
-        DriveTrain.dashboardMotorControllerInfo("Motor/right/2/", _right2);
-        DriveTrain.dashboardMotorControllerInfo("Motor/left/main/", _leftMain);
-        DriveTrain.dashboardMotorControllerInfo("Motor/left/2/", _left2);
+            DriveTrain.dashboardMotorControllerInfo("Motor/right/main/", _rightMain);
+            DriveTrain.dashboardMotorControllerInfo("Motor/right/2/", _right2);
+            DriveTrain.dashboardMotorControllerInfo("Motor/left/main/", _leftMain);
+            DriveTrain.dashboardMotorControllerInfo("Motor/left/2/", _left2);
+
     }
 
     private static void dashboardMotorControllerInfo(String category, TalonSRX talon) {
