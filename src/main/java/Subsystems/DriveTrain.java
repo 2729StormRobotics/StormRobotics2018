@@ -21,10 +21,10 @@ public class DriveTrain extends Subsystem {
     public static boolean high;
 
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
-    private static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
+    public static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
 
     public static TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
-    private static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
+    public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
     public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
 
@@ -48,18 +48,6 @@ public class DriveTrain extends Subsystem {
     @Override
     public void periodic() {
         super.periodic();
-        DriveTrain.dashboardStats();
-    }
-
-    public static void dashboardStats() {
-
-        Dashboard.sendEncoders();
-
-        Dashboard.sendMotorControllerInfo("Motor/right/main/", _rightMain);
-        Dashboard.sendMotorControllerInfo("Motor/right/2/", _right2);
-        Dashboard.sendMotorControllerInfo("Motor/left/main/", _leftMain);
-        Dashboard.sendMotorControllerInfo("Motor/left/2/", _left2);
-
     }
 
     public static void stormDrive(double combinedSpeed, double acceleration, double turn) {
@@ -145,10 +133,6 @@ public class DriveTrain extends Subsystem {
         _leftMain.configNeutralDeadband(tolerance, 500);
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
-
-    //    public void pointTurn(double degrees) {
-//
-//    }
 
     public static void shift(boolean forceLow) {
         boolean foo = high;

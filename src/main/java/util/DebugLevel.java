@@ -3,7 +3,7 @@ package util;
 public enum DebugLevel {
     INFO("Info"),
     DEBUG("Debug"),
-    TRACE("Trace");
+    ALL("All");
 
     private final String name;
 

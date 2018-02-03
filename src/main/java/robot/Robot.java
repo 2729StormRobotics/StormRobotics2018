@@ -11,10 +11,11 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.opencv.core.Mat;
 import util.AutoPosition;
 import util.AutoPreference;
+import util.DebugLevel;
+
 import Subsystems.*;
 import java.rmi.Remote;
 import java.io.File;
@@ -33,12 +34,15 @@ public class Robot extends IterativeRobot {
     public static SendableChooser autoChooser;
     public static SendableChooser positionChooser;
     public static SendableChooser preferenceChooser;
+    public static SendableChooser debugChooser;
 
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
     private double elevateSpeed;
     private double pullSpeed;
+    private DebugLevel bug;
+
     private double hookSpeed;
     public static boolean accelerationDisable = false;
     private int output;
@@ -58,6 +62,7 @@ public class Robot extends IterativeRobot {
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
+        autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
@@ -76,6 +81,12 @@ public class Robot extends IterativeRobot {
         preferenceChooser.addDefault(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
         preferenceChooser.addObject(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
         preferenceChooser.addObject(AutoPreference.SCALE.getName(), AutoPreference.SCALE);
+
+        debugChooser = new SendableChooser<>();
+        debugChooser.addDefault(DebugLevel.INFO.getName(), DebugLevel.INFO);
+        debugChooser.addObject(DebugLevel.INFO.getName(), DebugLevel.INFO);
+        debugChooser.addObject(DebugLevel.DEBUG.getName(), DebugLevel.DEBUG);
+        debugChooser.addObject(DebugLevel.ALL.getName(), DebugLevel.ALL);
 
         Dashboard.sendChooser();
         cameraInit();
@@ -101,6 +112,7 @@ public class Robot extends IterativeRobot {
         Command autonomousCommand = (Command) autoChooser.getSelected();
         AutoPosition position = (AutoPosition) positionChooser.getSelected();
         AutoPreference preference = (AutoPreference) preferenceChooser.getSelected();
+        bug = (DebugLevel) debugChooser.getSelected();
 
         System.out.println(autonomousCommand.getName());
 
@@ -126,10 +138,10 @@ public class Robot extends IterativeRobot {
             case "Right-Switch":
                 autonomousCommand = new RightSwitch();
                 break;
-            default:
-                break;
+            default: break;
         }
 
+        checkBug();
         autonomousCommand.start();
         System.out.println("Running" + autonomousCommand.getName());
 
@@ -143,25 +155,18 @@ public class Robot extends IterativeRobot {
     public void testInit() {
     }
 
-
-    @Override
-    public void disabledPeriodic() {
-        DriveTrain.dashboardStats();
-    }
-
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
-        DriveTrain.dashboardStats();
+        checkBug();
         NavX.dashboardStats();
     }
 
     @Override
     public void teleopPeriodic() {
-        DriveTrain.dashboardStats();
         NavX.dashboardStats();
 
-        Dashboard.sendEncoders();
+        checkBug();
 
         double combinedSpeed = forwardSpeed - reverseSpeed;
         turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
@@ -188,13 +193,9 @@ public class Robot extends IterativeRobot {
                     accelerationDisable = false;
                 }
             }
-
-        Dashboard.checkAccel();
-
             pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kRight);
             toggleAcceleration();
             togglePneumatics();
-            SmartDashboard.putBoolean("Intake Penumatics", armControl);
             DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, accelerationDisable);
             hanger.pull(pullSpeed);
             elevator.elevate(elevateSpeed, false);
@@ -209,18 +210,13 @@ public class Robot extends IterativeRobot {
 
     }
 
-    @Override
-    public void testPeriodic () {
-        DriveTrain.dashboardStats();
-    }
-
-    public void cameraInit () {
+    public void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
             camera.setResolution(640, 480);
 
             CvSink cvSink = CameraServer.getInstance().getVideo();
-            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+            CvSource outputStream = CameraServer.getInstance().putVideo("FirstP", 640, 480);
 
             Mat source = new Mat();
             Mat output = new Mat();
@@ -231,6 +227,37 @@ public class Robot extends IterativeRobot {
             }
         }).start();
     }
+
+    public void checkBug() {
+        switch(bug.getName()) {
+            case "Info":
+                Dashboard.sendEncoders();
+                Dashboard.sendNavXInfo();
+                break;
+            case "Debug":
+                Dashboard.sendEncoders();
+                Dashboard.sendElevatorEncoders();
+                Dashboard.checkAccel();
+                Dashboard.checkPneumatics();
+                Dashboard.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
+                Dashboard.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
+                break;
+            case "All":
+                Dashboard.sendEncoders();
+                Dashboard.sendElevatorEncoders();
+                Dashboard.sendNavXAll();
+                Dashboard.checkAccel();
+                Dashboard.checkPneumatics();
+                Dashboard.checkTurnSpeed();
+                Dashboard.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
+                Dashboard.sendMotorControllerInfo("Motor/right/2/", DriveTrain._right2);
+                Dashboard.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
+                Dashboard.sendMotorControllerInfo("Motor/left/2/", DriveTrain._left2);
+                break;
+            default: break;
+        }
+    }
+
     private void toggleAcceleration(){
         boolean aIsPressed = xboxDrive.getAButtonPressed();
         if(aIsPressed /*&& listenToA*/){

@@ -51,7 +51,7 @@ public class Lift extends Command {
 
     protected void initialize() {
         super.initialize();
-        elevatorController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, 0.0002, 0.00, elevatorSource, elevatorWrite, 0.02); //i: 0.000003 d: 0002
+        elevatorController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D, Constants.ELEVATOR_F, elevatorSource, elevatorWrite, Constants.ELEVATOR_PERIOD); //i: 0.000003 d: 0002
         elevatorController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         elevatorController.setOutputRange(-.5, .5);
         elevatorController.setAbsoluteTolerance(Constants.ELEVATOR_TOLERANCE);
@@ -63,7 +63,6 @@ public class Lift extends Command {
 
     protected void execute() {
         super.execute();
-        Dashboard.sendElevatorEncoders();
         if (!elevatorController.isEnabled()) {
             elevatorController.enable();
             System.err.println("moveElevator enabled again");

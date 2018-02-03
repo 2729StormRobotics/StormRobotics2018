@@ -1,5 +1,6 @@
 package AutoModes.Commands;
 
+import Subsystems.Dashboard;
 import Subsystems.DriveTrain;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -14,7 +15,8 @@ import robot.Robot;
 
 public class MoveForward extends Command {
 
-    double moveLeftSpeed, moveRightSpeed, turnSpeed, distance, angle;
+    public static double turnSpeed;
+    double moveLeftSpeed, moveRightSpeed, distance, angle;
     PIDController moveLeftController, moveRightController, angleController;
 
     PIDSource leftSource = new PIDSource() {
@@ -51,7 +53,6 @@ public class MoveForward extends Command {
 
         public double pidGet() { // Encoder Position Robot @
             return DriveTrain._rightMain.getSelectedSensorPosition(0);
-
         }
     };
 
@@ -77,9 +78,8 @@ public class MoveForward extends Command {
     PIDOutput motorSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
-            turnSpeed = a;  //change to -a later when .setInverted works
-
-            SmartDashboard.putNumber("Turn Speed", turnSpeed);
+            turnSpeed = a;
+            Dashboard.checkTurnSpeed();
         }
     };
 
