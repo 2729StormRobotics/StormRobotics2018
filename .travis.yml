@@ -8,8 +8,8 @@ env:
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "n4pa0mrR+H40dfseLGYQV64ROB4jj4dqJcHkWlhTRfhKQgDQ3TF3ShkE9MpN7WkHJdjVSKUCxo4DCDrN8CT4G90b6MOvJ/1tQdYoIOY836oCYEe6UOEffkbI/Vt/ItEZ0cIfjFyY7TN22TF4GvYl4rwcY6EjpVzRE/U/NgGTd0bACQWNCZSprtWRERlvoGRTkqYiVRddXwunp9x1fctvvTP/1lhjWthTqlDhjDDuYfs+zTbCogLIFksMGcEfjvBjVNE2Nyqu32bQyypgCxv+Pd2g6VQK0XLYyVCt1kfmSKoA1NNTr+zfVM3kFoP2NI/TT3XRM26umvc/UPJ+svDbV99tikuGMlpuTGzDP6aLx0saWdaBAMNA5h6prK1S8ms3Gfsr3MLH5+Ffvgi3SDjbEPcqimZyfQLha8Wr1i02h0084BeDu+cGdHZ+iDHrMF5GUWhOO8Go2pz+UD63xQ4nXurajD2FI+OytdSIf5bi0py8tQS3nDbAsQXzzecwoKnSDV7cXjIom9yZc5nIoCyTE1cP4fYb8udHEgSSvSJgnCVk1K+nN2r4Ebmlmz/d01LHy7TAA2/nh244IDijr7DAC0KQMfdDOdl5PLyFg65gNMBlAcRT7bRB4GdLZ2baOoQyVW+UEiATusFLMZwzI4GtvnlbefloDw2/EMHwhF3ruPI="
 
-before_install:
-  - echo -n | openssl s_client -connect 'https://scan.coverity.com:443' | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+#before_install:
+#  - echo -n | openssl s_client -connect 'https://scan.coverity.com:443' | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 addons:
   coverity_scan:
@@ -19,7 +19,7 @@ addons:
     notification_email: skareer@outlook.com
     build_command_prepend: "gradle clean"
     build_command: "gradle build"
-    branch_pattern: coverity_scan
+    branch_pattern: master
   apt:
     packages:
       - oracle-java8-installer
