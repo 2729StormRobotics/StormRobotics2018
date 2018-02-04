@@ -16,6 +16,8 @@ import util.DebugLevel;
 
 public class Dashboard {
 
+    public static DebugLevel bug;
+
     protected static SendableChooser autoChooser;
     protected static SendableChooser positionChooser;
     protected static SendableChooser preferenceChooser;
@@ -26,6 +28,40 @@ public class Dashboard {
 
     public static void checkAccel() {
         SmartDashboard.putBoolean("Accel Disable", Robot.accelerationDisable);
+    }
+
+    public static void checkBug() {
+        String s = "Info";
+        if(bug != null && bug.getName() != null) {
+            s = bug.getName();
+        }
+        switch(s) {
+            case "Info":
+                Dashboard.sendEncoders();
+                Dashboard.sendNavXInfo();
+                break;
+            case "Debug":
+                Dashboard.sendEncoders();
+                Dashboard.sendElevatorEncoders();
+                Dashboard.checkAccel();
+                Dashboard.checkPneumatics();
+                Dashboard.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
+                Dashboard.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
+                break;
+            case "All":
+                Dashboard.sendEncoders();
+                Dashboard.sendElevatorEncoders();
+                Dashboard.sendNavXAll();
+                Dashboard.checkAccel();
+                Dashboard.checkPneumatics();
+                Dashboard.checkTurnSpeed();
+                Dashboard.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
+                Dashboard.sendMotorControllerInfo("Motor/right/2/", DriveTrain._right2);
+                Dashboard.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
+                Dashboard.sendMotorControllerInfo("Motor/left/2/", DriveTrain._left2);
+                break;
+            default: break;
+        }
     }
 
     public static void checkPneumatics() { SmartDashboard.putBoolean("Intake Pneumatics", Robot.armControl); }

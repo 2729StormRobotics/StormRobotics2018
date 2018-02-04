@@ -1,7 +1,5 @@
 package robot;
 
-import AutoModes.Commands.MoveForward;
-import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.*;
 import edu.wpi.cscore.CvSink;
@@ -10,11 +8,12 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import org.opencv.core.Mat;
 import util.AutoPosition;
 import util.AutoPreference;
 import util.DebugLevel;
+import util.RobotState;
+import util.Controller;
 
 public class Robot extends IterativeRobot {
 
@@ -23,43 +22,21 @@ public class Robot extends IterativeRobot {
     public static Hanger _hanger = new Hanger();
     public static NavX navx = new NavX();
     public static Intake _intake = new Intake();
+    public static Dashboard _dashboard = new Dashboard();
+    public static RobotState _robotState;
+    private Controller _controller = new Controller();
 
-    private double forwardSpeed;
-    private double reverseSpeed;
-    private double turnSpeed;
-    private double elevateSpeed;
-    private double pullSpeed;
-    private double hookSetSpeed;
-
-    private DebugLevel bug;
-
-    private int output;
-
-    private boolean intakeOn;
-    private boolean forceLowGear;
-    public static boolean armControl;
-    public static boolean readyToHang;
     public static boolean acceleration;
-
-
-    public XboxController xboxDrive;
-    public XboxController xboxDrive2;
 
     boolean intakePneumatics = false;
 
     @Override
     public void robotInit() {
-        xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
-        xboxDrive2 = new XboxController(Constants.PORT_XBOX_WEAPONS);
-
-        Dashboard.sendChooser();
+        _dashboard.sendChooser();
        // cameraInit();
         NavX.getNavx();
         acceleration = false;
-        intakeOn = false;
-        forceLowGear = false;
-        armControl = false;
-        readyToHang = false;
+        _robotState = RobotState.DRIVE;
     }
 
     @Override
@@ -79,15 +56,15 @@ public class Robot extends IterativeRobot {
             System.out.println("No Game Data");
         }
 
-        Command autonomousCommand = (Command) autoChooser.getSelected();
-        AutoPosition position = (AutoPosition) positionChooser.getSelected();
-        AutoPreference preference = (AutoPreference) preferenceChooser.getSelected();
-        bug = (DebugLevel) debugChooser.getSelected();
+        Command autonomousCommand = (Command) _dashboard.autoChooser.getSelected();
+        AutoPosition position = (AutoPosition) _dashboard.positionChooser.getSelected();
+        AutoPreference preference = (AutoPreference) _dashboard.preferenceChooser.getSelected();
+        _dashboard.bug = (DebugLevel) _dashboard.debugChooser.getSelected();
 
         System.out.println(autonomousCommand.getName());
 
         if (!autonomousCommand.getName().equalsIgnoreCase("DummyCommand")) {
-            System.err.println("Auto " + autoChooser.getSelected() + " selected!");
+            System.err.println("Auto " + _dashboard.autoChooser.getSelected() + " selected!");
             autonomousCommand.start();
             return;
         }
@@ -111,7 +88,7 @@ public class Robot extends IterativeRobot {
             default: break;
         }
 
-        checkBug();
+        _dashboard.checkBug();
         autonomousCommand.start();
         System.out.println("Running" + autonomousCommand.getName());
 
@@ -119,7 +96,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-        acceleration = true;
     }
 
     @Override
@@ -129,61 +105,37 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
-        checkBug();
+        _dashboard.checkBug();
         NavX.dashboardStats();
     }
 
     @Override
     public void teleopPeriodic() {
         NavX.dashboardStats();
-
-        checkBug();
-
-        double combinedSpeed = forwardSpeed - reverseSpeed;
-
-        turnSpeed = xboxDrive.getX(GenericHID.Hand.kLeft);
-        elevateSpeed = xboxDrive.getX(GenericHID.Hand.kRight);
-        forwardSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kRight);
-        reverseSpeed = xboxDrive.getTriggerAxis(XboxController.Hand.kLeft);
-        forceLowGear = xboxDrive.getBumper(XboxController.Hand.kLeft);
-
-        //Controller 2
-        elevateSpeed = xboxDrive2.getX(GenericHID.Hand.kRight);  //elevator right stick
-        pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kLeft);  //winch left trigger
-        intakeOn = xboxDrive2.getBumper(XboxController.Hand.kLeft);  //intake left bumper
-        hookSetSpeed = xboxDrive2.getX(GenericHID.Hand.kLeft);  //hook set lift thing left stick
-        output = xboxDrive.getPOV(); //block output d-pad
-
-        //elevator.output(output);   THIS WILL BE NEEDED LATER DO NOT DELETE
-
+        _dashboard.checkBug();
+        double combinedSpeed = _controller.getForward() - _controller.getReverse();
+        _elevator.output(_controller.getBlockOutput());
 
         toggleAcceleration();
-        togglePneumatics();
-        toggleHang();
 
-        if(readyToHang){
-            DriveTrain.hang(pullSpeed);
+        if(_controller.getPTO()) {
+            if(_robotState.equals(RobotState.DRIVE)) {
+                _robotState = RobotState.PTO;
+            } else {
+                _robotState = RobotState.DRIVE;
+            }
+        }
+        if(_robotState.getState().equalsIgnoreCase("Drive")) {
+            DriveTrain.stormDrive(combinedSpeed, _controller.getTurn(), acceleration);
         }
         else {
-            DriveTrain.stormDrive(combinedSpeed, turnSpeed, acceleration);
-            //Use this DriveTrain.stormDrive to be able to shift gears
-            //DriveTrain.stormDrive(combinedSpeed, 0.0, turnSpeed, acceleration, forceLowGear);
-        }
-        _hanger.setHanger(hookSetSpeed);
-        _elevator.elevate(elevateSpeed, false);
-        if(intakeOn) _intake.fwoo(Constants.INTAKE_SPEED);
-        _elevator.elevate(elevateSpeed, false);
-
-
-        if(xboxDrive.getYButtonPressed()) {
-            intakePneumatics = !intakePneumatics;
-            _intake.intakeUpDown(intakePneumatics);
+            DriveTrain.hang(_controller.getWinch());
         }
 
-        if (xboxDrive.getXButtonPressed()) System.out.println("Doubt");
-
-        if (xboxDrive.getXButtonPressed()) System.out.println("Doubt");
-
+        _hanger.setHanger(_controller.getHanger());
+        _elevator.elevate(_controller.getElevator());
+        if(_controller.getIntake()) _intake.fwoo(Constants.INTAKE_SPEED);
+        _controller.printDoubt();
     }
 
     public void cameraInit() {
@@ -204,65 +156,11 @@ public class Robot extends IterativeRobot {
         }).start();
     }
 
-    public void checkBug() {
-        String s = "Info";
-        if(bug != null && bug.getName() != null) {
-            s = bug.getName();
-        }
-        switch(s) {
-            case "Info":
-                Dashboard.sendEncoders();
-                Dashboard.sendNavXInfo();
-                break;
-            case "Debug":
-                Dashboard.sendEncoders();
-                Dashboard.sendElevatorEncoders();
-                Dashboard.checkAccel();
-                Dashboard.checkPneumatics();
-                Dashboard.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
-                Dashboard.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
-                break;
-            case "All":
-                Dashboard.sendEncoders();
-                Dashboard.sendElevatorEncoders();
-                Dashboard.sendNavXAll();
-                Dashboard.checkAccel();
-                Dashboard.checkPneumatics();
-                Dashboard.checkTurnSpeed();
-                Dashboard.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
-                Dashboard.sendMotorControllerInfo("Motor/right/2/", DriveTrain._right2);
-                Dashboard.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
-                Dashboard.sendMotorControllerInfo("Motor/left/2/", DriveTrain._left2);
-                break;
-            default: break;
-        }
-    }
-
     private void toggleAcceleration(){
-        boolean aIsPressed = xboxDrive.getAButtonPressed();
+        boolean aIsPressed = _controller.getSmoothAccel();
         if(aIsPressed){
             acceleration = ! acceleration;
         }
-    }
-
-    private void toggleHang(){
-        boolean bIsPressed = xboxDrive2.getBButton();
-        if(bIsPressed){
-            readyToHang = !readyToHang;
-        }
-    }
-
-    private void togglePneumatics(){
-        boolean yIsPressed = xboxDrive2.getYButtonPressed();
-        if(yIsPressed) {
-            armControl = !armControl;
-        }
-
-
-
-
-    }
-
     }
 }
 

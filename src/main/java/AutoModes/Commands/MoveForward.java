@@ -30,7 +30,7 @@ public class MoveForward extends Command {
             return PIDSourceType.kDisplacement;
         }
 
-        public double pidGet() { // Encoder Position Robot @
+        public double pidGet() { // Encoder Position robot @
             return DriveTrain._leftMain.getSelectedSensorPosition(0);
 
         }
@@ -49,7 +49,7 @@ public class MoveForward extends Command {
             return PIDSourceType.kDisplacement;
         }
 
-        public double pidGet() { // Encoder Position Robot @
+        public double pidGet() { // Encoder Position robot @
             return DriveTrain._rightMain.getSelectedSensorPosition(0);
         }
     };
@@ -67,7 +67,7 @@ public class MoveForward extends Command {
             return PIDSourceType.kDisplacement;
         }
 
-        public double pidGet() { // Angle Robot at
+        public double pidGet() { // Angle robot at
             return NavX.getNavx().getYaw();
         }
     };
@@ -95,7 +95,7 @@ public class MoveForward extends Command {
     };
 
     public MoveForward(double _dist) {
-        //requires(Robot.navx);
+        //requires(robot.navx);
         distance = _dist;
     }
 

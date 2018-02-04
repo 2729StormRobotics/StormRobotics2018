@@ -2,13 +2,11 @@ package AutoModes.Commands;
 
 import Subsystems.DriveTrain;
 import Subsystems.NavX;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
 
 public class PointTurn extends Command {
@@ -33,7 +31,7 @@ public class PointTurn extends Command {
             return PIDSourceType.kDisplacement;
         }
 
-        public double pidGet() { // Angle Robot at
+        public double pidGet() { // Angle robot at
             return NavX.getNavx().getYaw();
         }
     };

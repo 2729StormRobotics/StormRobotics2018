@@ -8,13 +8,11 @@ import robot.Constants;
 public class Elevator extends Subsystem {
 
     public static final TalonSRX _elevatorLeft = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_MAIN); //formerly _leftMain
-    public static final TalonSRX _elevatorRight = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_2);  //formerly _left2
 
     public static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     public static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
 
     public Elevator() {
-        _elevatorRight.follow(_elevatorLeft);
         _outputRight.follow(_outputLeft);
     }
 
@@ -24,7 +22,7 @@ public class Elevator extends Subsystem {
     }
 
 
-    public static void elevate(double liftSpeed, boolean squareValues) {
+    public static void elevate(double liftSpeed) {
 
         _elevatorLeft.set(ControlMode.PercentOutput, liftSpeed);
 
@@ -40,20 +38,8 @@ public class Elevator extends Subsystem {
 
     }
 
-    public static void output(double dPadValue){
-        double outputSpeed = 0.0;
-        if(dPadValue == 315 || dPadValue == 0 || dPadValue == 45){
-            outputSpeed = 1.0;
-        }
-        else{
-            outputSpeed = 0.0;
-        }
-        _elevatorLeft.set(ControlMode.PercentOutput, outputSpeed);
-
-        if(outputSpeed > 0){
-            LEDs.shooting = true;
-        } else {
-            LEDs.shooting = false;
-        }
+    public static void output(boolean shoot){
+        _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+        LEDs.shooting = shoot;
     }
 }

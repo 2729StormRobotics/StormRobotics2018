@@ -84,5 +84,7 @@ public class Constants {
     public static final String TEST_MODE = "Test Mode";
     public static final String FOLLOW_PREF = "Follow";
 
+    public static final double OUTPUT_SPEED = 1.0;
+
 
 }

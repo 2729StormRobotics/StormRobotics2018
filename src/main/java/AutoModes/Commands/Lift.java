@@ -29,7 +29,7 @@ public class Lift extends Command {
             return PIDSourceType.kDisplacement;
         }
 
-        public double pidGet() { // Encoder Position Robot @
+        public double pidGet() { // Encoder Position robot @
             /*
                 get input from potentiometer
              */

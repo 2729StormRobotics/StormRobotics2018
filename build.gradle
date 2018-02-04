@@ -17,7 +17,7 @@ compileTestJava {
 }
 
 def TEAM = 2729
-def ROBOT_CLASS = "robot.Robot"
+def ROBOT_CLASS = "robot.robot"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
@@ -58,7 +58,7 @@ dependencies {
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
 // in order to make them all available at runtime. Also adding the manifest so WPILib
-// knows where to look for our Robot Class.
+// knows where to look for our robot Class.
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     manifest jaci.openrio.gradle.GradleRIOPlugin.javaManifest(ROBOT_CLASS)

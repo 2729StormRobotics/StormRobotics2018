@@ -2,15 +2,9 @@ package Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
-import robot.Robot;
-import util.DebugLevel;
 
 public class DriveTrain extends Subsystem {
 
@@ -55,7 +49,7 @@ public class DriveTrain extends Subsystem {
         stormDrive(combinedSpeed, turn, false, MOTOR_TOLERANCE_DEFAULT);
     }
 
-    public static void stormDrive(double combinedSpeed, double turn, boolean acceleration) {
+    public static void stormDrive(double combinedSpeed, double turn, boolean  acceleration) {
         stormDrive(combinedSpeed, turn, acceleration, MOTOR_TOLERANCE_DEFAULT);
     }
     public static void stormDrive(double combinedSpeed, double turn, boolean acceleration, boolean forceLow) {
@@ -101,6 +95,10 @@ public class DriveTrain extends Subsystem {
             _leftMain.configOpenloopRamp(0, 10000);
             _rightMain.configOpenloopRamp(0, 10000);
         }
+    }
+
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance, boolean forceLow) {
+
     }
 
     public static void tankDrive(double leftSpeed, double rightSpeed) {
