@@ -1,12 +1,25 @@
-package Subsystems;
+package robot;
 
 import AutoModes.Commands.Lift;
 import AutoModes.Commands.MoveForward;
+import AutoModes.Commands.PointTurn;
+import AutoModes.Modes.*;
+import Subsystems.DriveTrain;
+import Subsystems.Elevator;
+import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import robot.Robot;
+import util.AutoPosition;
+import util.AutoPreference;
+import util.DebugLevel;
 
 public class Dashboard {
+
+    protected static SendableChooser autoChooser;
+    protected static SendableChooser positionChooser;
+    protected static SendableChooser preferenceChooser;
+    protected static SendableChooser debugChooser;
 
     public Dashboard() {
     }
@@ -22,10 +35,39 @@ public class Dashboard {
     }
 
     public static void sendChooser() {
-        SmartDashboard.putData("Test Autonomous Modes", Robot.autoChooser);
-        SmartDashboard.putData("Auto Position", Robot.positionChooser);
-        SmartDashboard.putData("Auto Preference", Robot.preferenceChooser);
-        SmartDashboard.putData("Debug Level", Robot.debugChooser);
+        autoChooser = new SendableChooser<>();
+        autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
+        autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
+        autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
+        autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
+        autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
+        autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        autoChooser.addObject(Constants.TEST_MODE, new TestMode());
+        autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
+
+        positionChooser = new SendableChooser<AutoPosition>();
+        positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
+        positionChooser.addObject(AutoPosition.LEFT.getName(), AutoPosition.LEFT);
+        positionChooser.addObject(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
+        positionChooser.addObject(AutoPosition.RIGHT.getName(), AutoPosition.RIGHT);
+
+        preferenceChooser = new SendableChooser<AutoPreference>();
+        preferenceChooser.addDefault(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
+        preferenceChooser.addObject(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
+        preferenceChooser.addObject(AutoPreference.SCALE.getName(), AutoPreference.SCALE);
+
+        debugChooser = new SendableChooser<>();
+        debugChooser.addDefault(DebugLevel.INFO.getName(), DebugLevel.INFO);
+        debugChooser.addObject(DebugLevel.INFO.getName(), DebugLevel.INFO);
+        debugChooser.addObject(DebugLevel.DEBUG.getName(), DebugLevel.DEBUG);
+        debugChooser.addObject(DebugLevel.ALL.getName(), DebugLevel.ALL);
+
+        SmartDashboard.putData("Test Autonomous Modes", autoChooser);
+        SmartDashboard.putData("Auto Position", positionChooser);
+        SmartDashboard.putData("Auto Preference", preferenceChooser);
+        SmartDashboard.putData("Debug Level", debugChooser);
     }
 
 
