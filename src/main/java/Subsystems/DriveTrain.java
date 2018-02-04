@@ -13,6 +13,7 @@ public class DriveTrain extends Subsystem {
     public static final double MOTOR_TOLERANCE_MIN = 0.01;
 
     public static boolean high;
+    private boolean acceleration = false;
 
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
     public static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
@@ -45,20 +46,17 @@ public class DriveTrain extends Subsystem {
         super.periodic();
     }
 
-    public static void stormDrive(double combinedSpeed, double turn) {
-        stormDrive(combinedSpeed, turn, false, MOTOR_TOLERANCE_DEFAULT);
+    public void stormDrive(double combinedSpeed, double turn) {
+        stormDrive(combinedSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
     }
 
-    public static void stormDrive(double combinedSpeed, double turn, boolean  acceleration) {
-        stormDrive(combinedSpeed, turn, acceleration, MOTOR_TOLERANCE_DEFAULT);
-    }
-    public static void stormDrive(double combinedSpeed, double turn, boolean acceleration, boolean forceLow) {
+    public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
        if(_PTO.get()) _PTO.set(false);
         combinedSpeed = shift(combinedSpeed, forceLow);
-        stormDrive(combinedSpeed, turn, acceleration, MOTOR_TOLERANCE_DEFAULT);
+        stormDrive(combinedSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
     }
 
-    public static void stormDrive(double combinedSpeed, double turn, boolean acceleration, double tolerance) {
+    private void stormDrive(double combinedSpeed, double turn, double tolerance) {
         //Left and Right triggers control speed.  Steer with joystick
 
         combinedSpeed = shift(combinedSpeed, false);
@@ -88,17 +86,13 @@ public class DriveTrain extends Subsystem {
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 
-        if(acceleration) {
+        if(this.acceleration) {
             _leftMain.configOpenloopRamp(1, 10000);
             _rightMain.configOpenloopRamp(1, 10000);
         } else {
             _leftMain.configOpenloopRamp(0, 10000);
             _rightMain.configOpenloopRamp(0, 10000);
         }
-    }
-
-    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance, boolean forceLow) {
-
     }
 
     public static void tankDrive(double leftSpeed, double rightSpeed) {
@@ -152,6 +146,7 @@ public class DriveTrain extends Subsystem {
         return speed;
 
     }
+
     public static void hang(double pullSpeed) {
         if(!_PTO.get()) _PTO.set(true);
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
@@ -162,7 +157,13 @@ public class DriveTrain extends Subsystem {
             LEDs.hanging = false;
         }
     }
+
     public static void togglePTO(){
         _PTO.set(!_PTO.get());
+    }
+
+
+    public void toggleAcceleration(){
+        acceleration = ! acceleration;
     }
 }

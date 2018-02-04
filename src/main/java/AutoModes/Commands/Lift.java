@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import robot.Constants;
+import robot.Robot;
 
 public class Lift extends Command {
 
@@ -70,7 +71,7 @@ public class Lift extends Command {
         elevatorController.setContinuous(true);
         elevatorController.setSetpoint(((Elevator._elevatorLeft.getSelectedSensorPosition(0))));
         elevatorController.enable();
-        Dashboard.sendElevatorEncoders();
+        Robot._dashboard.sendElevatorEncoders();
     }
 
     protected void execute() {

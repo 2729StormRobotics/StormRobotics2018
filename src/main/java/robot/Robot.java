@@ -17,7 +17,7 @@ import util.Controller;
 
 public class Robot extends IterativeRobot {
 
-    public static DriveTrain driveTrain = new DriveTrain();
+    public static DriveTrain _driveTrain = new DriveTrain();
     public static Elevator _elevator = new Elevator();
     public static Hanger _hanger = new Hanger();
     public static NavX navx = new NavX();
@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
-       // cameraInit();
+        cameraInit();
         NavX.getNavx();
         acceleration = false;
         _robotState = RobotState.DRIVE;
@@ -116,7 +116,9 @@ public class Robot extends IterativeRobot {
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
         _elevator.output(_controller.getBlockOutput());
 
-        toggleAcceleration();
+        if(_controller.getSmoothAccel()) {
+            _driveTrain.toggleAcceleration();
+        }
 
         if(_controller.getPTO()) {
             if(_robotState.equals(RobotState.DRIVE)) {
@@ -125,16 +127,20 @@ public class Robot extends IterativeRobot {
                 _robotState = RobotState.DRIVE;
             }
         }
+
         if(_robotState.getState().equalsIgnoreCase("Drive")) {
-            DriveTrain.stormDrive(combinedSpeed, _controller.getTurn(), acceleration);
+            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn(), _controller.getLowGearLock());
         }
         else {
-            DriveTrain.hang(_controller.getWinch());
+            _driveTrain.hang(_controller.getWinch());
         }
 
         _hanger.setHanger(_controller.getHanger());
         _elevator.elevate(_controller.getElevator());
-        if(_controller.getIntake()) _intake.fwoo(Constants.INTAKE_SPEED);
+        if(_controller.getArmToggle())
+            _intake.toggleIntakeArm();
+        if(_controller.getIntake())
+            _intake.fwoo(Constants.INTAKE_SPEED);
         _controller.printDoubt();
     }
 
@@ -156,11 +162,5 @@ public class Robot extends IterativeRobot {
         }).start();
     }
 
-    private void toggleAcceleration(){
-        boolean aIsPressed = _controller.getSmoothAccel();
-        if(aIsPressed){
-            acceleration = ! acceleration;
-        }
-    }
 }
 

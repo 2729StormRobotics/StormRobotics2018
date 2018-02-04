@@ -30,7 +30,7 @@ public class Controller {
         return mainThing.getX(GenericHID.Hand.kLeft);
     }
 
-    public boolean getLowLock() {
+    public boolean getLowGearLock() {
         return mainThing.getBButton();
     }
 

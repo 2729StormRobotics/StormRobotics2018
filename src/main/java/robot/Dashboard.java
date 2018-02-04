@@ -18,59 +18,62 @@ public class Dashboard {
 
     public static DebugLevel bug;
 
-    protected static SendableChooser autoChooser;
-    protected static SendableChooser positionChooser;
-    protected static SendableChooser preferenceChooser;
-    protected static SendableChooser debugChooser;
+    public SendableChooser autoChooser;
+    public SendableChooser positionChooser;
+    public SendableChooser preferenceChooser;
+    public SendableChooser debugChooser;
 
     public Dashboard() {
     }
 
-    public static void checkAccel() {
-        SmartDashboard.putBoolean("Accel Disable", Robot.accelerationDisable);
+    public void checkAccel() {
+        //SmartDashboard.putBoolean("Accel Disable", Robot.accelerationDisable);
     }
 
-    public static void checkBug() {
+    public void checkBug() {
         String s = "Info";
         if(bug != null && bug.getName() != null) {
             s = bug.getName();
         }
         switch(s) {
             case "Info":
-                Dashboard.sendEncoders();
-                Dashboard.sendNavXInfo();
+                this.sendEncoders();
+                this.sendNavXInfo();
                 break;
             case "Debug":
-                Dashboard.sendEncoders();
-                Dashboard.sendElevatorEncoders();
-                Dashboard.checkAccel();
-                Dashboard.checkPneumatics();
-                Dashboard.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
-                Dashboard.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
+                this.sendEncoders();
+                this.sendElevatorEncoders();
+                this.checkAccel();
+                this.checkPneumatics();
+                this.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
+                this.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
                 break;
             case "All":
-                Dashboard.sendEncoders();
-                Dashboard.sendElevatorEncoders();
-                Dashboard.sendNavXAll();
-                Dashboard.checkAccel();
-                Dashboard.checkPneumatics();
-                Dashboard.checkTurnSpeed();
-                Dashboard.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
-                Dashboard.sendMotorControllerInfo("Motor/right/2/", DriveTrain._right2);
-                Dashboard.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
-                Dashboard.sendMotorControllerInfo("Motor/left/2/", DriveTrain._left2);
+                this.sendEncoders();
+                this.sendElevatorEncoders();
+                this.sendNavXAll();
+                this.checkAccel();
+                this.checkPneumatics();
+                this.checkTurnSpeed();
+                this.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
+                this.sendMotorControllerInfo("Motor/right/2/", DriveTrain._right2);
+                this.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
+                this.sendMotorControllerInfo("Motor/left/2/", DriveTrain._left2);
                 break;
             default: break;
         }
     }
 
-    public static void checkPneumatics() { SmartDashboard.putBoolean("Intake Pneumatics", Robot.armControl); }
+    public void checkPneumatics() {
+        //SmartDashboard.putBoolean("Intake Pneumatics", Robot._intake.Sol);
+    }
 
-    public static void checkTurnSpeed() {
+
+    public void checkTurnSpeed() {
         SmartDashboard.putNumber("Turn Speed", MoveForward.turnSpeed);
     }
 
-    public static void sendChooser() {
+    public void sendChooser() {
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
@@ -107,21 +110,21 @@ public class Dashboard {
     }
 
 
-    public static void sendElevatorEncoders() {
+    public void sendElevatorEncoders() {
         SmartDashboard.putNumber("Left Encoder", Elevator._elevatorLeft.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Right Encoder", Elevator._elevatorRight.getSelectedSensorPosition(0));
+        //SmartDashboard.putNumber("Right Encoder", Elevator._elevatorRight.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Speed", Lift.elevatorSpeed);
     }
 
 
-    public static void sendEncoders() {
+    public void sendEncoders() {
         SmartDashboard.putNumber("Encoder Left", DriveTrain._leftMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Encoder Left Velocity", DriveTrain._leftMain.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Encoder Right", DriveTrain._rightMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Encoder Right Velocity", DriveTrain._rightMain.getSelectedSensorVelocity(0));
     }
 
-    public static void sendMotorControllerInfo(String category, TalonSRX talon) {
+    public void sendMotorControllerInfo(String category, TalonSRX talon) {
         SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
         SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
         SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
@@ -132,7 +135,7 @@ public class Dashboard {
         SmartDashboard.putBoolean(category + "Inverted", talon.getInverted());
     }
 
-    public static void sendNavXInfo() {
+    public void sendNavXInfo() {
         if(NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
@@ -140,7 +143,7 @@ public class Dashboard {
     }
 
 
-    public static void sendNavXAll() {
+    public void sendNavXAll() {
         if (NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());

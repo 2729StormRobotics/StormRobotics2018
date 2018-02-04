@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import robot.Constants;
+import robot.Robot;
 
 public class MoveForward extends Command {
 
@@ -76,7 +77,7 @@ public class MoveForward extends Command {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             turnSpeed = a;
-            Dashboard.checkTurnSpeed();
+            Robot._dashboard.checkTurnSpeed();
         }
     };
 

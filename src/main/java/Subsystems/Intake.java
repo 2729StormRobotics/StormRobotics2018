@@ -18,8 +18,8 @@ public class Intake extends Subsystem{
         _intakeRight.follow(_intakeLeft);
     }
 
-    public static void intakeUpDown(boolean pneumaticStatus){
-        sol.set(pneumaticStatus);
+    public static void toggleIntakeArm(){
+        sol.set(!sol.get());
     }
 
     protected void initDefaultCommand() {
