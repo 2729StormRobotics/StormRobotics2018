@@ -1,6 +1,6 @@
 package AutoModes.Commands;
 
-import Subsystems.Dashboard;
+import robot.Dashboard;
 import Subsystems.DriveTrain;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -9,9 +9,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
-import robot.Robot;
 
 public class MoveForward extends Command {
 

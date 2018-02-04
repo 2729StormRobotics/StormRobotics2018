@@ -24,12 +24,6 @@ public class Robot extends IterativeRobot {
     public static NavX navx = new NavX();
     public static Intake _intake = new Intake();
 
-
-    public static SendableChooser autoChooser;
-    public static SendableChooser positionChooser;
-    public static SendableChooser preferenceChooser;
-    public static SendableChooser debugChooser;
-
     private double forwardSpeed;
     private double reverseSpeed;
     private double turnSpeed;
@@ -56,35 +50,6 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         xboxDrive = new XboxController(Constants.PORT_XBOX_DRIVE);
         xboxDrive2 = new XboxController(Constants.PORT_XBOX_WEAPONS);
-
-        autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
-        autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
-        autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
-        autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
-        autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
-        autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
-        autoChooser.addObject(Constants.TEST_MODE, new TestMode());
-        autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
-
-        positionChooser = new SendableChooser<AutoPosition>();
-        positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
-        positionChooser.addObject(AutoPosition.LEFT.getName(), AutoPosition.LEFT);
-        positionChooser.addObject(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
-        positionChooser.addObject(AutoPosition.RIGHT.getName(), AutoPosition.RIGHT);
-
-        preferenceChooser = new SendableChooser<AutoPreference>();
-        preferenceChooser.addDefault(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
-        preferenceChooser.addObject(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
-        preferenceChooser.addObject(AutoPreference.SCALE.getName(), AutoPreference.SCALE);
-
-        debugChooser = new SendableChooser<>();
-        debugChooser.addDefault(DebugLevel.INFO.getName(), DebugLevel.INFO);
-        debugChooser.addObject(DebugLevel.INFO.getName(), DebugLevel.INFO);
-        debugChooser.addObject(DebugLevel.DEBUG.getName(), DebugLevel.DEBUG);
-        debugChooser.addObject(DebugLevel.ALL.getName(), DebugLevel.ALL);
 
         Dashboard.sendChooser();
        // cameraInit();
@@ -184,7 +149,7 @@ public class Robot extends IterativeRobot {
         elevateSpeed = xboxDrive2.getX(GenericHID.Hand.kRight);  //elevator right stick
         pullSpeed = xboxDrive2.getTriggerAxis(XboxController.Hand.kLeft);  //winch left trigger
         intakeOn = xboxDrive2.getBumper(XboxController.Hand.kLeft);  //intake left bumper
-        hookSetSpeed = xboxDrive2.getX(GenericHID.Hand.kLeft);  //hook set lift thing right stick
+        hookSetSpeed = xboxDrive2.getX(GenericHID.Hand.kLeft);  //hook set lift thing left stick
         output = xboxDrive.getPOV(); //block output d-pad
         if(xboxDrive2.getBButtonPressed()){
 
@@ -209,11 +174,6 @@ public class Robot extends IterativeRobot {
         _elevator.elevate(elevateSpeed, false);
         if(intakeOn) _intake.fwoo(Constants.INTAKE_SPEED);
         _elevator.elevate(elevateSpeed, false);
-
-        if(xboxDrive.getYButtonPressed()) {
-            temp = !temp;
-            _intake.intakeUpDown(temp);
-        }
 
         if (xboxDrive.getXButtonPressed() || xboxDrive2.getXButtonPressed()) System.out.println("Doubt");
     }
@@ -276,21 +236,19 @@ public class Robot extends IterativeRobot {
             accelerationDisable = ! accelerationDisable;
         }
     }
+
     private void toggleHang(){
         boolean bIsPressed = xboxDrive2.getBButton();
         if(bIsPressed){
             readyToHang = !readyToHang;
         }
     }
+
     private void togglePneumatics(){
         boolean yIsPressed = xboxDrive2.getYButtonPressed();
         if(yIsPressed) {
             armControl = !armControl;
         }
-
-
-
     }
-
-    }
+}
 
