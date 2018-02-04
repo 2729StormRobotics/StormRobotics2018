@@ -22,7 +22,7 @@ public class Constants {
 
     public static final int PORT_SOLENOID_GEARSHIFT             = 1;
 
-
+    public static final int PORT_SOLENOID_PTO                   = 0;
     public static final int PORT_XBOX_DRIVE                     = 0;
     public static final int PORT_XBOX_WEAPONS                   = 1;
 

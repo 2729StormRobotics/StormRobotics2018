@@ -26,10 +26,6 @@ public class Elevator extends Subsystem {
 
     public static void elevate(double liftSpeed, boolean squareValues) {
 
-        if (squareValues) {
-            liftSpeed = Math.pow(liftSpeed, 2);
-        }
-
         _elevatorLeft.set(ControlMode.PercentOutput, liftSpeed);
 
         if(liftSpeed > 0){

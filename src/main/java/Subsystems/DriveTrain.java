@@ -27,7 +27,7 @@ public class DriveTrain extends Subsystem {
     public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
     public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
-    public static Solenoid _PTO = new Solenoid(0); //set a pto port constant
+    public static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO);
 
     public DriveTrain() {
         _rightMain.setInverted(true);
@@ -51,23 +51,20 @@ public class DriveTrain extends Subsystem {
         super.periodic();
     }
 
-    public static void stormDrive(double combinedSpeed, double acceleration, double turn) {
-        stormDrive(combinedSpeed, acceleration, turn, false, MOTOR_TOLERANCE_DEFAULT);
+    public static void stormDrive(double combinedSpeed, double turn) {
+        stormDrive(combinedSpeed, turn, false, MOTOR_TOLERANCE_DEFAULT);
     }
 
-    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable) {
-        stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
+    public static void stormDrive(double combinedSpeed, double turn, boolean acceleration) {
+        stormDrive(combinedSpeed, turn, acceleration, MOTOR_TOLERANCE_DEFAULT);
     }
-    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, boolean forceLow) {
-//        _PTO.set(false);
+    public static void stormDrive(double combinedSpeed, double turn, boolean acceleration, boolean forceLow) {
+       if(_PTO.get()) _PTO.set(false);
         combinedSpeed = shift(combinedSpeed, forceLow);
-        stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
+        stormDrive(combinedSpeed, turn, acceleration, MOTOR_TOLERANCE_DEFAULT);
     }
 
-    /*
-        Double acceleration doesn't seem to do anything, we could probably remove it
-     */
-    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance) {
+    public static void stormDrive(double combinedSpeed, double turn, boolean acceleration, double tolerance) {
         //Left and Right triggers control speed.  Steer with joystick
 
         combinedSpeed = shift(combinedSpeed, false);
@@ -97,8 +94,7 @@ public class DriveTrain extends Subsystem {
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 
-       // System.out.println(accelerationDisable);
-        if(!accelerationDisable) {
+        if(acceleration) {
             _leftMain.configOpenloopRamp(1, 10000);
             _rightMain.configOpenloopRamp(1, 10000);
         } else {
@@ -159,7 +155,7 @@ public class DriveTrain extends Subsystem {
 
     }
     public static void hang(double pullSpeed) {
-        _PTO.set(true);
+        if(!_PTO.get()) _PTO.set(true);
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
         _rightMain.set(ControlMode.PercentOutput, pullSpeed);
         if(pullSpeed > 0) {
@@ -167,5 +163,8 @@ public class DriveTrain extends Subsystem {
         } else {
             LEDs.hanging = false;
         }
+    }
+    public static void togglePTO(){
+        _PTO.set(!_PTO.get());
     }
 }
