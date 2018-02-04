@@ -186,9 +186,7 @@ public class MoveForward extends Command {
             moveRightSpeed += Math.abs(turnSpeed);
         }
 
-        DriveTrain._leftMain.set(ControlMode.PercentOutput, moveLeftSpeed);
-        DriveTrain._rightMain.set(ControlMode.PercentOutput, moveRightSpeed);
-
+        Robot._driveTrain.tankDrive(moveLeftSpeed, moveRightSpeed);
     }
 
 

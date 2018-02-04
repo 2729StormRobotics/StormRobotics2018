@@ -114,7 +114,9 @@ public class Robot extends IterativeRobot {
         NavX.dashboardStats();
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
-        _elevator.output(_controller.getBlockOutput());
+
+        if(_controller.getBlockOutput())
+            _elevator.outputToggle();
 
         if(_controller.getSmoothAccel()) {
             _driveTrain.toggleAcceleration();

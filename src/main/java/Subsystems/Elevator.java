@@ -12,6 +12,8 @@ public class Elevator extends Subsystem {
     public static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     public static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
 
+    public boolean shooting = false;
+
     public Elevator() {
         _outputRight.follow(_outputLeft);
     }
@@ -22,7 +24,7 @@ public class Elevator extends Subsystem {
     }
 
 
-    public static void elevate(double liftSpeed) {
+    public void elevate(double liftSpeed) {
 
         _elevatorLeft.set(ControlMode.PercentOutput, liftSpeed);
 
@@ -38,8 +40,11 @@ public class Elevator extends Subsystem {
 
     }
 
-    public static void output(boolean shoot){
-        _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
-        LEDs.shooting = shoot;
+    public  void outputToggle(){
+        this.shooting = !this.shooting;
+
+        if (shooting)
+            _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+        LEDs.shooting = this.shooting;
     }
 }
