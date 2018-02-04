@@ -3,6 +3,7 @@
 2018 development code for FIRST Power Up
 
 [![Build Status](https://travis-ci.org/2729StormRobotics/StormRobotics2018.svg?branch=master)](https://travis-ci.org/2729StormRobotics/StormRobotics2018)
+[![Coverity Scan](https://scan.coverity.com/projects/15040/badge.svg?flat=1)](https://scan.coverity.com/projects/2729stormrobotics-stormrobotics2018)
 
 ## Cloning
 
