@@ -2,13 +2,11 @@ package AutoModes.Commands;
 
 import Subsystems.DriveTrain;
 import Subsystems.NavX;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
 
 public class PointTurn extends Command {
@@ -33,7 +31,7 @@ public class PointTurn extends Command {
             return PIDSourceType.kDisplacement;
         }
 
-        public double pidGet() { // Angle Robot at
+        public double pidGet() { // Angle robot at
             return NavX.getNavx().getYaw();
         }
     };
@@ -41,7 +39,6 @@ public class PointTurn extends Command {
     PIDOutput motorSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
-
             turnSpeed = a;  //change to -a later when .setInverted works
         }
     };
@@ -49,26 +46,17 @@ public class PointTurn extends Command {
     @Override
     protected void initialize() {
         super.initialize();
-        turnController = new PIDController(
-                Constants.TURNCONTROLLER_P,
-                Constants.TURNCONTROLLER_I,
-                Constants.TURNCONTROLLER_D,
-                Constants.TURNCONTROLLER_F,
-                angleSource,
-                motorSpeedWrite,
-                Constants.TURNCONTROLLER_PERIOD);
+        turnController = new PIDController(Constants.TURNCONTROLLER_P, Constants.TURNCONTROLLER_I, Constants.TURNCONTROLLER_D, Constants.TURNCONTROLLER_F, angleSource, motorSpeedWrite, Constants.TURNCONTROLLER_PERIOD);
         turnController.setInputRange(-180.0, 180.0);
         turnController.setOutputRange(-.80, .80);
         turnController.setAbsoluteTolerance(Constants.POINT_TURN_TOLERANCE);
         turnController.setContinuous(true);
-
         double setpoint = targetAngle + NavX.getNavx().getYaw();
 
         if (setpoint > 180)
             setpoint = NavX.getNavx().getYaw() + targetAngle - 360;
         else if (setpoint < -180)
             setpoint = NavX.getNavx().getYaw() - targetAngle + 360;
-
 
         turnController.setSetpoint(setpoint);
         System.out.println("Starting At: " + NavX.getNavx().getYaw());
@@ -96,18 +84,15 @@ public class PointTurn extends Command {
     @Override
     protected void execute() {
         super.execute();
-        SmartDashboard.putNumber("Target", turnController.getSetpoint());
         turnController.getDeltaSetpoint();
 
         DriveTrain.tankDrive(turnSpeed, -turnSpeed, false, 0);
-        SmartDashboard.putNumber("Error: ", turnController.getError());
     }
 
     @Override
     protected boolean isFinished() {
         if (Math.abs(turnController.getError()) < Constants.POINT_TURN_TOLERANCE) {
             turnController.disable();
-
             DriveTrain.tankDrive(0, 0);
             System.err.println("finish Point Turn");
             return true;

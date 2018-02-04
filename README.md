@@ -14,5 +14,5 @@ This repository only contains the source code and relevant java packages.  Every
 
 ## Building and Deploying
 
-- ```gradlew build``` will build your Robot Code  
+- ```gradlew build``` will build your robot Code  
 - ```gradlew deploy``` will build and deploy your code.

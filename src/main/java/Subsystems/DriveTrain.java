@@ -2,14 +2,9 @@ package Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
-import robot.Robot;
-import util.DebugLevel;
 
 public class DriveTrain extends Subsystem {
 
@@ -17,17 +12,24 @@ public class DriveTrain extends Subsystem {
     public static final double MOTOR_TOLERANCE_DEFAULT = 0.04;
     public static final double MOTOR_TOLERANCE_MIN = 0.01;
 
+    public static boolean high;
+
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
-    private static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
+    public static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
 
     public static TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
-    private static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
+    public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
+
+    public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
+    public static Solenoid _PTO = new Solenoid(0); //set a pto port constant
 
     public DriveTrain() {
         _rightMain.setInverted(true);
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
+        high = false;
+        //_gearShift.set(false);
     }
 
     @Override
@@ -41,30 +43,6 @@ public class DriveTrain extends Subsystem {
     @Override
     public void periodic() {
         super.periodic();
-        DriveTrain.dashboardStats();
-    }
-
-    public static void dashboardStats() {
-            SmartDashboard.putNumber("Encoder Left", _leftMain.getSelectedSensorPosition(0));
-            SmartDashboard.putNumber("Encoder Left Velocity", _leftMain.getSelectedSensorVelocity(0));
-            SmartDashboard.putNumber("Encoder Right", _rightMain.getSelectedSensorPosition(0));
-            SmartDashboard.putNumber("Encoder Right Velocity", _rightMain.getSelectedSensorVelocity(0));
-
-            DriveTrain.dashboardMotorControllerInfo("Motor/right/main/", _rightMain);
-            DriveTrain.dashboardMotorControllerInfo("Motor/right/2/", _right2);
-            DriveTrain.dashboardMotorControllerInfo("Motor/left/main/", _leftMain);
-            DriveTrain.dashboardMotorControllerInfo("Motor/left/2/", _left2);
-
-    }
-
-    private static void dashboardMotorControllerInfo(String category, TalonSRX talon) {
-        SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
-        SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
-        SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
-        SmartDashboard.putNumber(category + "Output Current", talon.getOutputCurrent());
-        SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
-        SmartDashboard.putString(category + "control Mode", talon.getControlMode().toString());
-        SmartDashboard.putNumber(category + "Temperature", talon.getTemperature());
     }
 
     public static void stormDrive(double combinedSpeed, double acceleration, double turn) {
@@ -74,9 +52,20 @@ public class DriveTrain extends Subsystem {
     public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable) {
         stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
     }
+    public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, boolean forceLow) {
+//        _PTO.set(false);
+        combinedSpeed = shift(combinedSpeed, forceLow);
+        stormDrive(combinedSpeed, acceleration, turn, accelerationDisable, MOTOR_TOLERANCE_DEFAULT);
+    }
 
+    /*
+        Double acceleration doesn't seem to do anything, we could probably remove it
+     */
     public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance) {
         //Left and Right triggers control speed.  Steer with joystick
+
+        combinedSpeed = shift(combinedSpeed, false);
+
         turn = turn * Math.abs(turn);
 
         int mult;
@@ -102,6 +91,7 @@ public class DriveTrain extends Subsystem {
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 
+       // System.out.println(accelerationDisable);
         if(!accelerationDisable) {
             _leftMain.configOpenloopRamp(1, 10000);
             _rightMain.configOpenloopRamp(1, 10000);
@@ -109,7 +99,6 @@ public class DriveTrain extends Subsystem {
             _leftMain.configOpenloopRamp(0, 10000);
             _rightMain.configOpenloopRamp(0, 10000);
         }
-
     }
 
     public static void stormDrive(double combinedSpeed, double acceleration, double turn, boolean accelerationDisable, double tolerance, boolean forceLow) {
@@ -152,8 +141,29 @@ public class DriveTrain extends Subsystem {
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
 
-    public void pointTurn(double degrees) {
+    public static double shift(double speed, boolean forceLow) {
+        boolean foo = high;
+        if (forceLow) foo = false;
+
+        if(speed <= Constants.SHIFT_DOWN || forceLow){
+            speed *= Constants.SHIFT_DOWN_MULT;
+        }
+        else if(speed >= Constants.SHIFT_UP){
+            speed *= Constants.SHIFT_UP_MULT;
+        }
+
+        _gearShift.set(foo);
+        return speed;
 
     }
-
+    public static void hang(double pullSpeed) {
+        _PTO.set(true);
+        _leftMain.set(ControlMode.PercentOutput, pullSpeed);
+        _rightMain.set(ControlMode.PercentOutput, pullSpeed);
+        if(pullSpeed > 0) {
+            LEDs.hanging = true;
+        } else {
+            LEDs.hanging = false;
+        }
+    }
 }

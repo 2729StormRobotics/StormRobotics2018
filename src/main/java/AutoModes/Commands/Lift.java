@@ -1,6 +1,7 @@
 package AutoModes.Commands;
 
 
+import robot.Dashboard;
 import Subsystems.Elevator;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.PIDController;
@@ -8,11 +9,11 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import robot.Constants;
 
 public class Lift extends Command {
 
-    double elevatorSpeed, height;
+    public static double elevatorSpeed, height;
     PIDController elevatorController;
 
     PIDSource elevatorSource = new PIDSource() {
@@ -28,11 +29,11 @@ public class Lift extends Command {
             return PIDSourceType.kDisplacement;
         }
 
-        public double pidGet() { // Encoder Position Robot @
+        public double pidGet() { // Encoder Position robot @
             /*
                 get input from potentiometer
              */
-            return 0.000000234562;  //just an arbitrary number bc it needed to return something
+            return Elevator._elevatorLeft.getSelectedSensorPosition(0);  //just an arbitrary number bc it needed to return something
         }
     };
     PIDOutput elevatorWrite = new PIDOutput() {
@@ -46,66 +47,48 @@ public class Lift extends Command {
         super.start();
         System.err.println("start Lift");
     }
+    protected void end() {
+        System.err.println("end Lift");
+        elevatorController.disable();
+        super.end();
+    }
 
+    @Override
+    protected void interrupted() {
+        System.err.println("interrupted Lift");
+        elevatorController.disable();
+
+        Elevator._elevatorLeft.set(ControlMode.PercentOutput, 0);
+        super.interrupted();
+    }
     protected void initialize() {
         super.initialize();
-
-        elevatorController = new PIDController(0.0002, 0.0, 0.0002, 0.00, elevatorSource, elevatorWrite, 0.02); //i: 0.000003 d: 0002
+        elevatorController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D, Constants.ELEVATOR_F, elevatorSource, elevatorWrite, Constants.ELEVATOR_PERIOD); //i: 0.000003 d: 0002
         elevatorController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
         elevatorController.setOutputRange(-.5, .5);
-        //elevatorController.setAbsoluteTolerance(TOLERANCE_TICKS);
+        elevatorController.setAbsoluteTolerance(Constants.ELEVATOR_TOLERANCE);
         elevatorController.setContinuous(true);
         elevatorController.setSetpoint(((Elevator._elevatorLeft.getSelectedSensorPosition(0))));
         elevatorController.enable();
+        Dashboard.sendElevatorEncoders();
     }
 
     protected void execute() {
         super.execute();
-
         if (!elevatorController.isEnabled()) {
             elevatorController.enable();
             System.err.println("moveElevator enabled again");
         }
-
-
         Elevator._elevatorLeft.set(ControlMode.PercentOutput, elevatorSpeed);
-
-        SmartDashboard.putNumber("Left Encoder", Elevator._elevatorLeft.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Right Encoder", Elevator._elevatorRight.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Elevator Speed", elevatorSpeed);
-
-        SmartDashboard.putBoolean("Left PID Enabled", elevatorController.isEnabled());
-        SmartDashboard.updateValues();
-
     }
 
     @Override
     protected boolean isFinished() {
-        SmartDashboard.putBoolean("Left PID Enabled", elevatorController.isEnabled());
-        SmartDashboard.updateValues();
-
-        /*
-        if(Math.abs(Math.abs(current) - Math.abs(intended)) < TOLERANCE_TICKS) {
-            moveController.disable();
-            left.set(ControlMode.PercentOutput, 0);
-            right.set(ControlMode.PercentOutput, 0);
-            return true;
-        }
-        */
-
-
-        if ((elevatorController.get() >= -0.05 && elevatorController.get() <= 0.05 && elevatorController.onTarget())) {
+        if (Math.abs(elevatorController.getError()) < Constants.TOLERANCE_TICKS) {
             elevatorController.disable();
-            SmartDashboard.putBoolean("Elevator PID Enabled", elevatorController.isEnabled());
-            SmartDashboard.updateValues();
+            Elevator._elevatorLeft.set(ControlMode.PercentOutput, 0);
             return true;
         }
-
-
-        SmartDashboard.putBoolean("Elevator PID Enabled", elevatorController.isEnabled());
-        SmartDashboard.updateValues();
-
-
         return false;
     }
 }
