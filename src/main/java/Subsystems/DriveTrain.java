@@ -50,15 +50,6 @@ public class DriveTrain extends Subsystem {
     public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
         if(_PTO.get()) _PTO.set(false);
         autoShift(combinedSpeed, forceLow);
-//        if(autoShift(combinedSpeed) == 0) {
-////            slowSpeed *= Constants.SHIFT_UP_MULT;
-////            stormDrive(slowSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
-//            _gearShift.set(false);
-//        } else if(autoShift(combinedSpeed) == 1) {
-////            slowSpeed *= Constants.SHIFT_DOWN_MULT;
-////            stormDrive(combinedSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
-//            _gearShift.set(true);
-//        }
         stormDrive(combinedSpeed, turn, Constants.MOTOR_TOLERANCE_DEFAULT);
     }
 
