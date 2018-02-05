@@ -40,11 +40,18 @@ public class Elevator extends Subsystem {
 
     }
 
-    public  void outputToggle(){
+    public void outputToggle(){
         this.shooting = !this.shooting;
 
         if (shooting)
             _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
         LEDs.shooting = this.shooting;
+    }
+
+    public void outputSet(boolean _shooting) {
+        this.shooting = _shooting;
+
+        if (shooting)
+            _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
     }
 }
