@@ -15,7 +15,7 @@ public class Constants {
 
 
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 5;//Elevator 1
-    public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 10;//Elevator 2
+    //public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 10;//Elevator 2
 
     public static final int PORT_MOTOR_DRIVE_HANG_MAIN 		    = 7;//Hanger
 

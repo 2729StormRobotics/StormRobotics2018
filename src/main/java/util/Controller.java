@@ -1,7 +1,6 @@
 package util;
 
 import robot.Constants;
-import robot.Robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -72,10 +71,8 @@ public class Controller {
     }
 
     public boolean getPTO() {
-        if(weaponsThing.getBackButton() && weaponsThing.getStartButtonPressed()) { //Like the CDR girl: "TRUST ME IT WORKS"
-            return true; //.get(Button)Pressed checks if it was pressed since the last check and only checks when BackButton is true
-        }
-        return false;
+        return (weaponsThing.getBackButton() && weaponsThing.getStartButtonPressed()); //Like the CDR girl: "TRUST ME IT WORKS"
+        // .get(Button)Pressed checks if it was pressed since the last check and only checks when BackButton is true
     }
 
     public void printDoubt() {
