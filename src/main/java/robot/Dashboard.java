@@ -7,6 +7,7 @@ import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
 import Subsystems.NavX;
+import Subsystems.PDP;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,6 +37,7 @@ public class Dashboard {
         if(bug != null && bug.getName() != null) {
             s = bug.getName();
         }
+        PDP.dashboardStats();
         switch(s) {
             case "Info":
                 this.sendEncoders();
