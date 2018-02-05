@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 
 public class LEDs {
 
-    public static boolean hanging, shooting, elevating, elevatingUp, arming, armsUp, gearing, gearHigh, allianceRed;
+    public static boolean hanging, shooting, elevating, elevatingUp, armsUp, gearHigh, allianceRed, allianceBlue;
 
     public static SerialPort ledOut = new SerialPort(9600, SerialPort.Port.kMXP);
     private static byte ledCode[] = {(byte) 255};
@@ -97,8 +97,16 @@ public class LEDs {
 
     public static void checkStatus() {
 
-        String alliance = DriverStation.getInstance().getAlliance().toString();
+        allianceRed = false;
+        allianceBlue = false;
 
+        if(DriverStation.getInstance().getAlliance().toString().equals("Red")){
+            allianceRed = true;
+        } else if(DriverStation.getInstance().getAlliance().toString().equals("Blue")){
+            allianceBlue = true;
+        }
+
+        String mode = "Idle";
 
 
     }

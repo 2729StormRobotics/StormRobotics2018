@@ -20,6 +20,9 @@ public class Intake extends Subsystem{
 
     public void toggleIntakeArm(){
         sol.set(!sol.get());
+        if(!sol.get()){
+            LEDs.armsUp = true;
+        }
     }
 
     protected void initDefaultCommand() {
