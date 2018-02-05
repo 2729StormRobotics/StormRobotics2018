@@ -17,21 +17,21 @@ import util.DebugLevel;
 
 public class Dashboard {
 
-    public static DebugLevel bug;
+    private static DebugLevel bug;
 
-    public SendableChooser<Command> autoChooser;
-    public SendableChooser<AutoPosition> positionChooser;
-    public SendableChooser<AutoPreference> preferenceChooser;
-    public SendableChooser<DebugLevel> debugChooser;
+    SendableChooser<Command> autoChooser;
+    SendableChooser<AutoPosition> positionChooser;
+    SendableChooser<AutoPreference> preferenceChooser;
+    SendableChooser<DebugLevel> debugChooser;
 
-    public Dashboard() {
+    Dashboard() {
     }
 
-    public void checkAccel() {
-        //SmartDashboard.putBoolean("Accel Disable", Robot.accelerationDisable);
+    private void checkAccel() {
+        SmartDashboard.putBoolean("Accel Disable", Robot._controller.getSmoothAccel());
     }
 
-    public void checkBug() {
+    void checkBug() {
         String s = "Info";
         if(bug != null && bug.getName() != null) {
             s = bug.getName();
@@ -65,8 +65,8 @@ public class Dashboard {
         }
     }
 
-    public void checkPneumatics() {
-        //SmartDashboard.putBoolean("Intake Pneumatics", Robot._intake.Sol);
+    private void checkPneumatics() {
+        SmartDashboard.putBoolean("Intake Pneumatics", Robot._controller.getIntake());
     }
 
 
@@ -74,7 +74,7 @@ public class Dashboard {
         SmartDashboard.putNumber("Turn Speed", MoveForward.turnSpeed);
     }
 
-    public void sendChooser() {
+    void sendChooser() {
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
@@ -87,13 +87,13 @@ public class Dashboard {
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
 
-        positionChooser = new SendableChooser<AutoPosition>();
+        positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
         positionChooser.addObject(AutoPosition.LEFT.getName(), AutoPosition.LEFT);
         positionChooser.addObject(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
         positionChooser.addObject(AutoPosition.RIGHT.getName(), AutoPosition.RIGHT);
 
-        preferenceChooser = new SendableChooser<AutoPreference>();
+        preferenceChooser = new SendableChooser<>();
         preferenceChooser.addDefault(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
         preferenceChooser.addObject(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
         preferenceChooser.addObject(AutoPreference.SCALE.getName(), AutoPreference.SCALE);
@@ -118,14 +118,14 @@ public class Dashboard {
     }
 
 
-    public void sendEncoders() {
+    private void sendEncoders() {
         SmartDashboard.putNumber("Encoder Left", DriveTrain._leftMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Encoder Left Velocity", DriveTrain._leftMain.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Encoder Right", DriveTrain._rightMain.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Encoder Right Velocity", DriveTrain._rightMain.getSelectedSensorVelocity(0));
     }
 
-    public void sendMotorControllerInfo(String category, TalonSRX talon) {
+    private void sendMotorControllerInfo(String category, TalonSRX talon) {
         SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
         SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
         SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
@@ -136,7 +136,7 @@ public class Dashboard {
         SmartDashboard.putBoolean(category + "Inverted", talon.getInverted());
     }
 
-    public void sendNavXInfo() {
+    private void sendNavXInfo() {
         if(NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
@@ -144,7 +144,7 @@ public class Dashboard {
     }
 
 
-    public void sendNavXAll() {
+    private void sendNavXAll() {
         if (NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
@@ -166,7 +166,7 @@ public class Dashboard {
         }
     }
 
-    public void setBug(DebugLevel lvl) {
+    void setBug(DebugLevel lvl) {
         bug = lvl;
     }
 

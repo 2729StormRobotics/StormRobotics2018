@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import org.opencv.core.Mat;
 import util.AutoPosition;
 import util.AutoPreference;
-import util.DebugLevel;
 import util.RobotState;
 import util.Controller;
 
@@ -21,10 +20,10 @@ public class Robot extends IterativeRobot {
     private static Elevator _elevator = new Elevator();
     private static Hanger _hanger = new Hanger();
     public static NavX navx = new NavX();
-    private static Intake _intake = new Intake();
+    public static Intake _intake = new Intake();
     public static Dashboard _dashboard = new Dashboard();
     private RobotState _robotState;
-    private Controller _controller = new Controller();
+    public static Controller _controller = new Controller();
 
     @Override
     public void robotInit() {
@@ -49,10 +48,10 @@ public class Robot extends IterativeRobot {
             System.out.println("No Game Data");
         }
 
-        Command autonomousCommand = (Command) _dashboard.autoChooser.getSelected();
-        AutoPosition position = (AutoPosition) _dashboard.positionChooser.getSelected();
-        AutoPreference preference = (AutoPreference) _dashboard.preferenceChooser.getSelected();
-        _dashboard.setBug((DebugLevel) _dashboard.debugChooser.getSelected());
+        Command autonomousCommand = _dashboard.autoChooser.getSelected();
+        AutoPosition position = _dashboard.positionChooser.getSelected();
+        AutoPreference preference = _dashboard.preferenceChooser.getSelected();
+        _dashboard.setBug(_dashboard.debugChooser.getSelected());
 
         System.out.println(autonomousCommand.getName());
 
