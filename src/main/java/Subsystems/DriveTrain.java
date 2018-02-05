@@ -5,11 +5,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
-import util.Controller;
 
 public class DriveTrain extends Subsystem {
 
-    public static boolean high;
     private boolean acceleration = false;
 
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
@@ -26,7 +24,6 @@ public class DriveTrain extends Subsystem {
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
-        high = false;
         //_gearShift.set(false);
     }
 
