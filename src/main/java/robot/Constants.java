@@ -71,8 +71,8 @@ public class Constants {
     public static final double ELEVATOR_PERIOD            = 0.02;
     public static final double ELEVATOR_TOLERANCE         = 2.0;
 
-    public static final double SHIFT_UP_MULT              =0.406;
-    public static final double SHIFT_DOWN_MULT            =2.06;
+//    public static final double SHIFT_UP_MULT              = 0.406;
+//    public static final double SHIFT_DOWN_MULT            = 2.06;
 
     public static final String MID_SWITCH = "Mid Switch";
     public static final String LEFT_SCALE = "Left Side Scale";

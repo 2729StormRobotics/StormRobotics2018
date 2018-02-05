@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
+import util.Controller;
 
 public class DriveTrain extends Subsystem {
 
@@ -12,7 +13,6 @@ public class DriveTrain extends Subsystem {
     public static final double MOTOR_TOLERANCE_DEFAULT = 0.04;
     public static final double MOTOR_TOLERANCE_MIN = 0.01;
 
-    public static boolean high;
     private boolean acceleration = false;
 
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
@@ -29,8 +29,6 @@ public class DriveTrain extends Subsystem {
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
-        high = false;
-        //_gearShift.set(false);
     }
 
     @Override
@@ -51,15 +49,23 @@ public class DriveTrain extends Subsystem {
     }
 
     public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
-       if(_PTO.get()) _PTO.set(false);
-        combinedSpeed = shift(combinedSpeed, forceLow);
+//        double slowSpeed = combinedSpeed;
+        if(_PTO.get()) _PTO.set(false);
+        autoShift(combinedSpeed);
+//        if(autoShift(combinedSpeed) == 0) {
+////            slowSpeed *= Constants.SHIFT_UP_MULT;
+////            stormDrive(slowSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
+//            _gearShift.set(false);
+//        } else if(autoShift(combinedSpeed) == 1) {
+////            slowSpeed *= Constants.SHIFT_DOWN_MULT;
+////            stormDrive(combinedSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
+//            _gearShift.set(true);
+//        }
         stormDrive(combinedSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
     }
 
     private void stormDrive(double combinedSpeed, double turn, double tolerance) {
         //Left and Right triggers control speed.  Steer with joystick
-
-        combinedSpeed = shift(combinedSpeed, false);
 
         turn = turn * Math.abs(turn);
 
@@ -131,20 +137,25 @@ public class DriveTrain extends Subsystem {
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
 
-    public static double shift(double speed, boolean forceLow) {
-        boolean foo = high;
-        if (forceLow) foo = false;
+    private static void autoShift(double speed) {
+//        if (forceLow) _gearShift.set(forceLow);
+//
+//        if(speed <= Constants.SHIFT_DOWN || forceLow){
+//            speed *= Constants.SHIFT_DOWN_MULT;
+//        }
+//        else if(speed >= Constants.SHIFT_UP){
+//            speed *= Constants.SHIFT_UP_MULT;
+//        }
+//
+//        _gearShift.set(foo);
+//        return speed;
 
-        if(speed <= Constants.SHIFT_DOWN || forceLow){
-            speed *= Constants.SHIFT_DOWN_MULT;
+        //False means in High Gear && True Means in Low
+        if(_gearShift.get() == true && speed >= Constants.SHIFT_UP) {
+            _gearShift.set(false);
+        } else if(_gearShift.get() == false && speed <= Constants.SHIFT_DOWN) {
+            _gearShift.set(true);
         }
-        else if(speed >= Constants.SHIFT_UP){
-            speed *= Constants.SHIFT_UP_MULT;
-        }
-
-        _gearShift.set(foo);
-        return speed;
-
     }
 
     public static void hang(double pullSpeed) {

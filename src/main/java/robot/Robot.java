@@ -125,8 +125,6 @@ public class Robot extends IterativeRobot {
         if(_controller.getPTO()) {
             if(_robotState.equals(RobotState.DRIVE)) {
                 _robotState = RobotState.PTO;
-            } else {
-                _robotState = RobotState.DRIVE;
             }
         }
 

@@ -21,7 +21,6 @@ public class Controller {
         return mainThing.getTriggerAxis(GenericHID.Hand.kRight);
     }
 
-
     public double getReverse() {
         return mainThing.getTriggerAxis(GenericHID.Hand.kLeft);
     }
