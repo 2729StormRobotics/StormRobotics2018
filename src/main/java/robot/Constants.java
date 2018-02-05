@@ -7,6 +7,11 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 11;//Front right
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 12;//Back right
 
+    public static final double MOTOR_TOLERANCE_MAX              = 0.25;  //Drive Motor Tolerances
+    public static final double MOTOR_TOLERANCE_DEFAULT          = 0.04;
+    public static final double MOTOR_TOLERANCE_MIN              = 0.01;
+
+
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 5;//Elevator 1
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 10;//Elevator 2
 

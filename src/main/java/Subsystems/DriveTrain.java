@@ -9,10 +9,7 @@ import util.Controller;
 
 public class DriveTrain extends Subsystem {
 
-    public static final double MOTOR_TOLERANCE_MAX = 0.25;
-    public static final double MOTOR_TOLERANCE_DEFAULT = 0.04;
-    public static final double MOTOR_TOLERANCE_MIN = 0.01;
-
+    public static boolean high;
     private boolean acceleration = false;
 
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
@@ -29,6 +26,8 @@ public class DriveTrain extends Subsystem {
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
+        high = false;
+        //_gearShift.set(false);
     }
 
     @Override
@@ -45,13 +44,12 @@ public class DriveTrain extends Subsystem {
     }
 
     public void stormDrive(double combinedSpeed, double turn) {
-        stormDrive(combinedSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
+        stormDrive(combinedSpeed, turn, Constants.MOTOR_TOLERANCE_DEFAULT);
     }
 
     public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
-//        double slowSpeed = combinedSpeed;
         if(_PTO.get()) _PTO.set(false);
-        autoShift(combinedSpeed);
+        autoShift(combinedSpeed, forceLow);
 //        if(autoShift(combinedSpeed) == 0) {
 ////            slowSpeed *= Constants.SHIFT_UP_MULT;
 ////            stormDrive(slowSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
@@ -61,7 +59,7 @@ public class DriveTrain extends Subsystem {
 ////            stormDrive(combinedSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
 //            _gearShift.set(true);
 //        }
-        stormDrive(combinedSpeed, turn, MOTOR_TOLERANCE_DEFAULT);
+        stormDrive(combinedSpeed, turn, Constants.MOTOR_TOLERANCE_DEFAULT);
     }
 
     private void stormDrive(double combinedSpeed, double turn, double tolerance) {
@@ -102,11 +100,11 @@ public class DriveTrain extends Subsystem {
     }
 
     public static void tankDrive(double leftSpeed, double rightSpeed) {
-        tankDrive(leftSpeed, rightSpeed, false, MOTOR_TOLERANCE_DEFAULT);
+        tankDrive(leftSpeed, rightSpeed, false, Constants.MOTOR_TOLERANCE_DEFAULT);
     }
 
     public static void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues) {
-        tankDrive(leftSpeed, rightSpeed, squareValues, MOTOR_TOLERANCE_DEFAULT);
+        tankDrive(leftSpeed, rightSpeed, squareValues, Constants.MOTOR_TOLERANCE_DEFAULT);
     }
 
 
@@ -127,33 +125,21 @@ public class DriveTrain extends Subsystem {
     }
 
     private static void setMotorTolerance(double tolerance) {
-        if (tolerance > MOTOR_TOLERANCE_MAX) {
-            tolerance = MOTOR_TOLERANCE_MAX;
-        } else if (tolerance < MOTOR_TOLERANCE_MIN) {
-            tolerance = MOTOR_TOLERANCE_MIN;
+        if (tolerance > Constants.MOTOR_TOLERANCE_MAX) {
+            tolerance = Constants.MOTOR_TOLERANCE_MAX;
+        } else if (tolerance < Constants.MOTOR_TOLERANCE_MIN) {
+            tolerance = Constants.MOTOR_TOLERANCE_MIN;
         }
 
         _leftMain.configNeutralDeadband(tolerance, 500);
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
 
-    private static void autoShift(double speed) {
-//        if (forceLow) _gearShift.set(forceLow);
-//
-//        if(speed <= Constants.SHIFT_DOWN || forceLow){
-//            speed *= Constants.SHIFT_DOWN_MULT;
-//        }
-//        else if(speed >= Constants.SHIFT_UP){
-//            speed *= Constants.SHIFT_UP_MULT;
-//        }
-//
-//        _gearShift.set(foo);
-//        return speed;
-
+    private static void autoShift(double speed, boolean force) {
         //False means in High Gear && True Means in Low
         if(_gearShift.get() == true && speed >= Constants.SHIFT_UP) {
             _gearShift.set(false);
-        } else if(_gearShift.get() == false && speed <= Constants.SHIFT_DOWN) {
+        } else if((_gearShift.get() == false && speed <= Constants.SHIFT_DOWN) || force) {
             _gearShift.set(true);
         }
     }

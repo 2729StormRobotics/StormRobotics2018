@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
-        cameraInit();
+        this.cameraInit();
         NavX.getNavx();
         acceleration = false;
         _robotState = RobotState.DRIVE;
