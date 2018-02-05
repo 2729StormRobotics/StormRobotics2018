@@ -1,7 +1,6 @@
 package AutoModes.Commands;
 
 
-import robot.Dashboard;
 import Subsystems.Elevator;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.PIDController;
@@ -15,9 +14,9 @@ import robot.Robot;
 public class Lift extends Command {
 
     public static double elevatorSpeed, height;
-    PIDController elevatorController;
+    private PIDController elevatorController;
 
-    PIDSource elevatorSource = new PIDSource() {
+    private PIDSource elevatorSource = new PIDSource() {
         PIDSourceType pidST;
 
         @Override
@@ -37,7 +36,7 @@ public class Lift extends Command {
             return Elevator._elevatorLeft.getSelectedSensorPosition(0);  //just an arbitrary number bc it needed to return something
         }
     };
-    PIDOutput elevatorWrite = new PIDOutput() {
+    private PIDOutput elevatorWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             elevatorSpeed = a;

@@ -8,6 +8,7 @@ import Subsystems.DriveTrain;
 import Subsystems.Elevator;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import util.AutoPosition;
@@ -18,10 +19,10 @@ public class Dashboard {
 
     public static DebugLevel bug;
 
-    public SendableChooser autoChooser;
-    public SendableChooser positionChooser;
-    public SendableChooser preferenceChooser;
-    public SendableChooser debugChooser;
+    public SendableChooser<Command> autoChooser;
+    public SendableChooser<AutoPosition> positionChooser;
+    public SendableChooser<AutoPreference> preferenceChooser;
+    public SendableChooser<DebugLevel> debugChooser;
 
     public Dashboard() {
     }
@@ -163,6 +164,10 @@ public class Dashboard {
             SmartDashboard.putNumber("NavX/Quaternion/Y", NavX.getNavx().getQuaternionY());
             SmartDashboard.putNumber("NavX/Quaternion/Z", NavX.getNavx().getQuaternionZ());
         }
+    }
+
+    public void setBug(DebugLevel lvl) {
+        bug = lvl;
     }
 
 }

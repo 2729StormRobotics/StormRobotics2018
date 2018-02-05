@@ -1,9 +1,7 @@
 package AutoModes.Commands;
 
-import robot.Dashboard;
 import Subsystems.DriveTrain;
 import Subsystems.NavX;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -15,10 +13,10 @@ import robot.Robot;
 public class MoveForward extends Command {
 
     public static double turnSpeed;
-    double moveLeftSpeed, moveRightSpeed, distance, angle;
-    PIDController moveLeftController, moveRightController, angleController;
+    private double moveLeftSpeed, moveRightSpeed, distance, angle;
+    private PIDController moveLeftController, moveRightController, angleController;
 
-    PIDSource leftSource = new PIDSource() {
+    private PIDSource leftSource = new PIDSource() {
         PIDSourceType pidST;
 
         @Override
@@ -37,7 +35,7 @@ public class MoveForward extends Command {
         }
     };
 
-    PIDSource rightSource = new PIDSource() {
+    private PIDSource rightSource = new PIDSource() {
         PIDSourceType pidST;
 
         @Override
@@ -55,7 +53,7 @@ public class MoveForward extends Command {
         }
     };
 
-    PIDSource angleSource = new PIDSource() {
+    private PIDSource angleSource = new PIDSource() {
         PIDSourceType pidST;
 
         @Override
@@ -73,7 +71,7 @@ public class MoveForward extends Command {
         }
     };
 
-    PIDOutput motorSpeedWrite = new PIDOutput() {
+    private PIDOutput motorSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             turnSpeed = a;
@@ -81,14 +79,14 @@ public class MoveForward extends Command {
         }
     };
 
-    PIDOutput motorLeftSpeedWrite = new PIDOutput() {
+    private PIDOutput motorLeftSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             moveLeftSpeed = a;
         }
     };
 
-    PIDOutput motorRightSpeedWrite = new PIDOutput() {
+    private PIDOutput motorRightSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             moveRightSpeed = a;
@@ -168,7 +166,7 @@ public class MoveForward extends Command {
         moveRightController.disable();
         angleController.disable();
 
-        DriveTrain.tankDrive(0, 0);
+        Robot._driveTrain.tankDrive(0, 0);
         super.interrupted();
     }
 
@@ -215,7 +213,7 @@ public class MoveForward extends Command {
 
             System.out.println("DISABLE LEFT RIGHT & ANGLE");
 
-            DriveTrain.tankDrive(0, 0);
+            Robot._driveTrain.tankDrive(0, 0);
             return true;
         }
 

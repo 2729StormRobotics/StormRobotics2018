@@ -11,6 +11,8 @@ public class Constants {
     public static final double MOTOR_TOLERANCE_DEFAULT          = 0.04;
     public static final double MOTOR_TOLERANCE_MIN              = 0.01;
 
+    public static final double MIN_TURN_SPEED                   = 0.1;
+
 
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 5;//Elevator 1
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 10;//Elevator 2
@@ -31,10 +33,10 @@ public class Constants {
     public static final int PORT_XBOX_DRIVE                     = 0;
     public static final int PORT_XBOX_WEAPONS                   = 1;
 
-    public static final int TICKS_PER_REV                       = 1024;
+    public static final double TICKS_PER_REV                       = 1024.0;
 
     public static final double WHEEL_SIZE = 4.0 * 3.14;
-    public static final double TOLERANCE_TICKS = (TICKS_PER_REV) / 5;
+    public static final double TOLERANCE_TICKS = (TICKS_PER_REV) / 5.0;
     public static final double TOLERANCE_DEGREES = 0.5;
 
     public static final double TURNCONTROLLER_P                 = 0.006;

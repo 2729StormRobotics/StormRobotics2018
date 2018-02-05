@@ -8,16 +8,17 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import robot.Constants;
+import robot.Robot;
 
 public class PointTurn extends Command {
-    double turnSpeed, targetAngle;
-    PIDController turnController;
+    private double turnSpeed, targetAngle;
+    private PIDController turnController;
 
     public PointTurn(double angle) { //Accepts only values between (-180, 180)
         targetAngle = angle;
     }
 
-    PIDSource angleSource = new PIDSource() {
+    private PIDSource angleSource = new PIDSource() {
         PIDSourceType pidST;
 
         @Override
@@ -36,7 +37,7 @@ public class PointTurn extends Command {
         }
     };
 
-    PIDOutput motorSpeedWrite = new PIDOutput() {
+    private PIDOutput motorSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             turnSpeed = a;  //change to -a later when .setInverted works
@@ -71,7 +72,7 @@ public class PointTurn extends Command {
         System.err.println("end Point Turn");
         turnController.disable();
         //turnController = null;
-        DriveTrain.tankDrive(0, 0);
+        Robot._driveTrain.tankDrive(0, 0);
     }
 
     @Override
@@ -86,14 +87,14 @@ public class PointTurn extends Command {
         super.execute();
         turnController.getDeltaSetpoint();
 
-        DriveTrain.tankDrive(turnSpeed, -turnSpeed, false, 0);
+        Robot._driveTrain.tankDrive(turnSpeed, -turnSpeed, false, 0);
     }
 
     @Override
     protected boolean isFinished() {
         if (Math.abs(turnController.getError()) < Constants.POINT_TURN_TOLERANCE) {
             turnController.disable();
-            DriveTrain.tankDrive(0, 0);
+            Robot._driveTrain.tankDrive(0, 0);
             System.err.println("finish Point Turn");
             return true;
         }

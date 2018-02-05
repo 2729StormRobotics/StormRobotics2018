@@ -7,19 +7,16 @@ import robot.Constants;
 
 public class Hanger extends Subsystem {
 
-
-    public static  TalonSRX _hang;
-
+    private static TalonSRX _hang;
 
     public Hanger() {
         _hang = new TalonSRX(Constants.PORT_MOTOR_DRIVE_HANG_MAIN);
     }
 
     protected void initDefaultCommand() {
-
     }
 
-    public static void setHanger(double speed) {
+    public void setHanger(double speed) {
         if (Math.abs(speed) > 0.05)
             _hang.set(ControlMode.PercentOutput, speed);
         else

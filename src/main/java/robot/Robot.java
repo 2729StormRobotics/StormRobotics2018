@@ -18,24 +18,19 @@ import util.Controller;
 public class Robot extends IterativeRobot {
 
     public static DriveTrain _driveTrain = new DriveTrain();
-    public static Elevator _elevator = new Elevator();
-    public static Hanger _hanger = new Hanger();
+    private static Elevator _elevator = new Elevator();
+    private static Hanger _hanger = new Hanger();
     public static NavX navx = new NavX();
-    public static Intake _intake = new Intake();
+    private static Intake _intake = new Intake();
     public static Dashboard _dashboard = new Dashboard();
-    public static RobotState _robotState;
+    private RobotState _robotState;
     private Controller _controller = new Controller();
-
-    public static boolean acceleration;
-
-    boolean intakePneumatics = false;
 
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
-        this.cameraInit();
+        cameraInit();
         NavX.getNavx();
-        acceleration = false;
         _robotState = RobotState.DRIVE;
     }
 
@@ -48,10 +43,8 @@ public class Robot extends IterativeRobot {
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
         char switchSide = ' ';
-        char scaleSide = ' ';
         try {
             switchSide = gameData.charAt(0);
-            scaleSide = gameData.charAt(1);
         } catch (IndexOutOfBoundsException ex) {
             System.out.println("No Game Data");
         }
@@ -59,7 +52,7 @@ public class Robot extends IterativeRobot {
         Command autonomousCommand = (Command) _dashboard.autoChooser.getSelected();
         AutoPosition position = (AutoPosition) _dashboard.positionChooser.getSelected();
         AutoPreference preference = (AutoPreference) _dashboard.preferenceChooser.getSelected();
-        _dashboard.bug = (DebugLevel) _dashboard.debugChooser.getSelected();
+        _dashboard.setBug((DebugLevel) _dashboard.debugChooser.getSelected());
 
         System.out.println(autonomousCommand.getName());
 
@@ -69,7 +62,7 @@ public class Robot extends IterativeRobot {
             return;
         }
 
-        switch (position.getName() + "-" + preference.getName()) {
+        switch (position.getName() + '-' + preference.getName()) {
             case "Left-Scale":
                 autonomousCommand = new LeftScale();
                 break;
@@ -125,13 +118,14 @@ public class Robot extends IterativeRobot {
         if(_controller.getPTO()) {
             if(_robotState.equals(RobotState.DRIVE)) {
                 _robotState = RobotState.PTO;
+            } else {
+                _robotState = RobotState.DRIVE;
             }
         }
 
         if(_robotState.getState().equalsIgnoreCase("Drive")) {
             _driveTrain.stormDrive(combinedSpeed, _controller.getTurn(), _controller.getLowGearLock());
-        }
-        else {
+        } else {
             _driveTrain.hang(_controller.getWinch());
         }
 
@@ -144,7 +138,7 @@ public class Robot extends IterativeRobot {
         _controller.printDoubt();
     }
 
-    public void cameraInit() {
+    private static void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
             camera.setResolution(640, 480);

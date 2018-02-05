@@ -63,7 +63,7 @@ public class ProfileFollower extends Command {
     @Override
     protected void end() {
         super.end();
-        DriveTrain.tankDrive(0, 0, false, 0);
+        Robot._driveTrain.tankDrive(0, 0, false, 0);
     }
 
     /**
@@ -99,7 +99,7 @@ public class ProfileFollower extends Command {
         double turn = 0.8 * (-1.0/80.0) * angleDifference;
         System.out.println("Left: " + (l));// + turn));
         System.out.println("Right: " + (r));// - turn));
-        DriveTrain.tankDrive(l, r, false, 0);
+        Robot._driveTrain.tankDrive(l, r, false, 0);
         leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
         rightMotor.set(ControlMode.PercentOutput, (r + turn));// - turn));
     }

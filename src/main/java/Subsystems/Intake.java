@@ -6,11 +6,11 @@ import robot.Constants;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class Intake extends Subsystem{
-    public static TalonSRX _intakeLeft = new TalonSRX(Constants.PORT_MOTOR_INTAKE_LEFT);
-    public static TalonSRX _intakeRight = new TalonSRX(Constants.PORT_MOTOR_INTAKE_RIGHT);
+    private static TalonSRX _intakeLeft = new TalonSRX(Constants.PORT_MOTOR_INTAKE_LEFT);
+    private static TalonSRX _intakeRight = new TalonSRX(Constants.PORT_MOTOR_INTAKE_RIGHT);
 
 
-    public static Solenoid sol;
+    private static Solenoid sol;
 
     public Intake(){
         sol = new Solenoid(Constants.PORT_SOLENOID_INTAKE);
@@ -18,7 +18,7 @@ public class Intake extends Subsystem{
         _intakeRight.follow(_intakeLeft);
     }
 
-    public static void toggleIntakeArm(){
+    public void toggleIntakeArm(){
         sol.set(!sol.get());
     }
 
@@ -26,7 +26,7 @@ public class Intake extends Subsystem{
 
     }
 
-    public static void fwoo(double intakeSpeed){
+    public void fwoo(double intakeSpeed){
         _intakeLeft.set(ControlMode.PercentOutput, intakeSpeed);
     }
 }
