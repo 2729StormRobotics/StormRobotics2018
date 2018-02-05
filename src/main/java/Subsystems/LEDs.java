@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 
 public class LEDs {
 
-    public static boolean hanging, shooting, elevating, elevatingUp, armsUp, gearHigh, allianceRed, allianceBlue;
+    public static boolean hanging, shooting, elevatingUp, armsUp, gearHigh, allianceRed, allianceBlue;
 
     public static SerialPort ledOut = new SerialPort(9600, SerialPort.Port.kMXP);
     private static byte ledCode[] = {(byte) 255};
@@ -19,21 +19,13 @@ public class LEDs {
         ledOut.write(ledCode, 1);
     }
 
-    private static void gear(boolean high) {
-        if(high){
-            ledCode[0] = (byte) 190;
-        } else {
-            ledCode[0] = (byte) 191;
-        }
+    private static void gear() {
+        ledCode[0] = (byte) 190;
         ledOut.write(ledCode, 1);
     }
 
-    private static void arms(boolean up){
-        if(up){
-            ledCode[0] = (byte) 230;
-        } else {
-            ledCode[0] = (byte) 231;
-        }
+    private static void arms(){
+        ledCode[0] = (byte) 230;
         ledOut.write(ledCode, 1);
     }
 
@@ -51,12 +43,8 @@ public class LEDs {
         ledOut.write(ledCode, 1);
     }
 
-    private static void elevator(boolean rising){
-        if(rising){
-            ledCode[0] = (byte) 246;
-        } else {
-            ledCode[0] = (byte) 247;
-        }
+    private static void elevator(){
+        ledCode[0] = (byte) 246;
         ledOut.write(ledCode, 1);
     }
 
@@ -64,8 +52,6 @@ public class LEDs {
         ledCode[0] = (byte) 252;
         ledOut.write(ledCode, 1);
     }
-
-    private static void lightUp(String mode){lightUp(mode, false);}
 
     private static void lightUp(String mode, boolean state){
 
@@ -77,13 +63,13 @@ public class LEDs {
                 shoot();
                 break;
             case "elevator":
-                elevator(state);
+                elevator();
                 break;
             case "arms":
-                arms(state);
+                arms();
                 break;
             case "gear":
-                gear(state);
+                gear();
                 break;
             case "alliance":
                 alliance(state);
@@ -97,6 +83,9 @@ public class LEDs {
 
     public static void checkStatus() {
 
+        String mode = "Idle";
+        boolean state = false;
+
         allianceRed = false;
         allianceBlue = false;
 
@@ -106,9 +95,34 @@ public class LEDs {
             allianceBlue = true;
         }
 
-        String mode = "Idle";
+        if (allianceRed || allianceBlue){
+            mode = "alliance";
+            if (allianceRed){
+               state = true;
+            }
+        }
 
+        if (gearHigh){
+            mode = "gear";
+        }
+
+        if (armsUp){
+            mode = "arms";
+        }
+
+        if(elevatingUp){
+            mode = "elevator";
+        }
+
+        if(shooting){
+            mode = "shoot";
+        }
+
+        if(hanging){
+            mode = "hang";
+        }
+
+        lightUp(mode, state);
 
     }
-
 }

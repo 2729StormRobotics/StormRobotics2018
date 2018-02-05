@@ -29,13 +29,9 @@ public class Elevator extends Subsystem {
         _elevatorLeft.set(ControlMode.PercentOutput, liftSpeed);
 
         if(liftSpeed > 0){
-            LEDs.elevating = true;
             LEDs.elevatingUp = true;
         } else if(liftSpeed < 0){
-            LEDs.elevating = true;
             LEDs.elevatingUp = false;
-        } else {
-            LEDs.elevating = false;
         }
 
     }

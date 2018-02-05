@@ -100,6 +100,7 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();
         _dashboard.checkBug();
         NavX.dashboardStats();
+        LEDs.checkStatus();
     }
 
     @Override
@@ -136,6 +137,7 @@ public class Robot extends IterativeRobot {
         if(_controller.getIntake())
             _intake.fwoo(Constants.INTAKE_SPEED);
         _controller.printDoubt();
+        LEDs.checkStatus();
     }
 
     private static void cameraInit() {
