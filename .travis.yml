@@ -8,10 +8,16 @@ env:
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "n4pa0mrR+H40dfseLGYQV64ROB4jj4dqJcHkWlhTRfhKQgDQ3TF3ShkE9MpN7WkHJdjVSKUCxo4DCDrN8CT4G90b6MOvJ/1tQdYoIOY836oCYEe6UOEffkbI/Vt/ItEZ0cIfjFyY7TN22TF4GvYl4rwcY6EjpVzRE/U/NgGTd0bACQWNCZSprtWRERlvoGRTkqYiVRddXwunp9x1fctvvTP/1lhjWthTqlDhjDDuYfs+zTbCogLIFksMGcEfjvBjVNE2Nyqu32bQyypgCxv+Pd2g6VQK0XLYyVCt1kfmSKoA1NNTr+zfVM3kFoP2NI/TT3XRM26umvc/UPJ+svDbV99tikuGMlpuTGzDP6aLx0saWdaBAMNA5h6prK1S8ms3Gfsr3MLH5+Ffvgi3SDjbEPcqimZyfQLha8Wr1i02h0084BeDu+cGdHZ+iDHrMF5GUWhOO8Go2pz+UD63xQ4nXurajD2FI+OytdSIf5bi0py8tQS3nDbAsQXzzecwoKnSDV7cXjIom9yZc5nIoCyTE1cP4fYb8udHEgSSvSJgnCVk1K+nN2r4Ebmlmz/d01LHy7TAA2/nh244IDijr7DAC0KQMfdDOdl5PLyFg65gNMBlAcRT7bRB4GdLZ2baOoQyVW+UEiATusFLMZwzI4GtvnlbefloDw2/EMHwhF3ruPI="
 
-#before_install:
+install: true
+
+# before_install:
 #  - echo -n | openssl s_client -connect 'https://scan.coverity.com:443' | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 addons:
+  sonarcloud:
+    organization: "storm-robotics-2729-github"
+    token:
+      secure: "hwayKLIbl+adjAuidwx8mlxfkV+d+o9oJ7JSAhjl8mCmLu073K7DqtiDTLC4Lcc4m6zLGvPxpqU3bKyd8rMF2iMKpcUa4Ek3MRWtyDbeidJB91DTKBmM/PCBGk7EiukQ9cFRdJf3mLi+MmQUj7VBqQdU9wPLi+Tgbt0Y7ZfKjlindN/b7sy1HVUGy2GNjAD979YSVWM+bKl1g1jqrJxSzKemdeippzNSMzH2v2JOaPiDyhwEhFAT7MED3CMuMp+8/4c2noVW7PHtiL1up5yXYmXpCJ5AswwJ9YrNVKrAZA7PABzL+j/rewux7soPth15d7SMP6Dz9DSmHnZH8NI9fOGXlWg2wk9R3evHO1eZdql+FLdregVDE67/ILotIY5uM55Ol3mujKU2+kUI3rIIgNO87Bfhii6YjxjYewU1rH+vYWa8ootQ+HRIWJIVsTju2Z0hxu+oW/Zwu4jaCMcheNqwAOCJWbnZGx4BTOpc265ZGx7fe/n1aQzp128aDjtZKZYmmsnAoXys0Zy4XUeVoqi0Dr4OjLKRPZhdV1tUpwtMChwsjEy2zSSYME2owwPamfUSXjucdnctpC10xZlVlZm/BinpkmZ2ghW9GtwbvIMDP9kif0TocpsL4qqXmYldB8AYhxX2zPawdBW/1tbhQMwDDolqUd6lKHC18o6nX9E="
   coverity_scan:
     project:
       name: "2729StormRobotics/StormRobotics2018"
@@ -28,12 +34,20 @@ jdk:
   - openjdk8
   - oraclejdk8
 
+script:
+  - git fetch --unshallow
+  - ./gradlew sonarqube
+
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -f  '$HOME/.gradle/caches/modules-2/modules-2.lock'
+  - rm -fr '$HOME/.gradle/caches/*/plugin-resolution/'
 
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+    - '$HOME/.gradle/caches/'
+    - '$HOME/.gradle/wrapper/'
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
+    - '$HOME/.gradle'
+    - '.gradle'
 
