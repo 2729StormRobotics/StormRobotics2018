@@ -16,17 +16,17 @@ public class Elevator extends Subsystem {
 
     private boolean shooting = false;
     private static final AnalogPotentiometer pot = new AnalogPotentiometer(0);
-    private double startHeight = 0;
+    private double startPos = 0, switchPos = 0,  zeroPos = 0;
 
     public Elevator() {
-        startHeight = getPotHeight();
+        startPos = getPotHeightInches();
+        zeroPos = _elevatorLeft.getSelectedSensorPosition(0) - inchToTicks(startPos);
         _outputRight.follow(_outputLeft);
     }
 
     @Override
     protected void initDefaultCommand() {
     }
-
 
     public void elevate(double liftSpeed) {
 
@@ -59,7 +59,26 @@ public class Elevator extends Subsystem {
         return pot.get();
     }
 
-    public double get() {
-        return getPotHeight() + _elevatorLeft.getSelectedSensorPosition(0);
+    public double getInches() {
+        if(getPotHeight() >= Constants.STRPOT_SWITCH_FRACTION) {
+            return _elevatorLeft.getSelectedSensorPosition(0) / Constants.TICKS_PER_REV;
+        } else {
+
+        }
+        return 0;
+    }
+
+    private static double getPotHeightInches() {
+        return pot.get() * Constants.STRPOT_MAX;
+    }
+
+    private double inchToTicks(double pos) {
+        return pos / Constants.STRPOT_TICKS_PER_INCH;
+    }
+
+    private void checkSwitch() {
+        if(pot.get() == Constants.STRPOT_SWITCH_FRACTION) {
+            switchPos = getPotHeightInches();
+        }
     }
 }

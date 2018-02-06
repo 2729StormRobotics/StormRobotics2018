@@ -77,7 +77,11 @@ public class Constants {
     public static final double ELEVATOR_F                 = 0.0;
     public static final double ELEVATOR_PERIOD            = 0.02;
     public static final double ELEVATOR_TOLERANCE         = 2.0;
-    public static final double ELEVATOR_MAX           = 0.0;
+
+    public static final double STRPOT_MAX                 = 56.0;
+    public static final double STRPOT_SWITCH_FRACTION     = 0.0; //arbitrary value so the program will compile <- lol who am I (Brian M.)
+    public static final double STRPOT_INCH_PER_REV        = 2.0 * Math.PI; //Change 2 later for actual diameter
+    public static final double STRPOT_TICKS_PER_INCH      = TICKS_PER_REV / STRPOT_INCH_PER_REV;
 
 //    public static final double SHIFT_UP_MULT              = 0.406;
 //    public static final double SHIFT_DOWN_MULT            = 2.06;

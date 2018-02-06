@@ -34,12 +34,17 @@ public class Lift extends Command {
             return Elevator._elevatorLeft.getSelectedSensorPosition(0);  //just an arbitrary number bc it needed to return something
         }
     };
+
     private PIDOutput elevatorWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             elevatorSpeed = a;
         }
     };
+
+    public Lift(double inches) {
+       // height = Elevator;
+    }
 
     public synchronized void start() {
         super.start();
