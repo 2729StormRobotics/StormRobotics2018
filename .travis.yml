@@ -36,6 +36,7 @@ jdk:
 
 script:
   - git fetch --unshallow
+  - ./gradlew build
   - ./gradlew sonarqube
 
 before_cache:
