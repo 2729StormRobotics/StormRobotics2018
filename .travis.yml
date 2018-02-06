@@ -25,7 +25,7 @@ addons:
     notification_email: skareer@outlook.com
     build_command_prepend: "gradle --stop && ./gradlew --stop && ./gradlew --no-daemon clean"
     build_command: "./gradlew --no-daemon build assemble buildDependents buildNeeded classes jar"
-    branch_pattern: master
+    branch_pattern: coverity-scan
   apt:
     packages:
       - oracle-java8-installer
