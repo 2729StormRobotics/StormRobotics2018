@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import robot.Constants;
 
 public class Elevator extends Subsystem {
@@ -17,14 +16,15 @@ public class Elevator extends Subsystem {
     private boolean shooting = false;
     private boolean checkTicks;
     private static final AnalogPotentiometer pot = new AnalogPotentiometer(0);
+
     private double startPos = 0, switchPos = 0,  zeroPos = 0;
     private double height;
     private double startTicks;
     private double ticksStageOneMax;
 
     public Elevator() {
-        startPos = getPotHeightInches();
-        zeroPos = _elevatorLeft.getSelectedSensorPosition(0) - inchToTicks(startPos);
+        double startPos = getPotHeightInches();
+        double zeroPos = _elevatorLeft.getSelectedSensorPosition(0) - inchToTicks(startPos);
         _outputRight.follow(_outputLeft);
         height = 0.0;
         startTicks = _elevatorLeft.getSelectedSensorPosition(0);
@@ -89,7 +89,8 @@ public class Elevator extends Subsystem {
             switchPos = getPotHeightInches();
         }
     }
-    private double get(){
+
+    private double get() {
         if(getPotHeightInches() < Constants.STAGE_ONE_MAX){
             checkTicks = true;
             return getPotHeightInches();

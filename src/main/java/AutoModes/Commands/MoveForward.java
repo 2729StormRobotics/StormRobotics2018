@@ -13,7 +13,9 @@ import robot.Robot;
 public class MoveForward extends Command {
 
     public static double turnSpeed;
-    private double moveLeftSpeed, moveRightSpeed, distance, angle;
+    private double moveLeftSpeed;
+    private double moveRightSpeed;
+    private double distance;
     private PIDController moveLeftController, moveRightController, angleController;
 
     private PIDSource leftSource = new PIDSource() {
@@ -119,7 +121,7 @@ public class MoveForward extends Command {
         //NavX.getNavx().zeroYaw();
         System.err.println("initialize Move Forward");
 
-        //angle = NavX.getNavx().getYaw();
+        double angle = NavX.getNavx().getYaw();
 
         moveLeftController = new PIDController(Constants.FORWARD_LEFT_P, Constants.FORWARD_LEFT_I, Constants.FORWARD_LEFT_D, Constants.FORWARD_LEFT_F, leftSource, motorLeftSpeedWrite, Constants.FORWARD_LEFT_PERIOD); //i: 0.000003 d: 0002
         moveLeftController.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);

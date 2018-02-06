@@ -14,20 +14,19 @@ import robot.Robot;
 import java.io.File;
 
 public class ProfileFollower extends Command {
-    TalonSRX leftMotor, rightMotor;
-    EncoderFollower left;
-    EncoderFollower right;
-    Trajectory leftTra;
-    Trajectory rightTra;
-    File leftMotionProfile;
-    File rightMotionProfile;
+    private final TalonSRX leftMotor;
+    private final TalonSRX rightMotor;
+    private EncoderFollower left;
+    private EncoderFollower right;
+    private final Trajectory leftTra;
+    private final Trajectory rightTra;
 
 
     public ProfileFollower(String leftCSV, String rightCSV) {
         requires(Robot._driveTrain);
         requires(Robot.navx);
-        leftMotionProfile = new File(leftCSV);
-        rightMotionProfile = new File(rightCSV);
+        File leftMotionProfile = new File(leftCSV);
+        File rightMotionProfile = new File(rightCSV);
 
         leftMotor = DriveTrain._leftMain;
         rightMotor = DriveTrain._rightMain;
