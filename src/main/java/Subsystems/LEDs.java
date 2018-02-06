@@ -9,7 +9,7 @@ public class LEDs {
     public static boolean shooting;
     public static boolean elevatingUp;
     public static boolean armsUp;
-    private static boolean gearHigh;
+    public static boolean gearHigh;
 
     private static SerialPort ledOut = new SerialPort(9600, SerialPort.Port.kMXP);
     private static byte ledCode[] = {(byte) 255};
