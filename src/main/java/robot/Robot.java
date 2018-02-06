@@ -17,14 +17,14 @@ import util.Controller;
 
 public class Robot extends IterativeRobot {
 
-    public static DriveTrain _driveTrain = new DriveTrain();
-    private static Elevator _elevator = new Elevator();
-    private static Hanger _hanger = new Hanger();
-    public static NavX navx = new NavX();
-    public static Intake _intake = new Intake();
-    public static Dashboard _dashboard = new Dashboard();
+    public static final DriveTrain _driveTrain = new DriveTrain();
+    private static final Elevator _elevator = new Elevator();
+    private static final Hanger _hanger = new Hanger();
+    public static final NavX navx = new NavX();
+    private static final Intake _intake = new Intake();
+    public static final Dashboard _dashboard = new Dashboard();
     private RobotState _robotState;
-    public static Controller _controller = new Controller();
+    public static final Controller _controller = new Controller();
 
     @Override
     public void robotInit() {
@@ -133,7 +133,7 @@ public class Robot extends IterativeRobot {
         }
 
         if(_controller.getPTO()) {
-            if(_robotState.equals(RobotState.DRIVE)) {
+            if(_robotState == RobotState.DRIVE) {
                 _robotState = RobotState.PTO;
             } else {
                 _robotState = RobotState.DRIVE;

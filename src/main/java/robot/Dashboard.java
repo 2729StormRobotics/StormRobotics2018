@@ -7,7 +7,6 @@ import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
 import Subsystems.NavX;
-import Subsystems.PDP;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;

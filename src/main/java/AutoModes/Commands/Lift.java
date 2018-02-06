@@ -5,13 +5,12 @@ import Subsystems.Elevator;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import robot.Constants;
 import robot.Robot;
 
 public class Lift extends Command {
 
-    public static double elevatorSpeed, height;
+    public static double  elevatorSpeed, height;
     private PIDController elevatorController;
 
     private PIDSource elevatorSource = new PIDSource() {

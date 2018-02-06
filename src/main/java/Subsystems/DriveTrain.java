@@ -31,25 +31,17 @@ public class DriveTrain extends Subsystem {
 
     }
 
-    /**
-     * When the run method of the scheduler is called this method will be called.
-     */
-    @Override
-    public void periodic() {
-        super.periodic();
-    }
-
     public void stormDrive(double combinedSpeed, double turn) {
-        stormDrive(combinedSpeed, turn, Constants.MOTOR_TOLERANCE_DEFAULT);
+        stormDrive(combinedSpeed, turn);
     }
 
     public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
         if(_PTO.get()) _PTO.set(false);
         autoShift(combinedSpeed, forceLow);
-        stormDrive(combinedSpeed, turn, Constants.MOTOR_TOLERANCE_DEFAULT);
+        stormDrive(combinedSpeed, turn);
     }
 
-    private void stormDrive(double combinedSpeed, double turn, double tolerance) {
+    private void stormDrive(double combinedSpeed, double turn) {
         //Left and Right triggers control speed.  Steer with joystick
 
         turn = turn * Math.abs(turn);
@@ -72,7 +64,7 @@ public class DriveTrain extends Subsystem {
         double rightSpeed = combinedSpeed + turn;
         rightSpeed = rightSpeed * Math.abs(rightSpeed);
 
-        setMotorTolerance(tolerance);
+        setMotorTolerance(Constants.MOTOR_TOLERANCE_DEFAULT);
 
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);

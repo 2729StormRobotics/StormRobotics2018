@@ -25,7 +25,11 @@ public class NavX extends Subsystem {
     }
 
     public static void dashboardStats() {
-        SmartDashboard.putNumber("NavX/Gyro/Yaw", NavX.getNavx().getYaw());
+        try {
+            SmartDashboard.putNumber("NavX/Gyro/Yaw", NavX.getNavx().getYaw());
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
     }
 
     @Override

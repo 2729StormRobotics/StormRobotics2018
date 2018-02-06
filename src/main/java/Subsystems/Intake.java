@@ -8,12 +8,11 @@ import edu.wpi.first.wpilibj.Solenoid;
 public class Intake extends Subsystem{
     private static TalonSRX _intakeLeft = new TalonSRX(Constants.PORT_MOTOR_INTAKE_LEFT);
     private static TalonSRX _intakeRight = new TalonSRX(Constants.PORT_MOTOR_INTAKE_RIGHT);
-    private boolean intakeArmOut;
 
     private static Solenoid sol = new Solenoid(Constants.PORT_SOLENOID_INTAKE);
 
     public Intake(){
-        intakeArmOut = sol.get();
+        boolean intakeArmOut = sol.get();
         _intakeRight.setInverted(true);
         _intakeRight.follow(_intakeLeft);
     }

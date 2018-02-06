@@ -1,6 +1,5 @@
 package AutoModes.Commands;
 
-import Subsystems.DriveTrain;
 import Subsystems.NavX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -11,14 +10,15 @@ import robot.Constants;
 import robot.Robot;
 
 public class PointTurn extends Command {
-    private double turnSpeed, targetAngle;
+    private double turnSpeed;
+    private final double targetAngle;
     private PIDController turnController;
 
     public PointTurn(double angle) { //Accepts only values between (-180, 180)
         targetAngle = angle;
     }
 
-    private PIDSource angleSource = new PIDSource() {
+    private final PIDSource angleSource = new PIDSource() {
         PIDSourceType pidST;
 
         @Override
@@ -37,7 +37,7 @@ public class PointTurn extends Command {
         }
     };
 
-    private PIDOutput motorSpeedWrite = new PIDOutput() {
+    private final PIDOutput motorSpeedWrite = new PIDOutput() {
         public void pidWrite(double a) {
             //System.out.println("PID output: " + a);
             turnSpeed = a;  //change to -a later when .setInverted works
