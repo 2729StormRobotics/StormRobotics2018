@@ -17,7 +17,7 @@ compileTestJava {
 }
 
 def TEAM = 2729
-def ROBOT_CLASS = "robot.robot"
+def ROBOT_CLASS = "robot.Robot"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.

@@ -9,6 +9,7 @@ import Subsystems.Elevator;
 import Subsystems.NavX;
 import Subsystems.PDP;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,13 +38,14 @@ public class Dashboard {
         if(bug != null && bug.getName() != null) {
             s = bug.getName();
         }
-        PDP.dashboardStats();
         switch(s) {
             case "Info":
+                this.sendAlliance();
                 this.sendEncoders();
                 this.sendNavXInfo();
                 break;
             case "Debug":
+                this.sendAlliance();
                 this.sendEncoders();
                 this.sendElevatorEncoders();
                 this.checkAccel();
@@ -52,6 +54,7 @@ public class Dashboard {
                 this.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
                 break;
             case "All":
+                this.sendAlliance();
                 this.sendEncoders();
                 this.sendElevatorEncoders();
                 this.sendNavXAll();
@@ -74,6 +77,23 @@ public class Dashboard {
 
     public void checkTurnSpeed() {
         SmartDashboard.putNumber("Turn Speed", MoveForward.turnSpeed);
+    }
+
+    private void sendAlliance() {
+        DriverStation.Alliance a = DriverStation.getInstance().getAlliance();
+        switch (a) {
+            case Red:
+                SmartDashboard.putString("Alliance", "Red");
+                break;
+            case Blue:
+                SmartDashboard.putString("Alliance", "Blue");
+                break;
+            case Invalid:
+                SmartDashboard.putString("Alliance", "Invalid");
+                break;
+            default: break;
+        }
+
     }
 
     void sendChooser() {
@@ -117,6 +137,7 @@ public class Dashboard {
         SmartDashboard.putNumber("Left Encoder", Elevator._elevatorLeft.getSelectedSensorPosition(0));
         //SmartDashboard.putNumber("Right Encoder", Elevator._elevatorRight.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Speed", Lift.elevatorSpeed);
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
     }
 
 

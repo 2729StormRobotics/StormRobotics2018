@@ -25,7 +25,7 @@ public class Constants {
     public static final int PORT_MOTOR_OUTPUT_LEFT              = 13; //Output Left
     public static final int PORT_MOTOR_OUTPUT_RIGHT             = 14;//Output Right
 
-    public static final int PORT_SOLENOID_INTAKE            = 0;//Left Solenoid
+    public static final int PORT_SOLENOID_INTAKE                = 3;//Left Solenoid
 
     public static final int PORT_SOLENOID_GEARSHIFT             = 1;
 
@@ -77,6 +77,7 @@ public class Constants {
     public static final double ELEVATOR_F                 = 0.0;
     public static final double ELEVATOR_PERIOD            = 0.02;
     public static final double ELEVATOR_TOLERANCE         = 2.0;
+    public static final double ELEVATOR_MAX           = 0.0;
 
 //    public static final double SHIFT_UP_MULT              = 0.406;
 //    public static final double SHIFT_DOWN_MULT            = 2.06;

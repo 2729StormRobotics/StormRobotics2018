@@ -8,6 +8,7 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.opencv.core.Mat;
 import util.AutoPosition;
 import util.AutoPreference;
@@ -28,7 +29,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
-        cameraInit();
+        //cameraInit();
         NavX.getNavx();
         _robotState = RobotState.DRIVE;
     }
@@ -95,16 +96,32 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {
-        Scheduler.getInstance().run();
+    public void disabledPeriodic() {
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
+        super.disabledPeriodic();
+        System.out.println(Elevator.getPotHeight());
         _dashboard.checkBug();
         NavX.dashboardStats();
+        PDP.dashboardStats();
+        LEDs.checkStatus();
+    }
+
+    @Override
+    public void autonomousPeriodic() {
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
+        Scheduler.getInstance().run();
+        System.out.println(Elevator.getPotHeight());
+        _dashboard.checkBug();
+        NavX.dashboardStats();
+        PDP.dashboardStats();
         LEDs.checkStatus();
     }
 
     @Override
     public void teleopPeriodic() {
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
         NavX.dashboardStats();
+        PDP.dashboardStats();
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
@@ -136,6 +153,7 @@ public class Robot extends IterativeRobot {
         if(_controller.getIntake())
             _intake.fwoo(Constants.INTAKE_SPEED);
         _controller.printDoubt();
+        System.out.println(Elevator.getPotHeight());
         LEDs.checkStatus();
     }
 

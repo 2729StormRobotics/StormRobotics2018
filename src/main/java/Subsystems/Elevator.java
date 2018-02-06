@@ -2,7 +2,9 @@ package Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import robot.Constants;
 
 public class Elevator extends Subsystem {
@@ -13,14 +15,16 @@ public class Elevator extends Subsystem {
     private static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
 
     private boolean shooting = false;
+    private static final AnalogPotentiometer pot = new AnalogPotentiometer(0);
+    private double startHeight = 0;
 
     public Elevator() {
+        startHeight = getPotHeight();
         _outputRight.follow(_outputLeft);
     }
 
     @Override
     protected void initDefaultCommand() {
-
     }
 
 
@@ -49,5 +53,13 @@ public class Elevator extends Subsystem {
 
         if (shooting)
             _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+    }
+
+    public static double getPotHeight() {
+        return pot.get();
+    }
+
+    public double get() {
+        return getPotHeight() + _elevatorLeft.getSelectedSensorPosition(0);
     }
 }
