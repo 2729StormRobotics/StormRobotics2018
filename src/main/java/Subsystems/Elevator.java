@@ -9,27 +9,35 @@ import robot.Constants;
 
 public class Elevator extends Subsystem {
 
-    public static final TalonSRX _elevatorLeft = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_MAIN); //formerly _leftMain
+    public static final TalonSRX _elevatorLeft = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_MAIN);
 
     private static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     private static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
 
     private boolean shooting = false;
+    private boolean checkTicks;
     private static final AnalogPotentiometer pot = new AnalogPotentiometer(0);
     private double startPos = 0, switchPos = 0,  zeroPos = 0;
+    private double height;
+    private double startTicks;
+    private double ticksStageOneMax;
 
     public Elevator() {
         startPos = getPotHeightInches();
         zeroPos = _elevatorLeft.getSelectedSensorPosition(0) - inchToTicks(startPos);
         _outputRight.follow(_outputLeft);
+        height = 0.0;
+        startTicks = _elevatorLeft.getSelectedSensorPosition(0);
+        checkTicks = true;
     }
 
     @Override
     protected void initDefaultCommand() {
     }
 
-    public void elevate(double liftSpeed) {
 
+    public void elevate(double liftSpeed) {
+        height = get();
         _elevatorLeft.set(ControlMode.PercentOutput, liftSpeed);
 
         if(liftSpeed > 0){
@@ -60,7 +68,7 @@ public class Elevator extends Subsystem {
     }
 
     public double getInches() {
-        if(getPotHeight() >= Constants.STRPOT_SWITCH_FRACTION) {
+        if (getPotHeight() >= Constants.STRPOT_SWITCH_FRACTION) {
             return _elevatorLeft.getSelectedSensorPosition(0) / Constants.TICKS_PER_REV;
         } else {
 
@@ -77,8 +85,22 @@ public class Elevator extends Subsystem {
     }
 
     private void checkSwitch() {
-        if(pot.get() == Constants.STRPOT_SWITCH_FRACTION) {
+        if (pot.get() == Constants.STRPOT_SWITCH_FRACTION) {
             switchPos = getPotHeightInches();
         }
     }
+    private double get(){
+        if(getPotHeightInches() < Constants.STAGE_ONE_MAX){
+            checkTicks = true;
+            return getPotHeightInches();
+        } else {
+            if(checkTicks){
+                ticksStageOneMax = _elevatorLeft.getSelectedSensorPosition(0);
+                checkTicks = false;
+            }
+            double temp = (_elevatorLeft.getSelectedSensorPosition(0) - ticksStageOneMax) / Constants.STRPOT_TICKS_PER_INCH;
+            return getPotHeightInches() + temp;
+        }
+    }
 }
+

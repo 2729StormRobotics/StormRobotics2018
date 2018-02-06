@@ -9,6 +9,8 @@ import Subsystems.Elevator;
 import Subsystems.NavX;
 import Subsystems.PDP;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -26,7 +28,7 @@ public class Dashboard {
     SendableChooser<AutoPreference> preferenceChooser;
     SendableChooser<DebugLevel> debugChooser;
 
-    Dashboard() {
+    public Dashboard() {
     }
 
     private void checkAccel() {
@@ -43,18 +45,21 @@ public class Dashboard {
                 this.sendAlliance();
                 this.sendEncoders();
                 this.sendNavXInfo();
+                this.sendCustomDashInfo();
                 break;
             case "Debug":
                 this.sendAlliance();
                 this.sendEncoders();
                 this.sendElevatorEncoders();
                 this.checkAccel();
+                this.sendCustomDashInfo();
                 this.checkPneumatics();
                 this.sendMotorControllerInfo("Motor/right/main/", DriveTrain._rightMain);
                 this.sendMotorControllerInfo("Motor/left/main/", DriveTrain._leftMain);
                 break;
             case "All":
                 this.sendAlliance();
+                this.sendCustomDashInfo();
                 this.sendEncoders();
                 this.sendElevatorEncoders();
                 this.sendNavXAll();
@@ -132,6 +137,14 @@ public class Dashboard {
         SmartDashboard.putData("Debug Level", debugChooser);
     }
 
+    public void sendCustomDashInfo() {
+        SmartDashboard.putBoolean("StormDashboard/Gear", Robot._driveTrain._gearShift.get());
+        SmartDashboard.putBoolean("StormDashboard/Arm", Robot._intake.sol.get());
+        SmartDashboard.putBoolean("StormDashboard/PTO", Robot._driveTrain._PTO.get());
+        SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
+
+
+    }
 
     public void sendElevatorEncoders() {
         SmartDashboard.putNumber("Left Encoder", Elevator._elevatorLeft.getSelectedSensorPosition(0));

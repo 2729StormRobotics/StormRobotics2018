@@ -68,15 +68,21 @@ public class Constants {
 
 
     //do some calculations to determine optimal levels of motor output for shifting up and down
-    public static final double SHIFT_UP                         = 0.8;
-    public static final double SHIFT_DOWN                       = 0.4;
+    public static final double SHIFT_UP                     = 0.8;
+    public static final double SHIFT_DOWN                   = 0.4;
 
-    public static final double ELEVATOR_P                 = 0.0002;
-    public static final double ELEVATOR_I                 = 0.0000;
-    public static final double ELEVATOR_D                 = 0.00005;
-    public static final double ELEVATOR_F                 = 0.0;
-    public static final double ELEVATOR_PERIOD            = 0.02;
-    public static final double ELEVATOR_TOLERANCE         = 2.0;
+    public static final double ELEVATOR_P                   = 0.0002;
+    public static final double ELEVATOR_I                   = 0.0000;
+    public static final double ELEVATOR_D                   = 0.00005;
+    public static final double ELEVATOR_F                   = 0.0;
+    public static final double ELEVATOR_PERIOD              = 0.02;
+    public static final double ELEVATOR_TOLERANCE           = 2.0;
+    public static final double ELEVATOR_MAX                 = 0.0;
+
+    public static final double STAGE_ONE_MAX                = 31.0;
+    public static final double STAGE_TWO_MAX                = 38.0; //not right, gotta measure
+    public static final double STAGE_THREE_MAX              = 38.0;
+    public static final double STAGE_FOUR_MAX               = 39.0;
 
     public static final double STRPOT_MAX                 = 56.0; //push
     public static final double STRPOT_SWITCH_FRACTION     = 0.0; //arbitrary value so the program will compile <- lol who am I (Brian M.)

@@ -8,7 +8,7 @@ import robot.Constants;
 
 public class DriveTrain extends Subsystem {
 
-    private boolean acceleration = false;
+    public boolean acceleration = false;
 
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
     public static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
@@ -16,8 +16,8 @@ public class DriveTrain extends Subsystem {
     public static TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
     public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
-    private static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
-    private static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO);
+    public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
+    public static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO);
 
     public DriveTrain() {
         _rightMain.setInverted(true);

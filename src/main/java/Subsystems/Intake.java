@@ -10,7 +10,7 @@ public class Intake extends Subsystem{
     private static TalonSRX _intakeRight = new TalonSRX(Constants.PORT_MOTOR_INTAKE_RIGHT);
     private boolean intakeArmOut;
 
-    private static Solenoid sol = new Solenoid(Constants.PORT_SOLENOID_INTAKE);
+    public static Solenoid sol = new Solenoid(Constants.PORT_SOLENOID_INTAKE);
 
     public Intake(){
         intakeArmOut = sol.get();
