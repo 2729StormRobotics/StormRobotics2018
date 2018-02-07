@@ -23,6 +23,7 @@ addons:
       - maintenance
       - Dev
       - dev
+      - asbestos
   coverity_scan:
     project:
       name: "2729StormRobotics/StormRobotics2018"
