@@ -123,11 +123,12 @@ public class MoveForward extends Command {
         super.initialize();
         double targetTicks = inchesToTicks(distance);
         System.err.println("initialize Move Forward");
+        double angle;
 
         angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
 
         try {
-            double angle = NavX.getNavx().getYaw();
+            angle = NavX.getNavx().getYaw();
 
             angleController.setInputRange(-180.0, 180.0);
             angleController.setOutputRange(-0.3, 0.3);
