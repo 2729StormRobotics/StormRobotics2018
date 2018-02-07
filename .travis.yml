@@ -18,6 +18,11 @@ addons:
     organization: "storm-robotics-2729-github"
     token:
       secure: "JTC3pUUr0WzgmgdpOpqGSqL1k4EpJG0M2cVKsjrTMT5+SjEY1hIp6r/F4n4YuSN21zvHmOSYBDEPLD7aN/weP2FdacM4EvHtR+isWAQPs+FkwdVYczgM3nlt5VtmYcC5yeORLz2A5JcgXQqRJAU317jWJZLsiOFArqpInwy+TYiLshxX8I8n905Rwg/VdFldePZU8N5+fo68xtPl0cXrtZkaMAMhpiOpjcTY9v93sgE5qkqFctB8IyG6K6Jik4T41mSz3Mdm2c5lOMjFFdkwpt/mrdIrqieOazjdodZjm0odM1Mkd/3+7hwTpnkdo5NYFXLgSrB93xzX6tUt4EO82TpQUuP7/3AgDzz4ch+rbeD8ubuPgEImfQIdiTASv6BNYlrIx9zgf+34Vh4rwBUarDrqfZCjiXoGm/QEN5OaouY08UcoIW4m9XUmLZ0X9bZX6+i0jWwxNrqcQ11woMW9Tk3aNa9ucLvFSxdJJJu1AqiFta6u71maE9ZcYnRI8W66cTVoYIARLZpTdOUjt58cmTrAKLZdv1G6d8MKE1H9TWm3klrSNV6MWTdDxN/jEmDoXwfl0F1D7rTu5BRaZqk7J2Vxj8bteBZX9k7AgxaQupjUm0H1HGal3xy44hn47L3Y42AhX/HazsZilnAc2TOorLFayswMx+APuY7rFBA9ga4="
+    branches:
+      - master
+      - maintenance
+      - Dev
+      - dev
   coverity_scan:
     project:
       name: "2729StormRobotics/StormRobotics2018"
