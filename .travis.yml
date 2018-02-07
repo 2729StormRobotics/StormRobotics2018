@@ -40,7 +40,6 @@ jdk:
   - oraclejdk8
 
 script:
-  - git merge origin/master --ff-only
   - git fetch --unshallow
   - ./gradlew build
   - ./gradlew sonarqube
