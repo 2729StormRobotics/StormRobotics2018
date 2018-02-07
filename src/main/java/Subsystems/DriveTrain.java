@@ -31,10 +31,6 @@ public class DriveTrain extends Subsystem {
 
     }
 
-    public void stormDrive(double combinedSpeed, double turn) {
-        stormDrive(combinedSpeed, turn);
-    }
-
     public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
         if(_PTO.get()) _PTO.set(false);
         autoShift(combinedSpeed, forceLow);
