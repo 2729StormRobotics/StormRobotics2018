@@ -33,7 +33,11 @@ public class PointTurn extends Command {
         }
 
         public double pidGet() { // Angle robot at
-            return NavX.getNavx().getYaw();
+            try {
+                return NavX.getNavx().getYaw();
+            } catch (NullPointerException npe) {
+                return targetAngle;
+            }
         }
     };
 
@@ -52,15 +56,23 @@ public class PointTurn extends Command {
         turnController.setOutputRange(-.80, .80);
         turnController.setAbsoluteTolerance(Constants.POINT_TURN_TOLERANCE);
         turnController.setContinuous(true);
-        double setpoint = targetAngle + NavX.getNavx().getYaw();
+        double setpoint;
+        double currentYaw = 0;
+        try{
+            currentYaw = NavX.getNavx().getYaw();
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
+        setpoint = targetAngle + currentYaw;
+
 
         if (setpoint > 180)
-            setpoint = NavX.getNavx().getYaw() + targetAngle - 360;
+            setpoint = currentYaw + targetAngle - 360;
         else if (setpoint < -180)
-            setpoint = NavX.getNavx().getYaw() - targetAngle + 360;
+            setpoint = currentYaw - targetAngle + 360;
 
         turnController.setSetpoint(setpoint);
-        System.out.println("Starting At: " + NavX.getNavx().getYaw());
+        System.out.println("Starting At: " + currentYaw);
         System.out.println("Starting with setpoint: " + turnController.getSetpoint());
         turnController.enable();
         System.err.println("start Point Turn");

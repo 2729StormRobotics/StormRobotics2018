@@ -52,7 +52,11 @@ public class ProfileFollower extends Command {
         double max_velocity = 15;
         left.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
         right.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
-        NavX.getNavx().zeroYaw();
+        try {
+            NavX.getNavx().zeroYaw();
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
     }
 
     /**
@@ -92,7 +96,12 @@ public class ProfileFollower extends Command {
         DriveTrain._rightMain.configOpenloopRamp(0, 500);
         double l = left.calculate(leftMotor.getSelectedSensorPosition(0));
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
-        double gyro_heading = NavX.getNavx().getYaw();
+        double gyro_heading;
+        try {
+            gyro_heading = NavX.getNavx().getYaw();
+        } catch(NullPointerException npe) {
+            gyro_heading = 0;
+        }
         double desired_heading = Pathfinder.r2d(left.getHeading());
         double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
         double turn = 0.8 * (-1.0/80.0) * angleDifference;

@@ -13,22 +13,24 @@ public class NavX extends Subsystem {
         NavX.connect();
     }
 
-    private static void connect() {
+    private static boolean connect() {
         if (navx == null || !navx.isConnected()) {
             try {
                 navx = new AHRS(SerialPort.Port.kUSB);
                 System.out.println("NavX Connected: " + navx.isConnected());
             } catch (RuntimeException ex) {
                 DriverStation.reportError("Error instantiating navX MXP: " + ex.getMessage(), true);
+                return false;
             }
         }
+        return true;
     }
 
     public static void dashboardStats() {
         try {
             SmartDashboard.putNumber("NavX/Gyro/Yaw", NavX.getNavx().getYaw());
         } catch (NullPointerException npe) {
-            npe.printStackTrace();
+            NavX.connect();
         }
     }
 
@@ -43,10 +45,11 @@ public class NavX extends Subsystem {
         NavX.connect();
     }
 
-    public static AHRS getNavx() {
-        if (navx == null) {
-            NavX.connect();
+    public static AHRS getNavx() throws NullPointerException {
+        if (NavX.connect()) {
+            return navx;
+        } else {
+            throw new NullPointerException("Failed to connect to the NavX!");
         }
-        return navx;
     }
 }

@@ -6,6 +6,7 @@ import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
+import Subsystems.Intake;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.networktables.NetworkTable;
@@ -137,9 +138,9 @@ public class Dashboard {
     }
 
     public void sendCustomDashInfo() {
-        SmartDashboard.putBoolean("StormDashboard/Gear", Robot._driveTrain._gearShift.get());
-        SmartDashboard.putBoolean("StormDashboard/Arm", Robot._intake.sol.get());
-        SmartDashboard.putBoolean("StormDashboard/PTO", Robot._driveTrain._PTO.get());
+        SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
+        SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
+        SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
 
 
@@ -177,7 +178,6 @@ public class Dashboard {
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
         }
     }
-
 
     private void sendNavXAll() {
         if (NavX.getNavx() != null) {
