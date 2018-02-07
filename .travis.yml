@@ -23,7 +23,7 @@ addons:
       name: "2729StormRobotics/StormRobotics2018"
       description: "robot code for the FIRST FRC 2018 game, Power Up"
     notification_email: skareer@outlook.com
-    build_command_prepend: "gradle --stop && ./gradlew --stop && ./gradlew --no-daemon clean"
+    build_command_prepend: "git merge origin/master --ff-only && gradle --stop && ./gradlew --stop && ./gradlew --no-daemon clean"
     build_command: "./gradlew --no-daemon build assemble buildDependents buildNeeded classes jar"
     branch_pattern: coverity-scan
   apt:
@@ -35,6 +35,7 @@ jdk:
   - oraclejdk8
 
 script:
+  - git merge origin/master --ff-only
   - git fetch --unshallow
   - ./gradlew build
   - ./gradlew sonarqube
