@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
     private static final Elevator _elevator = new Elevator();
     private static final Hanger _hanger = new Hanger();
     public static final NavX navx = new NavX();
-    private static final Intake _intake = new Intake();
+    public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     private RobotState _robotState;
     public static final Controller _controller = new Controller();
