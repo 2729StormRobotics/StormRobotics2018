@@ -33,7 +33,11 @@ public class PointTurn extends Command {
         }
 
         public double pidGet() { // Angle robot at
-            return NavX.getNavx().getYaw();
+            try {
+                return NavX.getNavx().getYaw();
+            } catch (NullPointerException npe) {
+                return targetAngle;
+            }
         }
     };
 
@@ -52,9 +56,8 @@ public class PointTurn extends Command {
         turnController.setOutputRange(-.80, .80);
         turnController.setAbsoluteTolerance(Constants.POINT_TURN_TOLERANCE);
         turnController.setContinuous(true);
-        double setpoint = targetAngle;
+        double setpoint;
         double currentYaw = 0;
-
         try{
             currentYaw = NavX.getNavx().getYaw();
         } catch (NullPointerException npe){
