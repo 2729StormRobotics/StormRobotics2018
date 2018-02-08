@@ -54,8 +54,8 @@ public class Controller {
         return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft);
     }
 
-    public boolean getIntake() {
-        return weaponsThing.getBumperPressed(GenericHID.Hand.kLeft);
+    public int getIntake() {
+        return weaponsThing.getPOV();
     }
 
     public boolean getBlockOutput() {

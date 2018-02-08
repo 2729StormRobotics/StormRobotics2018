@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 
+import javax.naming.ldap.Control;
+
 public class Elevator extends Subsystem {
 
     public static final TalonSRX _elevatorLeft = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_MAIN);
@@ -48,12 +50,14 @@ public class Elevator extends Subsystem {
 
     }
 
-    public void outputToggle(){
-        this.shooting = !this.shooting;
+    public void output(double speed){
+//        this.shooting = !this.shooting;
+//
+//        if (shooting)
+//            _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+//        LEDs.shooting = this.shooting;
+        _elevatorLeft.set(ControlMode.PercentOutput, speed);
 
-        if (shooting)
-            _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
-        LEDs.shooting = this.shooting;
     }
 
     public void outputSet(boolean _shooting) {

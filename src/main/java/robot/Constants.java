@@ -11,7 +11,7 @@ public class Constants {
     public static final double MOTOR_TOLERANCE_DEFAULT          = 0.04;
     public static final double MOTOR_TOLERANCE_MIN              = 0.01;
 
-    public static final double MIN_TURN_SPEED                   = 0.1;
+    public static final double MIN_TURN_SPEED                   = 0.05;
 
 
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 5;//Elevator 1
