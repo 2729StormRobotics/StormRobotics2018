@@ -64,8 +64,7 @@ public class Constants {
     public static final double FORWARD_ANGLE_F                  = 0.0;
     public static final double FORWARD_ANGLE_PERIOD             = 0.02;
 
-    public static final double INTAKE_SPEED                     = 0.4;
-
+    static final double INTAKE_SPEED                            = 0.4;
 
     //do some calculations to determine optimal levels of motor output for shifting up and down
     public static final double SHIFT_UP                     = 0.8;
@@ -92,15 +91,15 @@ public class Constants {
 //    public static final double SHIFT_UP_MULT              = 0.406;
 //    public static final double SHIFT_DOWN_MULT            = 2.06;
 
-    public static final String MID_SWITCH = "Mid Switch";
-    public static final String LEFT_SCALE = "Left Side Scale";
-    public static final String LEFT_SWITCH = "Left Side Switch";
-    public static final String RIGHT_SCALE = "Right Scale";
-    public static final String RIGHT_SWITCH = "Right Switch";
-    public static final String POINT_TURN = "Point Turn";
-    public static final String MOVE_FORWARD = "Move Forward";
-    public static final String TEST_MODE = "Test Mode";
-    public static final String FOLLOW_PREF = "Follow";
+    static final String MID_SWITCH = "Mid Switch";
+    static final String LEFT_SCALE = "Left Side Scale";
+    static final String LEFT_SWITCH = "Left Side Switch";
+    static final String RIGHT_SCALE = "Right Scale";
+    static final String RIGHT_SWITCH = "Right Switch";
+    static final String POINT_TURN = "Point Turn";
+    static final String MOVE_FORWARD = "Move Forward";
+    static final String TEST_MODE = "Test Mode";
+    static final String FOLLOW_PREF = "Follow";
 
     public static final double OUTPUT_SPEED = 1.0;
 

@@ -9,8 +9,6 @@ import Subsystems.Elevator;
 import Subsystems.Intake;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -76,7 +74,7 @@ public class Dashboard {
     }
 
     private void checkPneumatics() {
-        SmartDashboard.putBoolean("Intake Pneumatics", Robot._controller.getIntake());
+        SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
     }
 
 

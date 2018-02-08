@@ -129,7 +129,6 @@ public class MoveForward extends Command {
 
         try {
             angle = NavX.getNavx().getYaw();
-
             angleController.setInputRange(-180.0, 180.0);
             angleController.setOutputRange(-0.3, 0.3);
             angleController.setAbsoluteTolerance(Constants.TOLERANCE_DEGREES);
