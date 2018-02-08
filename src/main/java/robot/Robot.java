@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
-        //cameraInit();
+        cameraInit();
         NavX.getNavx();
         _robotState = RobotState.DRIVE;
     }
@@ -48,6 +48,8 @@ public class Robot extends IterativeRobot {
         } catch (IndexOutOfBoundsException ex) {
             System.out.println("No Game Data");
         }
+
+        SmartDashboard.putBoolean("Match Started:", true);
 
         Command autonomousCommand = _dashboard.autoChooser.getSelected();
         AutoPosition position = _dashboard.positionChooser.getSelected();
@@ -153,10 +155,8 @@ public class Robot extends IterativeRobot {
             _intake.toggleIntakeArm();
         if(_controller.getIntake() == 0) {
             _intake.fwoo(Constants.INTAKE_SPEED);
-            _elevator.output(Constants.OUTPUT_SPEED);
         } else if(_controller.getIntake() == 180){
             _intake.fwoo(Constants.INTAKE_SPEED * -1.0);
-            _elevator.output(Constants.OUTPUT_SPEED * -1.0);
         }
         _controller.printDoubt();
         System.out.println(Elevator.getPotHeight());

@@ -108,7 +108,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        //autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
 
@@ -136,9 +136,9 @@ public class Dashboard {
     }
 
     public void sendCustomDashInfo() {
-        SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
-        SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
-        SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
+        //SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
+        //SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
+        //SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
 
 
