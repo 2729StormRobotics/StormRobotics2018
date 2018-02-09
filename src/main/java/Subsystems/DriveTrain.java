@@ -16,8 +16,8 @@ public class DriveTrain extends Subsystem {
     public static TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
     public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
-    public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
-    public static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO);
+//    public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
+//    public static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO);
 
     public DriveTrain() {
         _rightMain.setInverted(true);
@@ -32,7 +32,7 @@ public class DriveTrain extends Subsystem {
     }
 
     public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
-        if(_PTO.get()) _PTO.set(false);
+//        if(_PTO.get()) _PTO.set(false);
         autoShift(combinedSpeed, forceLow);
         stormDrive(combinedSpeed, turn);
     }
@@ -112,15 +112,15 @@ public class DriveTrain extends Subsystem {
 
     private void autoShift(double speed, boolean force) {
         //False means in High Gear && True Means in Low
-        if(_gearShift.get() && speed >= Constants.SHIFT_UP) {
-            _gearShift.set(false);
-        } else if((!_gearShift.get() && speed <= Constants.SHIFT_DOWN) || force) {
-            _gearShift.set(true);
-        }
+//        if(_gearShift.get() && speed >= Constants.SHIFT_UP) {
+//            _gearShift.set(false);
+//        } else if((!_gearShift.get() && speed <= Constants.SHIFT_DOWN) || force) {
+//            _gearShift.set(true);
+//        }
     }
 
     public void hang(double pullSpeed) {
-        if(!_PTO.get()) togglePTO();
+//        if(!_PTO.get()) togglePTO();
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
         _rightMain.set(ControlMode.PercentOutput, pullSpeed);
 
@@ -128,8 +128,8 @@ public class DriveTrain extends Subsystem {
     }
 
     private static void togglePTO(){
-        _PTO.set(!_PTO.get());
-        _gearShift.set(true);
+//        _PTO.set(!_PTO.get());
+//        _gearShift.set(true);
     }
 
 

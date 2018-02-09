@@ -6,10 +6,9 @@ import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
+import Subsystems.Intake;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -75,7 +74,7 @@ public class Dashboard {
     }
 
     private void checkPneumatics() {
-        SmartDashboard.putBoolean("Intake Pneumatics", Robot._controller.getIntake());
+        SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
     }
 
 
@@ -109,7 +108,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        //autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
 
@@ -137,9 +136,9 @@ public class Dashboard {
     }
 
     public void sendCustomDashInfo() {
-        SmartDashboard.putBoolean("StormDashboard/Gear", Robot._driveTrain._gearShift.get());
-        SmartDashboard.putBoolean("StormDashboard/Arm", Robot._intake.sol.get());
-        SmartDashboard.putBoolean("StormDashboard/PTO", Robot._driveTrain._PTO.get());
+        //SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
+        //SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
+        //SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
 
 
@@ -177,7 +176,6 @@ public class Dashboard {
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
         }
     }
-
 
     private void sendNavXAll() {
         if (NavX.getNavx() != null) {

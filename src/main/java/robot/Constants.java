@@ -11,7 +11,7 @@ public class Constants {
     public static final double MOTOR_TOLERANCE_DEFAULT          = 0.04;
     public static final double MOTOR_TOLERANCE_MIN              = 0.01;
 
-    public static final double MIN_TURN_SPEED                   = 0.1;
+    public static final double MIN_TURN_SPEED                   = 0.05;
 
 
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 5;//Elevator 1
@@ -64,8 +64,7 @@ public class Constants {
     public static final double FORWARD_ANGLE_F                  = 0.0;
     public static final double FORWARD_ANGLE_PERIOD             = 0.02;
 
-    public static final double INTAKE_SPEED                     = 0.4;
-
+    static final double INTAKE_SPEED                            = 0.4;
 
     //do some calculations to determine optimal levels of motor output for shifting up and down
     public static final double SHIFT_UP                     = 0.8;
@@ -78,29 +77,30 @@ public class Constants {
     public static final double ELEVATOR_PERIOD              = 0.02;
     public static final double ELEVATOR_TOLERANCE           = 2.0;
     public static final double ELEVATOR_MAX                 = 0.0;
+    public static final double ELEVATOR_INCH_PER_REV         = 2.0 * Math.PI; //Change 2 later for actual diameter
 
     public static final double STAGE_ONE_MAX                = 31.0;
     public static final double STAGE_TWO_MAX                = 38.0; //not right, gotta measure
     public static final double STAGE_THREE_MAX              = 38.0;
     public static final double STAGE_FOUR_MAX               = 39.0;
 
-    public static final double STRPOT_MAX                 = 56.0; //push
-    public static final double STRPOT_SWITCH_FRACTION     = 0.0; //arbitrary value so the program will compile <- lol who am I (Brian M.)
-    private static final double STRPOT_INCH_PER_REV        = 2.0 * Math.PI; //Change 2 later for actual diameter
-    public static final double STRPOT_TICKS_PER_INCH      = TICKS_PER_REV / STRPOT_INCH_PER_REV;
+    public static final double STRPOT_MAX                   = 56.0; //push
+    public static final double STRPOT_SWITCH_FRACTION       = 0.0; //arbitrary value so the program will compile <- lol who am I (Brian M.) THIS IS THE MAX HEIGHT FRACTION
+    public static final double STRPOT_TICKS_PER_INCH        = TICKS_PER_REV / ELEVATOR_INCH_PER_REV;
+    public static final double STRPOT_LOW_FRACTION          = 0.0; //Add the magic number
 
 //    public static final double SHIFT_UP_MULT              = 0.406;
 //    public static final double SHIFT_DOWN_MULT            = 2.06;
 
-    public static final String MID_SWITCH = "Mid Switch";
-    public static final String LEFT_SCALE = "Left Side Scale";
-    public static final String LEFT_SWITCH = "Left Side Switch";
-    public static final String RIGHT_SCALE = "Right Scale";
-    public static final String RIGHT_SWITCH = "Right Switch";
-    public static final String POINT_TURN = "Point Turn";
-    public static final String MOVE_FORWARD = "Move Forward";
-    public static final String TEST_MODE = "Test Mode";
-    public static final String FOLLOW_PREF = "Follow";
+    static final String MID_SWITCH = "Mid Switch";
+    static final String LEFT_SCALE = "Left Side Scale";
+    static final String LEFT_SWITCH = "Left Side Switch";
+    static final String RIGHT_SCALE = "Right Scale";
+    static final String RIGHT_SWITCH = "Right Switch";
+    static final String POINT_TURN = "Point Turn";
+    static final String MOVE_FORWARD = "Move Forward";
+    static final String TEST_MODE = "Test Mode";
+    static final String FOLLOW_PREF = "Follow";
 
     public static final double OUTPUT_SPEED = 1.0;
 
