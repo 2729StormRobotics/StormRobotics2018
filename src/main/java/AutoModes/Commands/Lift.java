@@ -10,7 +10,8 @@ import robot.Robot;
 
 public class Lift extends Command {
 
-    public static double  elevatorSpeed, height;
+    public static double  elevatorSpeed;
+    private static final double height;
     private PIDController elevatorController;
 
     private PIDSource elevatorSource = new PIDSource() {
@@ -42,7 +43,7 @@ public class Lift extends Command {
     };
 
     public Lift(double inches) {
-       // height = Elevator;
+        height = Elevator.getHeight();
     }
 
     public synchronized void start() {
@@ -60,7 +61,7 @@ public class Lift extends Command {
         System.err.println("interrupted Lift");
         elevatorController.disable();
 
-        Elevator._elevatorLeft.set(ControlMode.PercentOutput, 0);
+        Elevator._elevator.set(ControlMode.PercentOutput, 0);
         super.interrupted();
     }
     protected void initialize() {
@@ -70,7 +71,7 @@ public class Lift extends Command {
         elevatorController.setOutputRange(-.5, .5);
         elevatorController.setAbsoluteTolerance(Constants.ELEVATOR_TOLERANCE);
         elevatorController.setContinuous(true);
-        elevatorController.setSetpoint(((Elevator._elevatorLeft.getSelectedSensorPosition(0))));
+        elevatorController.setSetpoint(((Elevator._elevator.getSelectedSensorPosition(0))));
         elevatorController.enable();
         Robot._dashboard.sendElevatorEncoders();
     }
@@ -81,14 +82,14 @@ public class Lift extends Command {
             elevatorController.enable();
             System.err.println("moveElevator enabled again");
         }
-        Elevator._elevatorLeft.set(ControlMode.PercentOutput, elevatorSpeed);
+        Elevator._elevator.set(ControlMode.PercentOutput, elevatorSpeed);
     }
 
     @Override
     protected boolean isFinished() {
         if (Math.abs(elevatorController.getError()) < Constants.TOLERANCE_TICKS) {
             elevatorController.disable();
-            Elevator._elevatorLeft.set(ControlMode.PercentOutput, 0);
+            Elevator._elevator.set(ControlMode.PercentOutput, 0);
             return true;
         }
         return false;
