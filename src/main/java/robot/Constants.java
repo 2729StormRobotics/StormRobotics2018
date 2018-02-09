@@ -2,10 +2,10 @@ package robot;
 
 public class Constants {
 
-    public static final int PORT_MOTOR_DRIVE_LEFT_MAIN 			= 1; //Front Left
-    public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 2; //Back left
-    public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 11;//Front right
-    public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 12;//Back right
+    public static final int PORT_MOTOR_DRIVE_LEFT_MAIN 			= 14; //Front Left
+    public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 1; //Back left
+    public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 15;//Front right
+    public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 0;//Back right
 
     public static final double MOTOR_TOLERANCE_MAX              = 0.25;  //Drive Motor Tolerances
     public static final double MOTOR_TOLERANCE_DEFAULT          = 0.04;
@@ -14,16 +14,16 @@ public class Constants {
     public static final double MIN_TURN_SPEED                   = 0.05;
 
 
-    public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 5;//Elevator 1
-    //public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 10;//Elevator 2
+    public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 12;//Elevator 1
+    public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 3;//Elevator 2
 
-    public static final int PORT_MOTOR_DRIVE_HANG_MAIN 		    = 7;//Hanger
+    //public static final int PORT_MOTOR_DRIVE_HANG_MAIN 		    = 7;//Hanger
 
-    public static final int PORT_MOTOR_INTAKE_LEFT              = 4; //Intake Left
-    public static final int PORT_MOTOR_INTAKE_RIGHT             = 6; //Intake Right
+    public static final int PORT_MOTOR_INTAKE_LEFT              = 6; //Intake Left
+    public static final int PORT_MOTOR_INTAKE_RIGHT             = 7; //Intake Right
 
-    public static final int PORT_MOTOR_OUTPUT_LEFT              = 13; //Output Left
-    public static final int PORT_MOTOR_OUTPUT_RIGHT             = 14;//Output Right
+    public static final int PORT_MOTOR_OUTPUT_LEFT              = 10; //Output Left
+    public static final int PORT_MOTOR_OUTPUT_RIGHT             = 5;//Output Right
 
     public static final int PORT_SOLENOID_INTAKE                = 3;//Left Solenoid
 
