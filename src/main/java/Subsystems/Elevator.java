@@ -20,11 +20,13 @@ public class Elevator extends Subsystem {
     private boolean checkTicks;
     private static final AnalogPotentiometer pot = new AnalogPotentiometer(0);
 
-    private static double switchPos, startPos;
+    private static double switchPos, startPos, zeroPos, maxPos;
 
     public Elevator() {
         _elevatorFollow.follow(_elevator);
         startPos = getHypotInches();
+        zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
+        maxPos = zeroPos + (Constants.ELEVATOR_MAX_TICKS);
         _outputRight.follow(_outputLeft);
         checkTicks = true;
     }
@@ -35,8 +37,9 @@ public class Elevator extends Subsystem {
 
 
     public void elevate(double liftSpeed) {
-        _elevator.set(ControlMode.PercentOutput, liftSpeed);
-        if(liftSpeed > 0){
+        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos)
+            _elevator.set(ControlMode.PercentOutput, liftSpeed);
+        if(liftSpeed > 0) {
             LEDs.elevatingUp = true;
         } else if(liftSpeed < 0){
             LEDs.elevatingUp = false;
@@ -62,27 +65,22 @@ public class Elevator extends Subsystem {
 
     private static double getPotInches() { return convertHypotToY(); }
 
-//    private double get() { Old Juan
-//        if(getPotInches() <= Constants.STAGE_ONE_MAX){
-//            checkTicks = true;
-//            return getPotInches();
-//        } else {
-//            if(checkTicks){
-//                ticksStageOneMax = _elevator.getSelectedSensorPosition(0);
-//                checkTicks = false;
-//            }
-//            double temp = (_elevator.getSelectedSensorPosition(0) - ticksStageOneMax) / Constants.STRPOT_TICKS_PER_INCH;
-//            return getHypotInches() + temp;
-//        }
-//    }
-
     public static double getHeight() {
         if(pot.get() <= Constants.STRPOT_SWITCH_FRACTION) {
             updateSwitchPos();
             return getPotInches();
         } else {
-            return ((_elevator.getSelectedSensorPosition(0) - switchPos) / Constants.STRPOT_TICKS_PER_INCH) + getPotInches();
+            return ((_elevator.getSelectedSensorPosition(0) - switchPos) / Constants.ELEVATOR_TICKS_PER_INCH) + getPotInches();
         }
+    }
+
+    public static double checkHeight(double ticks) {
+        if(_elevator.getSelectedSensorPosition(0) + ticks <= zeroPos) {
+            return zeroPos;
+        } else if(_elevator.getSelectedSensorPosition(0) + ticks >= maxPos) {
+            return maxPos;
+        }
+        return _elevator.getSelectedSensorPosition(0) + ticks;
     }
 
     private static void updateSwitchPos() {
