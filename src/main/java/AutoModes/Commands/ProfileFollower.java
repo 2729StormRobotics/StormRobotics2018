@@ -119,5 +119,7 @@ public class ProfileFollower extends Command {
     @Override
     protected boolean isFinished() {
         return left.isFinished() && right.isFinished();
+
+        //cherry pick test
     }
 }
