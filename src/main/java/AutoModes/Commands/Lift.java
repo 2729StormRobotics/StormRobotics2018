@@ -11,7 +11,7 @@ import robot.Robot;
 public class Lift extends Command {
 
     double setPoint;
-    private static double  elevatorSpeed;
+    public static double  elevatorSpeed;
     private PIDController elevatorController;
 
     private PIDSource elevatorSource = new PIDSource() {
