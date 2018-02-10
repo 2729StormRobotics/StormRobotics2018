@@ -43,6 +43,7 @@ public class Dashboard {
                 this.sendAlliance();
                 this.sendEncoders();
                 this.sendNavXInfo();
+                this.sendElevatorEncoders();
                 this.sendCustomDashInfo();
                 break;
             case "Debug":
@@ -146,7 +147,7 @@ public class Dashboard {
 
     public void sendElevatorEncoders() {
         SmartDashboard.putNumber("Left Encoder", Elevator._elevator.getSelectedSensorPosition(0));
-        //SmartDashboard.putNumber("Right Encoder", Elevator._elevatorRight.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Right Encoder", Elevator._elevatorFollow.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Speed", Lift.elevatorSpeed);
         SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
     }
