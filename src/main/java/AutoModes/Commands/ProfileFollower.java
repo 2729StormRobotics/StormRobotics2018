@@ -49,7 +49,7 @@ public class ProfileFollower extends Command {
         rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.1016 * 3.279);
 
-        double max_velocity = 1 / 9;
+        double max_velocity = 1.0 / 9.0;
         left.configurePIDVA(1.0, 0.0, 0.0, max_velocity, 0);
         right.configurePIDVA(1.0, 0.0, 0.0, max_velocity, 0);
         try {
@@ -119,7 +119,5 @@ public class ProfileFollower extends Command {
     @Override
     protected boolean isFinished() {
         return left.isFinished() && right.isFinished();
-
-        //i made a change to master that i also want on dev
     }
 }
