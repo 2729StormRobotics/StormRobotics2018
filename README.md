@@ -6,13 +6,13 @@
 
 [![Coverity Scan](https://scan.coverity.com/projects/15040/badge.svg?flat=1)](https://scan.coverity.com/projects/2729stormrobotics-stormrobotics2018)
 
-[![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018:asbestos&metric=alert_status)](https://sonarcloud.io/dashboard?id=StormRobotics2018:asbestos)
-[![SonarCloud Maintainability](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018:asbestos&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=StormRobotics2018:asbestos)
-[![SonarCloud Security](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018:asbestos&metric=security_rating)](https://sonarcloud.io/dashboard?id=StormRobotics2018:asbestos)
-[![SonarCloud Reliability](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018:asbestos&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=StormRobotics2018:asbestos)
-[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018:asbestos&metric=bugs)](https://sonarcloud.io/dashboard?id=StormRobotics2018:asbestos)
-[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018:asbestos&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=StormRobotics2018:asbestos)
-[![SonarCloud Code Smells](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018:asbestos&metric=code_smells)](https://sonarcloud.io/dashboard?id=StormRobotics2018:asbestos)
+[![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018&metric=alert_status)](https://sonarcloud.io/dashboard?id=StormRobotics2018)
+[![SonarCloud Maintainability](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=StormRobotics2018)
+[![SonarCloud Security](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018&metric=security_rating)](https://sonarcloud.io/dashboard?id=StormRobotics2018)
+[![SonarCloud Reliability](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=StormRobotics2018)
+[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018&metric=bugs)](https://sonarcloud.io/dashboard?id=StormRobotics2018)
+[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=StormRobotics2018)
+[![SonarCloud Code Smells](https://sonarcloud.io/api/project_badges/measure?project=StormRobotics2018&metric=code_smells)](https://sonarcloud.io/dashboard?id=StormRobotics2018)
 
 ## Cloning
 
