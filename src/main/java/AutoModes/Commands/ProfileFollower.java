@@ -49,9 +49,9 @@ public class ProfileFollower extends Command {
         rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.1016 * 3.279);
 
-        double max_velocity = 15;
-        left.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
-        right.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
+        double max_velocity = 1 / 9;
+        left.configurePIDVA(1.0, 0.0, 0.0, max_velocity, 0);
+        right.configurePIDVA(1.0, 0.0, 0.0, max_velocity, 0);
         try {
             NavX.getNavx().zeroYaw();
         } catch (NullPointerException npe) {
