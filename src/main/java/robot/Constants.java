@@ -76,8 +76,10 @@ public class Constants {
     public static final double ELEVATOR_F                   = 0.0;
     public static final double ELEVATOR_PERIOD              = 0.02;
     public static final double ELEVATOR_TOLERANCE           = 2.0;
-    public static final double ELEVATOR_MAX                 = 0.0;
-    public static final double ELEVATOR_INCH_PER_REV         = 2.0 * Math.PI; //Change 2 later for actual diameter
+    public static final double ELEVATOR_MAX                 = 0.0; //max height in inches
+    public static final double ELEVATOR_INCH_PER_REV        = 2.0 * Math.PI; //Change 2 later for actual diameter
+    public static final double ELEVATOR_TICKS_PER_INCH      = TICKS_PER_REV / ELEVATOR_INCH_PER_REV;
+    public static final double ELEVATOR_MAX_TICKS           = ELEVATOR_MAX * ELEVATOR_TICKS_PER_INCH;
 
     public static final double STAGE_ONE_MAX                = 31.0;
     public static final double STAGE_TWO_MAX                = 38.0; //not right, gotta measure
@@ -85,8 +87,8 @@ public class Constants {
     public static final double STAGE_FOUR_MAX               = 39.0;
 
     public static final double STRPOT_MAX                   = 56.0; //push
+    public static final double STRPOT_START_FRACTION        = 0.0; //change later cause simmer doesn't like exact numbers
     public static final double STRPOT_SWITCH_FRACTION       = 0.0; //arbitrary value so the program will compile <- lol who am I (Brian M.) THIS IS THE MAX HEIGHT FRACTION
-    public static final double STRPOT_TICKS_PER_INCH        = TICKS_PER_REV / ELEVATOR_INCH_PER_REV;
     public static final double STRPOT_LOW_FRACTION          = 0.0; //Add the magic number
 
 //    public static final double SHIFT_UP_MULT              = 0.406;

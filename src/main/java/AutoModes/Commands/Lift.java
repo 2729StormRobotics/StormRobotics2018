@@ -10,8 +10,8 @@ import robot.Robot;
 
 public class Lift extends Command {
 
-    public static double  elevatorSpeed;
-    private static double height;
+    double setPoint;
+    private static double  elevatorSpeed;
     private PIDController elevatorController;
 
     private PIDSource elevatorSource = new PIDSource() {
@@ -43,7 +43,7 @@ public class Lift extends Command {
     };
 
     public Lift(double inches) {
-        height = Elevator.getHeight();
+        setPoint = Elevator.checkHeight(inches * Constants.ELEVATOR_TICKS_PER_INCH);
     }
 
     public synchronized void start() {
