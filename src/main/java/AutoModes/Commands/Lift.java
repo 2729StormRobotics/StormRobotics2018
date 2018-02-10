@@ -11,7 +11,7 @@ import robot.Robot;
 public class Lift extends Command {
 
     public static double  elevatorSpeed;
-    private static final double height;
+    private static double height;
     private PIDController elevatorController;
 
     private PIDSource elevatorSource = new PIDSource() {
@@ -31,7 +31,7 @@ public class Lift extends Command {
             /*
                 get input from potentiometer
              */
-            return Elevator._elevatorLeft.getSelectedSensorPosition(0);  //just an arbitrary number bc it needed to return something
+            return Elevator._elevator.getSelectedSensorPosition(0);  //just an arbitrary number bc it needed to return something
         }
     };
 

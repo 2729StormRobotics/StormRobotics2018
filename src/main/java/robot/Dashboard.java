@@ -145,10 +145,10 @@ public class Dashboard {
     }
 
     public void sendElevatorEncoders() {
-        SmartDashboard.putNumber("Left Encoder", Elevator._elevatorLeft.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Left Encoder", Elevator._elevator.getSelectedSensorPosition(0));
         //SmartDashboard.putNumber("Right Encoder", Elevator._elevatorRight.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Speed", Lift.elevatorSpeed);
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
     }
 
 

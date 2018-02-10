@@ -10,7 +10,7 @@ public class Hanger extends Subsystem {
     private static TalonSRX _hang;
 
     public Hanger() {
-        _hang = new TalonSRX(Constants.PORT_MOTOR_DRIVE_HANG_MAIN);
+        //_hang = new TalonSRX(Constants.PORT_MOTOR_DRIVE_HANG_MAIN);
     }
 
     protected void initDefaultCommand() {
