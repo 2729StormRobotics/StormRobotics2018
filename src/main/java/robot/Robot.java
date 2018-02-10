@@ -99,9 +99,10 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
+        System.out.println();
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
         super.disabledPeriodic();
-        System.out.println(Elevator.getPotHeight());
+        System.out.println(Elevator.getHeight());
         _dashboard.checkBug();
         NavX.dashboardStats();
         PDP.dashboardStats();
@@ -110,9 +111,9 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
         Scheduler.getInstance().run();
-        System.out.println(Elevator.getPotHeight());
+        System.out.println(Elevator.getHeight());
         _dashboard.checkBug();
         NavX.dashboardStats();
         PDP.dashboardStats();
@@ -121,7 +122,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
         NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
@@ -159,7 +160,7 @@ public class Robot extends IterativeRobot {
             _intake.fwoo(Constants.INTAKE_SPEED * -1.0);
         }
         _controller.printDoubt();
-        System.out.println(Elevator.getPotHeight());
+        System.out.println(Elevator.getHeight());
         LEDs.checkStatus();
     }
 

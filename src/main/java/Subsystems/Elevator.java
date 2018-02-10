@@ -11,6 +11,7 @@ import javax.naming.ldap.Control;
 public class Elevator extends Subsystem {
 
     public static final TalonSRX _elevator = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_MAIN);
+    public static final TalonSRX _elevatorFollow = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_2);
 
     private static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     private static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
@@ -22,6 +23,7 @@ public class Elevator extends Subsystem {
     private static double switchPos, startPos;
 
     public Elevator() {
+        _elevatorFollow.follow(_elevator);
         startPos = getHypotInches();
         _outputRight.follow(_outputLeft);
         checkTicks = true;
