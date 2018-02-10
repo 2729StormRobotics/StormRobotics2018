@@ -120,6 +120,6 @@ public class ProfileFollower extends Command {
     protected boolean isFinished() {
         return left.isFinished() && right.isFinished();
 
-        //cherry pick test
+        //i made a change to master that i also want on dev
     }
 }
