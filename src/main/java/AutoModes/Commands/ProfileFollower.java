@@ -109,11 +109,15 @@ public class ProfileFollower extends Command {
         System.out.println("Right: " + (r));// - turn));
         Robot._driveTrain.tankDrive(l, r, false, 0);
         leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
-        rightMotor.set(ControlMode.PercentOutput, (r + turn));// - turn));
+        rightMotor.set(ControlMode.PercentOutput, (r - turn));// - turn));
+
+        Robot._driveTrain.tankDrive(l+turn, r-turn);
+
+
     }
 
     @Override
     protected boolean isFinished() {
-        return false;
+        return left.isFinished() && right.isFinished();
     }
 }
