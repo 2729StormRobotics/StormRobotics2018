@@ -25,7 +25,7 @@ public class Elevator extends Subsystem {
         _elevatorFollow.follow(_elevator);
         zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
         maxPos = zeroPos + (Constants.ELEVATOR_MAX_TICKS);
-        _outputRight.follow(_outputLeft);
+        _outputLeft.follow(_outputRight);
         checkTicks = true;
     }
 
@@ -35,6 +35,7 @@ public class Elevator extends Subsystem {
 
 
     public void elevate(double liftSpeed) {
+
         if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos)
             _elevator.set(ControlMode.PercentOutput, liftSpeed);
         if(liftSpeed > 0) {
@@ -56,16 +57,16 @@ public class Elevator extends Subsystem {
 
     public void setOutput(CubeManipState desiredState) {
         if(desiredState == CubeManipState.IN) {
-            _elevator.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
-            _elevator.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
             state = CubeManipState.OUT;
 
             if(getHeight() > zeroPos)
                 Robot._intake.setIntake(CubeManipState.OUT);
         } else {
-            _elevator.set(ControlMode.PercentOutput, 0);
+            _outputRight.set(ControlMode.PercentOutput, 0);
             state = CubeManipState.IDLE;
         }
     }

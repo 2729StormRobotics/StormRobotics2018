@@ -2,6 +2,7 @@ package robot;
 
 import AutoModes.Modes.*;
 import Subsystems.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
@@ -20,6 +21,8 @@ public class Robot extends IterativeRobot {
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
+
+    boolean idle = true;
 
     @Override
     public void robotInit() {
@@ -87,6 +90,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
         _driveTrain.state = DriveState.DRIVE;
+        _intake.state = CubeManipState.IDLE;
     }
 
     @Override
@@ -118,14 +122,21 @@ public class Robot extends IterativeRobot {
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
+        //_intake.setIntake(CubeManipState.IN);
+        //_driveTrain._leftMain.set(ControlMode.PercentOutput, 0.5);
+        //_intake._intakeRight.set(ControlMode.PercentOutput, 0.5);
+
+
         if(_controller.getBlockOutput()) {
             _elevator.toggleOutput();
+            System.out.println("Toggling Block Output");
+            System.out.println("Elevator Status" + _elevator.state);
         }
 
         if(_controller.getSmoothAccel()) {
             _driveTrain.toggleAcceleration();
         }
-
+//hi - Dan Hong
         if(_controller.getPTO()) {
             if(_driveTrain.state == DriveState.DRIVE) {
                 _driveTrain.state = DriveState.PTO;
@@ -145,18 +156,21 @@ public class Robot extends IterativeRobot {
         if(_controller.getArmToggle())
             _intake.toggleIntakeArm();
 
-        if(_controller.getIntake() == 0) {
-            if (_intake.state != CubeManipState.IDLE)
-                _intake.setIntake(CubeManipState.IN);
-            else
-                _intake.setIntake(CubeManipState.IDLE);
+        System.out.println(_intake.state.getState());
 
-        } else if(_controller.getIntake() == 180){
-            if(_intake.state != CubeManipState.IDLE)
+        if(_controller.getIntake() == 0) {
+            if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.OUT);
             else
                 _intake.setIntake(CubeManipState.IDLE);
+        } else if(_controller.getIntake() == 180){
+            if(_intake.state == CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.IN);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
         }
+
+        _controller.get
 
         _controller.printDoubt();
         LEDs.checkStatus();

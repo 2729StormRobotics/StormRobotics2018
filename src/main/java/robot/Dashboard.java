@@ -161,11 +161,11 @@ public class Dashboard {
     }
 
     private void sendMotorControllerInfo(String category, TalonSRX talon) {
-        SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
-        SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
-        SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
-        SmartDashboard.putNumber(category + "Output Current", talon.getOutputCurrent());
-        SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
+        //SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
+        //SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
+        //SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
+        //SmartDashboard.putNumber(category + "Output Current", talon.getOutputCurrent());
+        //SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
         SmartDashboard.putString(category + "control Mode", talon.getControlMode().toString());
         SmartDashboard.putNumber(category + "Temperature", talon.getTemperature());
         SmartDashboard.putBoolean(category + "Inverted", talon.getInverted());
