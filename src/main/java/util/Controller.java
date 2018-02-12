@@ -21,9 +21,9 @@ public class Controller {
     public Controller() {
         mainThing = new XboxController(Constants.PORT_XBOX_DRIVE);
         weaponsThing = new XboxController(Constants.PORT_XBOX_WEAPONS);
-        scaleHighElevator = new JoystickButton(weaponsThing, 3);
+        scaleHighElevator = new JoystickButton(weaponsThing, 4);
         scaleMidElevator = new JoystickButton(weaponsThing, 3);
-        switchElevator = new JoystickButton(weaponsThing, 3);
+        switchElevator = new JoystickButton(weaponsThing, 1);
     }
 
     //Driver
