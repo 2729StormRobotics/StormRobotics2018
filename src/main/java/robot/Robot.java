@@ -98,9 +98,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        //System.out.println();
         super.disabledPeriodic();
-        //System.out.println(Elevator.getHeight());
         _dashboard.checkBug();
         NavX.dashboardStats();
         PDP.dashboardStats();
@@ -123,9 +121,7 @@ public class Robot extends IterativeRobot {
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
-        if(_controller.getBlockOutput())
-            //_elevator.outputToggle();
-            _elevator.output();
+        if(_controller.getBlockOutput()) _elevator.output();
 
         if(_controller.getSmoothAccel()) {
             _driveTrain.toggleAcceleration();
@@ -146,6 +142,7 @@ public class Robot extends IterativeRobot {
         }
 
         _elevator.elevate(_controller.getElevator());
+
         if(_controller.getArmToggle())
             _intake.toggleIntakeArm();
         if(_controller.getIntake() == 0) {
@@ -156,7 +153,6 @@ public class Robot extends IterativeRobot {
             _intake.fwoo(0.0);
         }
         _controller.printDoubt();
-        //System.out.println(Elevator.getHeight());
         LEDs.checkStatus();
     }
 

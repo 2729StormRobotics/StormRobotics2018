@@ -43,7 +43,7 @@ public class Lift extends Command {
     };
 
     public Lift(double inches) {
-        setPoint = Elevator.checkHeight(inches * Constants.ELEVATOR_TICKS_PER_INCH);
+        setPoint = Elevator.checkHeight(Elevator._elevator.getSelectedSensorPosition(0) + (inches * Constants.ELEVATOR_TICKS_PER_INCH));
     }
 
     public synchronized void start() {
@@ -71,9 +71,8 @@ public class Lift extends Command {
         elevatorController.setOutputRange(-.5, .5);
         elevatorController.setAbsoluteTolerance(Constants.ELEVATOR_TOLERANCE);
         elevatorController.setContinuous(true);
-        elevatorController.setSetpoint(((Elevator._elevator.getSelectedSensorPosition(0))));
+        elevatorController.setSetpoint(setPoint);
         elevatorController.enable();
-        Robot._dashboard.sendElevatorEncoders();
     }
 
     protected void execute() {

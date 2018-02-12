@@ -87,8 +87,7 @@ public class Constants {
 
     public static final double STRPOT_MAX                   = 56.0; //push
     public static final double STRPOT_START_FRACTION        = 0.0; //change later cause simmer doesn't like exact numbers
-    public static final double STRPOT_SWITCH_FRACTION       = 0.0; //arbitrary value so the program will compile <- lol who am I (Brian M.) THIS IS THE MAX HEIGHT FRACTION
-    public static final double STRPOT_LOW_FRACTION          = 0.0; //Add the magic number
+    public static final double STRPOT_SWITCH_FRACTION       = 0.6426; //36.0 in inches (Should be 0.6426)
 
 //    public static final double SHIFT_UP_MULT              = 0.406;
 //    public static final double SHIFT_DOWN_MULT            = 2.06;

@@ -6,8 +6,6 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 
-import javax.naming.ldap.Control;
-
 public class Elevator extends Subsystem {
 
     public static final TalonSRX _elevator = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_MAIN);
@@ -20,11 +18,10 @@ public class Elevator extends Subsystem {
     private boolean checkTicks;
     private static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
 
-    private static double switchPos, startPos, zeroPos, maxPos;
+    private static double switchPos, zeroPos, maxPos;
 
     public Elevator() {
         _elevatorFollow.follow(_elevator);
-        startPos = getHypotInches();
         zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
         maxPos = zeroPos + (Constants.ELEVATOR_MAX_TICKS);
         _outputRight.follow(_outputLeft);
