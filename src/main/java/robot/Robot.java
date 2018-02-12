@@ -170,8 +170,6 @@ public class Robot extends IterativeRobot {
                 _intake.setIntake(CubeManipState.IDLE);
         }
 
-        _controller.get
-
         _controller.printDoubt();
         LEDs.checkStatus();
     }
