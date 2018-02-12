@@ -14,16 +14,15 @@ public class Constants {
     public static final double MIN_TURN_SPEED                   = 0.05;
 
 
-    public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 12;//Elevator 1
+    public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 5;//Elevator 1
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 3;//Elevator 2
-
-    //public static final int PORT_MOTOR_DRIVE_HANG_MAIN 		    = 7;//Hanger
+    public static final int PORT_STRING_POT 		            = 3;//Elevator 2
 
     public static final int PORT_MOTOR_INTAKE_LEFT              = 6; //Intake Left
     public static final int PORT_MOTOR_INTAKE_RIGHT             = 7; //Intake Right
 
     public static final int PORT_MOTOR_OUTPUT_LEFT              = 10; //Output Left
-    public static final int PORT_MOTOR_OUTPUT_RIGHT             = 5;//Output Right
+    public static final int PORT_MOTOR_OUTPUT_RIGHT             = 12;//Output Right
 
     public static final int PORT_SOLENOID_INTAKE                = 3;//Left Solenoid
 

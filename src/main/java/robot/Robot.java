@@ -19,7 +19,6 @@ public class Robot extends IterativeRobot {
 
     public static final DriveTrain _driveTrain = new DriveTrain();
     private static final Elevator _elevator = new Elevator();
-    private static final Hanger _hanger = new Hanger();
     public static final NavX navx = new NavX();
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
@@ -99,9 +98,9 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        System.out.println();
+        //System.out.println();
         super.disabledPeriodic();
-        System.out.println(Elevator.getHeight());
+        //System.out.println(Elevator.getHeight());
         _dashboard.checkBug();
         NavX.dashboardStats();
         PDP.dashboardStats();
@@ -126,7 +125,7 @@ public class Robot extends IterativeRobot {
 
         if(_controller.getBlockOutput())
             //_elevator.outputToggle();
-            _elevator.output(Constants.OUTPUT_SPEED);
+            _elevator.output();
 
         if(_controller.getSmoothAccel()) {
             _driveTrain.toggleAcceleration();
@@ -146,7 +145,6 @@ public class Robot extends IterativeRobot {
             _driveTrain.hang(_controller.getWinch());
         }
 
-        _hanger.setHanger(_controller.getHanger());
         _elevator.elevate(_controller.getElevator());
         if(_controller.getArmToggle())
             _intake.toggleIntakeArm();
@@ -154,9 +152,11 @@ public class Robot extends IterativeRobot {
             _intake.fwoo(Constants.INTAKE_SPEED);
         } else if(_controller.getIntake() == 180){
             _intake.fwoo(Constants.INTAKE_SPEED * -1.0);
+        } else {
+            _intake.fwoo(0.0);
         }
         _controller.printDoubt();
-        System.out.println(Elevator.getHeight());
+        //System.out.println(Elevator.getHeight());
         LEDs.checkStatus();
     }
 

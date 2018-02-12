@@ -18,7 +18,7 @@ public class Elevator extends Subsystem {
 
     private boolean shooting = false;
     private boolean checkTicks;
-    private static final AnalogPotentiometer pot = new AnalogPotentiometer(0);
+    private static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
 
     private static double switchPos, startPos, zeroPos, maxPos;
 
@@ -46,13 +46,15 @@ public class Elevator extends Subsystem {
         }
     }
 
-    public void output(double speed){
-//        this.shooting = !this.shooting;
-//
-//        if (shooting)
-//            _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
-//        LEDs.shooting = this.shooting;
-        _elevator.set(ControlMode.PercentOutput, speed);
+    public void output(){
+        this.shooting = !this.shooting;
+        System.out.println("Shooting: " + shooting);
+
+        if (shooting)
+            _outputLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+        else
+            _outputLeft.set(ControlMode.PercentOutput, 0);
+        LEDs.shooting = this.shooting;
 
     }
 
