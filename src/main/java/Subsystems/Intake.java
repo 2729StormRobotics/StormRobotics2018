@@ -42,9 +42,11 @@ public class Intake extends Subsystem{
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
             _intakeRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
+            Robot._elevator.setOutput(CubeManipState.IDLE);
             state = CubeManipState.OUT;
         } else if (desiredState == CubeManipState.IDLE){
             _intakeRight.set(ControlMode.PercentOutput, 0);
+            Robot._elevator.setOutput(CubeManipState.IDLE);
             state = CubeManipState.IDLE;
         }
     }
