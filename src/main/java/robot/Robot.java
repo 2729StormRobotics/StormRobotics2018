@@ -120,7 +120,6 @@ public class Robot extends IterativeRobot {
 
         if(_controller.getBlockOutput()) {
             _elevator.toggleOutput();
-            if _elevator
         }
 
         if(_controller.getSmoothAccel()) {
