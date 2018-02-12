@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
+import util.DriveState;
 
 public class DriveTrain extends Subsystem {
 
@@ -18,6 +19,7 @@ public class DriveTrain extends Subsystem {
 
     public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
     public static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO);
+    public DriveState state;
 
     public DriveTrain() {
         _rightMain.setInverted(true);

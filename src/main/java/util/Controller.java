@@ -46,10 +46,6 @@ public class Controller {
         return weaponsThing.getY(GenericHID.Hand.kRight);
     }
 
-    public double getHanger() {
-        return weaponsThing.getY(GenericHID.Hand.kLeft);
-    }
-
     public double getWinch() {
         return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft);
     }

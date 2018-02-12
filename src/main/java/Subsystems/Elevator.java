@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
+import robot.Robot;
+import util.CubeManipState;
 
 public class Elevator extends Subsystem {
 
@@ -13,10 +15,9 @@ public class Elevator extends Subsystem {
 
     private static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     private static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
-
-    private boolean shooting = false;
     private boolean checkTicks;
     private static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
+    public CubeManipState state;
 
     private static double switchPos, zeroPos, maxPos;
 
@@ -43,23 +44,30 @@ public class Elevator extends Subsystem {
         }
     }
 
-    public void output(){
-        this.shooting = !this.shooting;
-        System.out.println("Shooting: " + shooting);
-
-        if (shooting)
-            _outputLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+    public void toggleOutput(){
+        if (state != CubeManipState.IN)
+            setOutput(CubeManipState.IN);
         else
-            _outputLeft.set(ControlMode.PercentOutput, 0);
-        LEDs.shooting = this.shooting;
+            setOutput(CubeManipState.IDLE);
+
+        LEDs.shooting = (state == CubeManipState.OUT);
 
     }
 
-    public void outputSet(boolean _shooting) {
-        this.shooting = _shooting;
+    public void setOutput(CubeManipState desiredState) {
+        if(desiredState == CubeManipState.IN) {
+            _elevator.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            state = CubeManipState.IN;
+        } else if (desiredState == CubeManipState.OUT) {
+            _elevator.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
+            state = CubeManipState.OUT;
 
-        if (shooting)
-            _elevator.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+            if(getHeight() > zeroPos)
+                Robot._intake.setIntake(CubeManipState.OUT);
+        } else {
+            _elevator.set(ControlMode.PercentOutput, 0);
+            state = CubeManipState.IDLE;
+        }
     }
 
     private static double getPotInches() { return convertHypotToY(); }

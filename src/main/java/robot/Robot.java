@@ -10,19 +10,15 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.opencv.core.Mat;
-import util.AutoPosition;
-import util.AutoPreference;
-import util.RobotState;
-import util.Controller;
+import util.*;
 
 public class Robot extends IterativeRobot {
 
     public static final DriveTrain _driveTrain = new DriveTrain();
-    private static final Elevator _elevator = new Elevator();
+    public static final Elevator _elevator = new Elevator();
     public static final NavX navx = new NavX();
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
-    private RobotState _robotState;
     public static final Controller _controller = new Controller();
 
     @Override
@@ -30,7 +26,7 @@ public class Robot extends IterativeRobot {
         _dashboard.sendChooser();
         cameraInit();
         NavX.getNavx();
-        _robotState = RobotState.DRIVE;
+        _driveTrain.state = DriveState.DRIVE;
     }
 
     @Override
@@ -90,6 +86,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        _driveTrain.state = DriveState.DRIVE;
     }
 
     @Override
@@ -121,21 +118,24 @@ public class Robot extends IterativeRobot {
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
-        if(_controller.getBlockOutput()) _elevator.output();
+        if(_controller.getBlockOutput()) {
+            _elevator.toggleOutput();
+            if _elevator
+        }
 
         if(_controller.getSmoothAccel()) {
             _driveTrain.toggleAcceleration();
         }
 
         if(_controller.getPTO()) {
-            if(_robotState == RobotState.DRIVE) {
-                _robotState = RobotState.PTO;
+            if(_driveTrain.state == DriveState.DRIVE) {
+                _driveTrain.state = DriveState.PTO;
             } else {
-                _robotState = RobotState.DRIVE;
+                _driveTrain.state = DriveState.DRIVE;
             }
         }
 
-        if(_robotState.getState().equalsIgnoreCase("Drive")) {
+        if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
             _driveTrain.stormDrive(combinedSpeed, _controller.getTurn(), _controller.getLowGearLock());
         } else {
             _driveTrain.hang(_controller.getWinch());
@@ -145,13 +145,20 @@ public class Robot extends IterativeRobot {
 
         if(_controller.getArmToggle())
             _intake.toggleIntakeArm();
+
         if(_controller.getIntake() == 0) {
-            _intake.fwoo(Constants.INTAKE_SPEED);
+            if (_intake.state != CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.IN);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
+
         } else if(_controller.getIntake() == 180){
-            _intake.fwoo(Constants.INTAKE_SPEED * -1.0);
-        } else {
-            _intake.fwoo(0.0);
+            if(_intake.state != CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.OUT);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
         }
+
         _controller.printDoubt();
         LEDs.checkStatus();
     }

@@ -63,7 +63,7 @@ public class Constants {
     public static final double FORWARD_ANGLE_F                  = 0.0;
     public static final double FORWARD_ANGLE_PERIOD             = 0.02;
 
-    static final double INTAKE_SPEED                            = 0.4;
+    public static final double INTAKE_SPEED                            = 0.4;
 
     //do some calculations to determine optimal levels of motor output for shifting up and down
     public static final double SHIFT_UP                     = 0.8;
