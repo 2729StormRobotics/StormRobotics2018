@@ -1,14 +1,13 @@
 package util;
 
 import AutoModes.Commands.Lift;
-import com.sun.tools.internal.jxc.ap.Const;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import robot.Constants;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 
-import java.awt.*;
+import java.sql.Timestamp;
 
 public class Controller {
 
@@ -17,6 +16,7 @@ public class Controller {
     private final Button scaleHighElevator;
     private final Button scaleMidElevator;
     private final Button switchElevator;
+    private Timestamp intakePressedTime;
 
     public Controller() {
         mainThing = new XboxController(Constants.PORT_XBOX_DRIVE);
@@ -24,6 +24,12 @@ public class Controller {
         scaleHighElevator = new JoystickButton(weaponsThing, 4);
         scaleMidElevator = new JoystickButton(weaponsThing, 3);
         switchElevator = new JoystickButton(weaponsThing, 1);
+
+        scaleHighElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_HIGH_HEIGHT));
+        scaleMidElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_MID_HEIGHT));
+        switchElevator.whenPressed(new Lift(Constants.ELEVATOR_SWITCH_HEIGHT));
+
+        intakePressedTime = new Timestamp(System.currentTimeMillis());
     }
 
     //Driver
@@ -66,8 +72,20 @@ public class Controller {
         return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft);
     }
 
-    public int getIntake() {
-        return weaponsThing.getPOV();
+    public CubeManipState getIntake() {
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        double timeDiff = currentTime.getTime() - intakePressedTime.getTime();
+
+        if (isBetween(315, 45, weaponsThing.getPOV()) && timeDiff > Constants.CONTROLLER_INTAKE_BUFFER) {
+            intakePressedTime = new Timestamp(System.currentTimeMillis());
+            return CubeManipState.OUT;
+        }
+        else if (isBetween(135, 225, weaponsThing.getPOV()) && timeDiff > Constants.CONTROLLER_INTAKE_BUFFER) {
+            intakePressedTime = new Timestamp(System.currentTimeMillis());
+            return CubeManipState.IN;
+        }
+        else
+            return CubeManipState.IDLE;
     }
 
     public boolean getBlockOutput() {
@@ -91,6 +109,10 @@ public class Controller {
         if(mainThing.getXButtonPressed() || weaponsThing.getXButtonPressed()) {
             System.out.println("(X) Doubt");
         }
+    }
+
+    public static boolean isBetween(int a, int b, int c) {  //Taken from http://tech.chitgoks.com
+        return b >= a ? c >= a && c <= b : c >= b && c <= a;
     }
 
 }

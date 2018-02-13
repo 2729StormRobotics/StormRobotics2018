@@ -6,15 +6,15 @@ import robot.Constants;
 import edu.wpi.first.wpilibj.Solenoid;
 import robot.Robot;
 import util.CubeManipState;
+import util.PneumaticsPair;
 
 public class Intake extends Subsystem{
     public static TalonSRX _intakeLeft = new TalonSRX(Constants.PORT_MOTOR_INTAKE_LEFT);
     public static TalonSRX _intakeRight = new TalonSRX(Constants.PORT_MOTOR_INTAKE_RIGHT);
-    public static Solenoid sol = new Solenoid(Constants.PORT_SOLENOID_INTAKE);
+    public static PneumaticsPair sol = new PneumaticsPair(Constants.PORT_SOLENOID_INTAKE_IN, Constants.PORT_SOLENOID_INTAKE_OUT);
     public CubeManipState state;
 
-    public Intake(){
-        boolean intakeArmOut = sol.get();
+    public Intake() {
         _intakeRight.setInverted(true);
         _intakeLeft.follow(_intakeRight);
         System.out.println("Reached Intake()");

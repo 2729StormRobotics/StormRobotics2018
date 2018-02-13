@@ -1,4 +1,4 @@
-package robot;
+package util;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -11,14 +11,13 @@ public class PneumaticsPair {
         solOut = new Solenoid(out);
     }
 
-    public static void setSolIn(){
-        solIn.set(true);
-        solOut.set(false);
+    public void set(boolean out) {
+        solIn.set(!out);
+        solOut.set(out);
     }
 
-    public static void setSolOut(){
-        solIn.set(false);
-        solOut.set(true);
+    public boolean get() {
+        return solOut.get();
     }
 
 }
