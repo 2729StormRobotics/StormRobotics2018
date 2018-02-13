@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         _dashboard.sendChooser();
         cameraInit();
-        NavX.getNavx();
+        //NavX.getNavx();
         _driveTrain.state = DriveState.DRIVE;
     }
 
@@ -103,7 +103,7 @@ public class Robot extends IterativeRobot {
     public void disabledPeriodic() {
         super.disabledPeriodic();
         _dashboard.checkBug();
-        NavX.dashboardStats();
+        //NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
     }
@@ -112,14 +112,14 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
         _dashboard.checkBug();
-        NavX.dashboardStats();
+        //NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
     }
 
     @Override
     public void teleopPeriodic() {
-        NavX.dashboardStats();
+        //NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
@@ -160,12 +160,15 @@ public class Robot extends IterativeRobot {
 
         System.out.println(_intake.state.getState());
 
+        
         if(_controller.getIntake() == CubeManipState.OUT) {
+            System.out.println("Intake controller OUT");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.OUT);
             else
                 _intake.setIntake(CubeManipState.IDLE);
         } else if(_controller.getIntake() == CubeManipState.IN){
+            System.out.println("Intake controller IN");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.IN);
             else

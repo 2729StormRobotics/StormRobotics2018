@@ -72,20 +72,9 @@ public class Controller {
         return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft);
     }
 
-    public CubeManipState getIntake() {
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        double timeDiff = currentTime.getTime() - intakePressedTime.getTime();
+    public double getIntakeSpeed() {
+        return weaponsThing.getTriggerAxis(GenericHID.Hand.kRight) -  weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft);
 
-        if (isBetween(315, 45, weaponsThing.getPOV())/* && timeDiff > Constants.CONTROLLER_INTAKE_BUFFER*/) {
-            intakePressedTime = new Timestamp(System.currentTimeMillis());
-            return CubeManipState.OUT;
-        }
-        else if (isBetween(135, 225, weaponsThing.getPOV())/* && timeDiff > Constants.CONTROLLER_INTAKE_BUFFER*/) {
-            intakePressedTime = new Timestamp(System.currentTimeMillis());
-            return CubeManipState.IN;
-        }
-        else
-            return CubeManipState.IDLE;
     }
 
     public boolean getBlockOutput() {

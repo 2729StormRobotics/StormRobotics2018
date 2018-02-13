@@ -1,7 +1,6 @@
 package AutoModes.Commands;
 
 import Subsystems.DriveTrain;
-import Subsystems.NavX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -70,7 +69,8 @@ public class MoveForward extends Command {
 
         public double pidGet() { // Angle robot at
             try {
-                return NavX.getNavx().getYaw();
+                return 0.0;
+                //return NavX.getNavx().getYaw();
             } catch (NullPointerException npe) {
                 return 0.0;
             }
@@ -128,7 +128,8 @@ public class MoveForward extends Command {
         angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
 
         try {
-            angle = NavX.getNavx().getYaw();
+            angle = 0.0;
+            //angle = NavX.getNavx().getYaw();
             angleController.setInputRange(-180.0, 180.0);
             angleController.setOutputRange(-0.3, 0.3);
             angleController.setAbsoluteTolerance(Constants.TOLERANCE_DEGREES);

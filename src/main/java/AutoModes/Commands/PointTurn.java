@@ -1,6 +1,5 @@
 package AutoModes.Commands;
 
-import Subsystems.NavX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -34,7 +33,8 @@ public class PointTurn extends Command {
 
         public double pidGet() { // Angle robot at
             try {
-                return NavX.getNavx().getYaw();
+                return targetAngle;
+                //return NavX.getNavx().getYaw();
             } catch (NullPointerException npe) {
                 return targetAngle;
             }
@@ -59,7 +59,8 @@ public class PointTurn extends Command {
         double setpoint;
         double currentYaw = 0;
         try{
-            currentYaw = NavX.getNavx().getYaw();
+            currentYaw = 0;
+            //currentYaw = NavX.getNavx().getYaw();
         } catch (NullPointerException npe){
             npe.printStackTrace();
         }
