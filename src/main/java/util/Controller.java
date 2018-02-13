@@ -25,9 +25,9 @@ public class Controller {
         scaleMidElevator = new JoystickButton(weaponsThing, 3);
         switchElevator = new JoystickButton(weaponsThing, 1);
 
-        scaleHighElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_HIGH_HEIGHT));
-        scaleMidElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_MID_HEIGHT));
-        switchElevator.whenPressed(new Lift(Constants.ELEVATOR_SWITCH_HEIGHT));
+        scaleHighElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_HIGH_HEIGHT));  //YButton
+        scaleMidElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_MID_HEIGHT));  //XButton
+        switchElevator.whenPressed(new Lift(Constants.ELEVATOR_SWITCH_HEIGHT));  //AButton
 
         intakePressedTime = new Timestamp(System.currentTimeMillis());
     }
@@ -76,11 +76,11 @@ public class Controller {
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         double timeDiff = currentTime.getTime() - intakePressedTime.getTime();
 
-        if (isBetween(315, 45, weaponsThing.getPOV()) && timeDiff > Constants.CONTROLLER_INTAKE_BUFFER) {
+        if (isBetween(315, 45, weaponsThing.getPOV())/* && timeDiff > Constants.CONTROLLER_INTAKE_BUFFER*/) {
             intakePressedTime = new Timestamp(System.currentTimeMillis());
             return CubeManipState.OUT;
         }
-        else if (isBetween(135, 225, weaponsThing.getPOV()) && timeDiff > Constants.CONTROLLER_INTAKE_BUFFER) {
+        else if (isBetween(135, 225, weaponsThing.getPOV())/* && timeDiff > Constants.CONTROLLER_INTAKE_BUFFER*/) {
             intakePressedTime = new Timestamp(System.currentTimeMillis());
             return CubeManipState.IN;
         }

@@ -75,7 +75,7 @@ public class Dashboard {
     }
 
     private void checkPneumatics() {
-        SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
+        //SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
     }
 
 

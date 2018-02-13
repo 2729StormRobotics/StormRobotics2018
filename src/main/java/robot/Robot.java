@@ -17,10 +17,12 @@ public class Robot extends IterativeRobot {
 
     public static final DriveTrain _driveTrain = new DriveTrain();
     public static final Elevator _elevator = new Elevator();
-    public static final NavX navx = new NavX();
+    //public static final NavX navx = new NavX();
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
+    public static final KBar _kbar = new KBar();
+
 
     boolean idle = true;
 

@@ -24,7 +24,7 @@ public class ProfileFollower extends Command {
 
     public ProfileFollower(String leftCSV, String rightCSV) {
         requires(Robot._driveTrain);
-        requires(Robot.navx);
+        //requires(Robot.navx);
         File leftMotionProfile = new File(leftCSV);
         File rightMotionProfile = new File(rightCSV);
 

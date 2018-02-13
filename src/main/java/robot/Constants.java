@@ -17,10 +17,16 @@ public class Constants {
     public static final int PORT_MOTOR_OUTPUT_LEFT              = 5; //Output Left
     public static final int PORT_MOTOR_OUTPUT_RIGHT             = 10;//Output Right
 
-    public static final int PORT_SOLENOID_INTAKE_OUT                = 3; //Left Solenoid
-    public static final int PORT_SOLENOID_INTAKE_IN                = 3; //Left Solenoid
-    public static final int PORT_SOLENOID_GEARSHIFT             = 1;
-    public static final int PORT_SOLENOID_PTO                   = 0;
+
+    public static final int PORT_SOLENOID_INTAKE_IN             = 1; //Left Solenoid
+    public static final int PORT_SOLENOID_INTAKE_OUT            = 2; //Left Solenoid
+    public static final int PORT_SOLENOID_GEARSHIFT_IN          = 0;
+    public static final int PORT_SOLENOID_GEARSHIFT_OUT         = 3;
+    public static final int PORT_SOLENOID_PTO_IN                = 7;
+    public static final int PORT_SOLENOID_PTO_OUT               = 5;
+    public static final int PORT_SOLENOID_KBAR_IN               = 6; // following are just temp values
+    public static final int PORT_SOLENOID_KBAR_OUT              = 4;
+
 
     public static final int PORT_XBOX_DRIVE                     = 0;
     public static final int PORT_XBOX_WEAPONS                   = 1;
@@ -32,9 +38,9 @@ public class Constants {
     public static final double MIN_TURN_SPEED                   = 0.05;
     public static final double TICKS_PER_REV                    = 1024.0;
 
-    public static final double WHEEL_SIZE = 4.0 * 3.14;
+    public static final double WHEEL_SIZE                       = 4.0 * 3.14;
     public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 5.0;
-    public static final double TOLERANCE_DEGREES = 0.5;
+    public static final double TOLERANCE_DEGREES                = 0.5;
 
     public static final double TURNCONTROLLER_P                 = 0.006;
     public static final double TURNCONTROLLER_I                 = 0.0000;
@@ -75,7 +81,7 @@ public class Constants {
     public static final double ELEVATOR_F                       = 0.0;
     public static final double ELEVATOR_PERIOD                  = 0.02;
     public static final double ELEVATOR_TOLERANCE               = 2.0;
-    public static final double ELEVATOR_MAX                     =  0.0; //max height in inches
+    public static final double ELEVATOR_MAX                     = 0.0; //max height in inches
     public static final double ELEVATOR_INCH_PER_REV            = 2.0 * Math.PI; //Change 2 later for actual diameter
     public static final double ELEVATOR_TICKS_PER_INCH          = TICKS_PER_REV / ELEVATOR_INCH_PER_REV;
     public static final double ELEVATOR_MAX_TICKS               = ELEVATOR_MAX * ELEVATOR_TICKS_PER_INCH;
@@ -105,5 +111,5 @@ public class Constants {
     static final String TEST_MODE                               = "Test Mode";
     static final String FOLLOW_PREF                             = "Follow";
 
-    public static final long CONTROLLER_INTAKE_BUFFER           = 250; //Time in ms where the intake controller stops listening.  (prevents double clicks)
+    public static final int CONTROLLER_INTAKE_BUFFER            = 250; //Time in ms where the intake controller stops listening.  (prevents double clicks)
 }
