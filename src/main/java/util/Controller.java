@@ -68,6 +68,15 @@ public class Controller {
         return 0;
     }
 
+    public CubeManipState getIntake() {
+        if(weaponsThing.getBumperPressed(GenericHID.Hand.kLeft))
+            return CubeManipState.OUT;
+        else if(weaponsThing.getBumperPressed(GenericHID.Hand.kLeft))
+            return CubeManipState.IN;
+        else
+            return CubeManipState.IDLE;
+    }
+
     public double getWinch() {
         return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft);
     }
@@ -78,7 +87,7 @@ public class Controller {
     }
 
     public boolean getBlockOutput() {
-        return weaponsThing.getBumperPressed(GenericHID.Hand.kRight);
+        return weaponsThing.getXButtonPressed();
     }
 
     public void getElevatorSwitch() {
