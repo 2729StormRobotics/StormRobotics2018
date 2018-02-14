@@ -138,7 +138,7 @@ public class Robot extends IterativeRobot {
         if(_controller.getSmoothAccel()) {
             _driveTrain.toggleAcceleration();
         }
-//hi - Dan Hong
+
         if(_controller.getPTO()) {
             if(_driveTrain.state == DriveState.DRIVE) {
                 _driveTrain.state = DriveState.PTO;
@@ -155,8 +155,10 @@ public class Robot extends IterativeRobot {
 
         _elevator.elevate(_controller.getElevator());
 
-        if(_controller.getArmToggle())
+        if(_controller.getArmToggle()) {
             _intake.toggleIntakeArm();
+            System.out.println("ARM TOGGLED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
 
         //System.out.println(_intake.state.getState());
 
