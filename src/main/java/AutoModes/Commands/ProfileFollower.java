@@ -1,7 +1,6 @@
 package AutoModes.Commands;
 
 import Subsystems.DriveTrain;
-import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -24,7 +23,7 @@ public class ProfileFollower extends Command {
 
     public ProfileFollower(String leftCSV, String rightCSV) {
         requires(Robot._driveTrain);
-        requires(Robot.navx);
+        //requires(Robot.navx);
         File leftMotionProfile = new File(leftCSV);
         File rightMotionProfile = new File(rightCSV);
 
@@ -49,10 +48,14 @@ public class ProfileFollower extends Command {
         rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.1016 * 3.279);
 
-        double max_velocity = 15;
-        left.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
-        right.configurePIDVA(1.0, 0.0, 0.0, 1 / max_velocity, 0);
-        NavX.getNavx().zeroYaw();
+        double max_velocity = 1.0 / 9.0;
+        left.configurePIDVA(1.0, 0.0, 0.0, max_velocity, 0);
+        right.configurePIDVA(1.0, 0.0, 0.0, max_velocity, 0);
+        try {
+            //NavX.getNavx().zeroYaw();
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
     }
 
     /**
@@ -92,7 +95,13 @@ public class ProfileFollower extends Command {
         DriveTrain._rightMain.configOpenloopRamp(0, 500);
         double l = left.calculate(leftMotor.getSelectedSensorPosition(0));
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
-        double gyro_heading = NavX.getNavx().getYaw();
+        double gyro_heading;
+        try {
+            gyro_heading = 0.0;
+            //gyro_heading = NavX.getNavx().getYaw();
+        } catch(NullPointerException npe) {
+            gyro_heading = 0;
+        }
         double desired_heading = Pathfinder.r2d(left.getHeading());
         double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
         double turn = 0.8 * (-1.0/80.0) * angleDifference;
@@ -100,11 +109,15 @@ public class ProfileFollower extends Command {
         System.out.println("Right: " + (r));// - turn));
         Robot._driveTrain.tankDrive(l, r, false, 0);
         leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
-        rightMotor.set(ControlMode.PercentOutput, (r + turn));// - turn));
+        rightMotor.set(ControlMode.PercentOutput, (r - turn));// - turn));
+
+        Robot._driveTrain.tankDrive(l+turn, r-turn);
+
+
     }
 
     @Override
     protected boolean isFinished() {
-        return false;
+        return left.isFinished() && right.isFinished();
     }
 }

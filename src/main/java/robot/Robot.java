@@ -2,6 +2,7 @@ package robot;
 
 import AutoModes.Modes.*;
 import Subsystems.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
@@ -10,28 +11,27 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.opencv.core.Mat;
-import util.AutoPosition;
-import util.AutoPreference;
-import util.RobotState;
-import util.Controller;
+import util.*;
 
 public class Robot extends IterativeRobot {
 
     public static final DriveTrain _driveTrain = new DriveTrain();
-    private static final Elevator _elevator = new Elevator();
-    private static final Hanger _hanger = new Hanger();
-    public static final NavX navx = new NavX();
+    public static final Elevator _elevator = new Elevator();
+    //public static final NavX navx = new NavX();
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
-    private RobotState _robotState;
     public static final Controller _controller = new Controller();
+    public static final KBar _kbar = new KBar();
+
+
+    boolean idle = true;
 
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
-        //cameraInit();
-        NavX.getNavx();
-        _robotState = RobotState.DRIVE;
+        cameraInit();
+        //NavX.getNavx();
+        _driveTrain.state = DriveState.DRIVE;
     }
 
     @Override
@@ -48,6 +48,8 @@ public class Robot extends IterativeRobot {
         } catch (IndexOutOfBoundsException ex) {
             System.out.println("No Game Data");
         }
+
+        SmartDashboard.putBoolean("Match Started:", true);
 
         Command autonomousCommand = _dashboard.autoChooser.getSelected();
         AutoPosition position = _dashboard.positionChooser.getSelected();
@@ -89,6 +91,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        _driveTrain.state = DriveState.DRIVE;
+        _intake.state = CubeManipState.IDLE;
     }
 
     @Override
@@ -97,63 +101,82 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() {
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
         super.disabledPeriodic();
-        System.out.println(Elevator.getPotHeight());
         _dashboard.checkBug();
-        NavX.dashboardStats();
+        //NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
     }
 
     @Override
     public void autonomousPeriodic() {
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
         Scheduler.getInstance().run();
-        System.out.println(Elevator.getPotHeight());
         _dashboard.checkBug();
-        NavX.dashboardStats();
+        //NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
     }
 
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
-        NavX.dashboardStats();
+        //NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
-        if(_controller.getBlockOutput())
-            _elevator.outputToggle();
+        //_intake.setIntake(CubeManipState.IN);
+        //_driveTrain._leftMain.set(ControlMode.PercentOutput, 0.5);
+        //_intake._intakeRight.set(ControlMode.PercentOutput, 0.5);
+
+
+        if(_controller.getBlockOutput()) {
+            _elevator.toggleOutput();
+            System.out.println("Toggling Block Output");
+            System.out.println("Elevator Status" + _elevator.state);
+        }
 
         if(_controller.getSmoothAccel()) {
             _driveTrain.toggleAcceleration();
         }
-
+//hi - Dan Hong
         if(_controller.getPTO()) {
-            if(_robotState == RobotState.DRIVE) {
-                _robotState = RobotState.PTO;
+            if(_driveTrain.state == DriveState.DRIVE) {
+                _driveTrain.state = DriveState.PTO;
             } else {
-                _robotState = RobotState.DRIVE;
+                _driveTrain.state = DriveState.DRIVE;
             }
         }
 
-        if(_robotState.getState().equalsIgnoreCase("Drive")) {
+        if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
             _driveTrain.stormDrive(combinedSpeed, _controller.getTurn(), _controller.getLowGearLock());
         } else {
             _driveTrain.hang(_controller.getWinch());
         }
 
-        _hanger.setHanger(_controller.getHanger());
         _elevator.elevate(_controller.getElevator());
+
         if(_controller.getArmToggle())
             _intake.toggleIntakeArm();
-        if(_controller.getIntake())
-            _intake.fwoo(Constants.INTAKE_SPEED);
+
+        System.out.println(_intake.state.getState());
+
+        CubeManipState controllerState = _controller.getIntake();
+
+        if(controllerState == CubeManipState.OUT) {
+            System.out.println("Intake controller OUT");
+            if(_intake.state == CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.OUT);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
+        } else if(controllerState == CubeManipState.IN){
+            System.out.println("Intake controller IN");
+            if(_intake.state == CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.IN);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
+        }
+
         _controller.printDoubt();
-        System.out.println(Elevator.getPotHeight());
         LEDs.checkStatus();
     }
 

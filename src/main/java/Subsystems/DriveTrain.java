@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
+import util.DriveState;
+import util.PneumaticsPair;
 
 public class DriveTrain extends Subsystem {
 
@@ -16,8 +18,9 @@ public class DriveTrain extends Subsystem {
     public static TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
     public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
-    public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
-    public static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO);
+    public static PneumaticsPair _gearShift = new PneumaticsPair(Constants.PORT_SOLENOID_GEARSHIFT_IN, Constants.PORT_SOLENOID_GEARSHIFT_OUT);
+    public static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO_IN, Constants.PORT_SOLENOID_PTO_OUT);
+    public DriveState state;
 
     public DriveTrain() {
         _rightMain.setInverted(true);
@@ -130,6 +133,14 @@ public class DriveTrain extends Subsystem {
     private static void togglePTO(){
         _PTO.set(!_PTO.get());
         _gearShift.set(true);
+    }
+
+    public static void gearShift(boolean high){
+        if(high){
+            _gearShift.set(false);
+        } else {
+            _gearShift.set(true);
+        }
     }
 
 

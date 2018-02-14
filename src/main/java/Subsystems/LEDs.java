@@ -11,26 +11,26 @@ public class LEDs {
     public static boolean armsUp;
     public static boolean gearHigh;
 
-    private static SerialPort ledOut = new SerialPort(9600, SerialPort.Port.kMXP);
+    //private static SerialPort ledOut = new SerialPort(9600, SerialPort.Port.kMXP);
     private static byte ledCode[] = {(byte) 255};
 
     public LEDs() {
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
     private static void hang(){
         ledCode[0] = (byte) 170;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
     private static void gear() {
         ledCode[0] = (byte) 190;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
     private static void arms(){
         ledCode[0] = (byte) 230;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
     private static void alliance(boolean red){
@@ -39,22 +39,22 @@ public class LEDs {
         } else {
             ledCode[0] = (byte) 237;
         }
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
     private static void idle(){
         ledCode[0] = (byte) 0;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
     private static void elevator(){
         ledCode[0] = (byte) 246;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
     private static void shoot(){
         ledCode[0] = (byte) 252;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
     private static void lightUp(String mode, boolean state){

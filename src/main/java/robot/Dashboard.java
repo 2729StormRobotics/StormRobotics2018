@@ -6,10 +6,8 @@ import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
-import Subsystems.NavX;
+import Subsystems.Intake;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -44,6 +42,7 @@ public class Dashboard {
                 this.sendAlliance();
                 this.sendEncoders();
                 this.sendNavXInfo();
+                this.sendElevatorEncoders();
                 this.sendCustomDashInfo();
                 break;
             case "Debug":
@@ -75,7 +74,7 @@ public class Dashboard {
     }
 
     private void checkPneumatics() {
-        SmartDashboard.putBoolean("Intake Pneumatics", Robot._controller.getIntake());
+        //SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
     }
 
 
@@ -109,7 +108,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        //autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
 
@@ -137,19 +136,19 @@ public class Dashboard {
     }
 
     public void sendCustomDashInfo() {
-        SmartDashboard.putBoolean("StormDashboard/Gear", Robot._driveTrain._gearShift.get());
-        SmartDashboard.putBoolean("StormDashboard/Arm", Robot._intake.sol.get());
-        SmartDashboard.putBoolean("StormDashboard/PTO", Robot._driveTrain._PTO.get());
+        //SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
+        //SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
+        //SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
 
 
     }
 
     public void sendElevatorEncoders() {
-        SmartDashboard.putNumber("Left Encoder", Elevator._elevatorLeft.getSelectedSensorPosition(0));
-        //SmartDashboard.putNumber("Right Encoder", Elevator._elevatorRight.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Left Encoder", Elevator._elevator.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Right Encoder", Elevator._elevatorFollow.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Speed", Lift.elevatorSpeed);
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getPotHeight());
+        SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
     }
 
 
@@ -161,25 +160,25 @@ public class Dashboard {
     }
 
     private void sendMotorControllerInfo(String category, TalonSRX talon) {
-        SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
-        SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
-        SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
-        SmartDashboard.putNumber(category + "Output Current", talon.getOutputCurrent());
-        SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
+        //SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
+        //SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
+        //SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
+        //SmartDashboard.putNumber(category + "Output Current", talon.getOutputCurrent());
+        //SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
         SmartDashboard.putString(category + "control Mode", talon.getControlMode().toString());
         SmartDashboard.putNumber(category + "Temperature", talon.getTemperature());
         SmartDashboard.putBoolean(category + "Inverted", talon.getInverted());
     }
 
     private void sendNavXInfo() {
-        if(NavX.getNavx() != null) {
+        /*if(NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
-        }
+        }*/
     }
 
-
     private void sendNavXAll() {
+        /*
         if (NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
@@ -198,7 +197,7 @@ public class Dashboard {
             SmartDashboard.putNumber("NavX/Quaternion/X", NavX.getNavx().getQuaternionX());
             SmartDashboard.putNumber("NavX/Quaternion/Y", NavX.getNavx().getQuaternionY());
             SmartDashboard.putNumber("NavX/Quaternion/Z", NavX.getNavx().getQuaternionZ());
-        }
+        }*/
     }
 
     void setBug(DebugLevel lvl) {

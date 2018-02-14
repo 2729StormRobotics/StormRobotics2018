@@ -1,12 +1,12 @@
 package util;
 
-public enum RobotState {
+public enum DriveState {
     DRIVE("Drive"),
     PTO("PTO");
 
     private final String state;
 
-    RobotState(String state) { this.state = state; }
+    DriveState(String state) { this.state = state; }
 
     public String getState() { return state; }
 }
