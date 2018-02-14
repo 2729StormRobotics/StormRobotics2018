@@ -12,8 +12,8 @@ public class PneumaticsPair {
     }
 
     public void set(boolean out) {
-        solIn.set(!out);
-        solOut.set(out);
+        solIn.set(out);
+        solOut.set(!out);
     }
 
     public boolean get() {

@@ -69,12 +69,21 @@ public class Controller {
     }
 
     public CubeManipState getIntake() {
-        if(weaponsThing.getBumperPressed(GenericHID.Hand.kLeft))
-            return CubeManipState.OUT;
-        else if(weaponsThing.getBumperPressed(GenericHID.Hand.kLeft))
+
+
+
+        if(weaponsThing.getBumperPressed(GenericHID.Hand.kRight)) {
+            System.out.println("Controller: Intake controller IN");
             return CubeManipState.IN;
-        else
-            return CubeManipState.IDLE;
+        }
+        if(weaponsThing.getBumperPressed(GenericHID.Hand.kLeft)) {
+            System.out.println("Controller: Intake controller OUT");
+            return CubeManipState.OUT;
+        }
+
+
+
+        return CubeManipState.IDLE;
     }
 
     public double getWinch() {
