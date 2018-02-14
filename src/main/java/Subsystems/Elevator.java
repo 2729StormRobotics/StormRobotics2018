@@ -16,7 +16,7 @@ public class Elevator extends Subsystem {
     private static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     private static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
     private boolean checkTicks;
-    private static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
+    public static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
     public CubeManipState state;
 
     private static double switchPos, zeroPos, maxPos;

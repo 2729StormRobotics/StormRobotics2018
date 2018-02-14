@@ -93,6 +93,10 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         _driveTrain.state = DriveState.DRIVE;
         _intake.state = CubeManipState.IDLE;
+
+        _intake.setIntakeArm(false);
+        _driveTrain.setPTO(false);
+        _driveTrain.gearShift(false);
     }
 
     @Override
@@ -124,11 +128,9 @@ public class Robot extends IterativeRobot {
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
-        //_intake.setIntake(CubeManipState.IN);
-        //_driveTrain._leftMain.set(ControlMode.PercentOutput, 0.5);
-        //_intake._intakeRight.set(ControlMode.PercentOutput, 0.5);
-
-
+        if(_controller.getLowGearLock()) {
+            _driveTrain.toggleGear(); //for now this will just toggle, not hold low gear
+        }
         if(_controller.getBlockOutput()) {
             _elevator.toggleOutput();
             System.out.println("Toggling Block Output");
@@ -136,15 +138,13 @@ public class Robot extends IterativeRobot {
         }
 
         if(_controller.getSmoothAccel()) {
+            System.out.println("ACCELRATION TRIGGERED");
             _driveTrain.toggleAcceleration();
         }
 
         if(_controller.getPTO()) {
-            if(_driveTrain.state == DriveState.DRIVE) {
-                _driveTrain.state = DriveState.PTO;
-            } else {
-                _driveTrain.state = DriveState.DRIVE;
-            }
+            System.out.println("PTO BEING TRIGGERED");
+            _driveTrain.togglePTO();
         }
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
@@ -157,10 +157,7 @@ public class Robot extends IterativeRobot {
 
         if(_controller.getArmToggle()) {
             _intake.toggleIntakeArm();
-            System.out.println("ARM TOGGLED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
-
-        //System.out.println(_intake.state.getState());
 
         CubeManipState controllerState = _controller.getIntake();
 

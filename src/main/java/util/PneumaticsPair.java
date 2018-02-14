@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class PneumaticsPair {
 
-    private static Solenoid solIn, solOut;
+    public static Solenoid solIn, solOut;
 
     public PneumaticsPair(int in, int out){
         solIn = new Solenoid(in);

@@ -1,6 +1,7 @@
 package Subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -11,8 +12,10 @@ import util.PneumaticsPair;
 public class Intake extends Subsystem{
     public static TalonSRX _intakeLeft = new TalonSRX(Constants.PORT_MOTOR_INTAKE_LEFT);
     public static TalonSRX _intakeRight = new TalonSRX(Constants.PORT_MOTOR_INTAKE_RIGHT);
-    public static PneumaticsPair sol = new PneumaticsPair(Constants.PORT_SOLENOID_INTAKE_IN, Constants.PORT_SOLENOID_INTAKE_OUT);
+    public static DoubleSolenoid sol = new DoubleSolenoid(Constants.PORT_SOLENOID_INTAKE_IN, Constants.PORT_SOLENOID_INTAKE_OUT);
     public CubeManipState state;
+    public static DoubleSolenoid.Value armsUp = DoubleSolenoid.Value.kForward;
+    public static DoubleSolenoid.Value armsDown = DoubleSolenoid.Value.kReverse;
 
     public Intake() {
         _intakeRight.setInverted(true);
@@ -21,14 +24,18 @@ public class Intake extends Subsystem{
     }
 
     public void toggleIntakeArm(){
-        sol.set(!sol.get());
-        if(!sol.get()){
-            LEDs.armsUp = true;
+        if(sol.get() == armsUp){
+            setIntakeArm(false);
+        } else {
+            setIntakeArm(true);
         }
     }
 
-    public void setIntakeArm(boolean _intakeArmOut) {
-        sol.set(_intakeArmOut);
+    public void setIntakeArm(boolean up) {
+        if(up)
+            sol.set(armsUp);
+        else
+            sol.set(armsDown);
     }
 
     protected void initDefaultCommand() {

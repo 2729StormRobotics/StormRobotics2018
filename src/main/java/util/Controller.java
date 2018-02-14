@@ -47,7 +47,7 @@ public class Controller {
     }
 
     public boolean getLowGearLock() {
-        return mainThing.getBButton();
+        return mainThing.getBButtonPressed();
     }
 
     public boolean getSmoothAccel() {

@@ -24,7 +24,7 @@ public class Constants {
     public static final int PORT_SOLENOID_GEARSHIFT_OUT         = 3;
     public static final int PORT_SOLENOID_PTO_IN                = 7;
     public static final int PORT_SOLENOID_PTO_OUT               = 5;
-    public static final int PORT_SOLENOID_KBAR_IN               = 6; // following are just temp values
+    public static final int PORT_SOLENOID_KBAR_IN               = 6;
     public static final int PORT_SOLENOID_KBAR_OUT              = 4;
 
 
