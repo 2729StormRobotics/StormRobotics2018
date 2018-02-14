@@ -160,15 +160,17 @@ public class Robot extends IterativeRobot {
 
         //System.out.println(_intake.state.getState());
 
+        CubeManipState controllerState = _controller.getIntake();
 
-        if(_controller.getIntake().equals(CubeManipState.OUT)) {
-            System.out.println("Robot: Intake controller OUT");
+
+        if(controllerState == CubeManipState.OUT) {
+            System.out.println("Intake controller OUT");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.OUT);
             else
                 _intake.setIntake(CubeManipState.IDLE);
-        } else if(_controller.getIntake().equals(CubeManipState.IN)){
-            System.out.println("Robot: Intake controller IN");
+        } else if(controllerState == CubeManipState.IN){
+            System.out.println("Intake controller IN");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.IN);
             else
