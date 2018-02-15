@@ -23,9 +23,6 @@ public class Robot extends IterativeRobot {
     public static final Controller _controller = new Controller();
     public static final KBar _kbar = new KBar();
 
-
-    boolean idle = true;
-
     @Override
     public void robotInit() {
         _dashboard.sendChooser();

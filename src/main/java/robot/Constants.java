@@ -9,7 +9,7 @@ public class Constants {
 
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 12;//Elevator 1
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 3;//Elevator 2
-    public static final int PORT_STRING_POT 		            = 3;//Elevator 2
+    public static final int PORT_STRING_POT 		            = 3;
 
     public static final int PORT_MOTOR_INTAKE_LEFT              = 6; //Intake Left
     public static final int PORT_MOTOR_INTAKE_RIGHT             = 7; //Intake Right
@@ -110,6 +110,7 @@ public class Constants {
     static final String MOVE_FORWARD                            = "Move Forward";
     static final String TEST_MODE                               = "Test Mode";
     static final String FOLLOW_PREF                             = "Follow";
+    static final String INTAKE_TIMED                             = "Intake Timed";
 
     public static final int CONTROLLER_INTAKE_BUFFER            = 250; //Time in ms where the intake controller stops listening.  (prevents double clicks)
 }

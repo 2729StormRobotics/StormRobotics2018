@@ -16,10 +16,10 @@ public class Elevator extends Subsystem {
     private static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     private static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
     private boolean checkTicks;
-    public static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
+    private static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
     public CubeManipState state;
 
-    private static double switchPos, zeroPos, maxPos;
+    public static double switchPos, zeroPos, maxPos;
 
     public Elevator() {
         _elevatorFollow.follow(_elevator);
@@ -35,7 +35,6 @@ public class Elevator extends Subsystem {
 
 
     public void elevate(double liftSpeed) {
-
         if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos)
             _elevator.set(ControlMode.PercentOutput, liftSpeed);
         if(liftSpeed > 0) {
@@ -80,6 +79,11 @@ public class Elevator extends Subsystem {
         } else {
             return ((_elevator.getSelectedSensorPosition(0) - switchPos) / Constants.ELEVATOR_TICKS_PER_INCH) + getPotInches();
         }
+    }
+
+    public static double getPotFrac() {
+        System.out.println(pot.get());
+        return pot.get();
     }
 
     public static double checkHeight(double ticks) {

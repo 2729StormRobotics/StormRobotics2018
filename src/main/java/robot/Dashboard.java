@@ -1,12 +1,12 @@
 package robot;
 
+import AutoModes.Commands.IntakeTimed;
 import AutoModes.Commands.Lift;
 import AutoModes.Commands.MoveForward;
 import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
-import Subsystems.Intake;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
@@ -111,6 +111,7 @@ public class Dashboard {
         //autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
+        autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(5));
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
@@ -135,7 +136,7 @@ public class Dashboard {
         SmartDashboard.putData("Debug Level", debugChooser);
     }
 
-    public void sendCustomDashInfo() {
+    private void sendCustomDashInfo() {
         //SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
         //SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
         //SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
@@ -144,11 +145,16 @@ public class Dashboard {
 
     }
 
-    public void sendElevatorEncoders() {
-        SmartDashboard.putNumber("Left Encoder", Elevator._elevator.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Right Encoder", Elevator._elevatorFollow.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Elevator Speed", Lift.elevatorSpeed);
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
+    private void sendElevatorEncoders() {
+        SmartDashboard.putNumber("Elevator Left Encoder", Elevator._elevator.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Elevator Right Encoder", Elevator._elevatorFollow.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Elevator Lift Speed", Lift.elevatorSpeed);
+        SmartDashboard.putNumber("Elevator String Pot Height", Elevator.getHeight());
+        SmartDashboard.putNumber("String pot fraction", Elevator.getPotFrac());
+        SmartDashboard.putNumber("Elevator maxPos", Elevator.maxPos);
+        SmartDashboard.putNumber("Elevator zeroPos", Elevator.zeroPos);
+        SmartDashboard.putNumber("Elevator switchPos", Elevator.switchPos);
+
     }
 
 
