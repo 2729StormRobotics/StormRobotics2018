@@ -1,29 +1,35 @@
 package Subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
-import util.PneumaticsPair;
 
 public class KBar extends Subsystem {
-    private PneumaticsPair sol;
+    private DoubleSolenoid sol;
     public KBar() {
-        sol = new PneumaticsPair(Constants.PORT_SOLENOID_KBAR_IN, Constants.PORT_SOLENOID_KBAR_OUT);
+        sol = new DoubleSolenoid(Constants.PORT_SOLENOID_KBAR_IN, Constants.PORT_SOLENOID_KBAR_OUT);
     }
+
+    public DoubleSolenoid.Value KBarOut = DoubleSolenoid.Value.kForward;
+    public DoubleSolenoid.Value KBarIn = DoubleSolenoid.Value.kForward;
 
     @Override
     protected void initDefaultCommand() {
     }
 
-    public void toggleKbar(){
-        sol.set(!sol.get());
-
-        if(!sol.get()){
-            LEDs.armsUp = true;
+    public void toggleKBar(){
+        if(sol.get() == KBarOut){
+            setKBar(false);
+        } else {
+            setKBar(true);
         }
     }
 
-    public void setIntakeArm(boolean _intakeArmOut) {
-        sol.set(_intakeArmOut);
+    public void setKBar(boolean out) {
+        if(out)
+            sol.set(KBarOut);
+        else
+            sol.set(KBarIn);
     }
 
 }

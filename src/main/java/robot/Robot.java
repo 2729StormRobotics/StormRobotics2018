@@ -144,10 +144,11 @@ public class Robot extends IterativeRobot {
             _driveTrain.togglePTO();
         }
 
+
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
             _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
         } else {
-            _driveTrain.hang(_controller.getWinch());
+            _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
 
         _elevator.elevate(_controller.getElevator());
@@ -162,8 +163,10 @@ public class Robot extends IterativeRobot {
             System.out.println("Intake controller OUT");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.OUT);
-            else
+            else {
+                System.out.println("trying to set Intake to idle");
                 _intake.setIntake(CubeManipState.IDLE);
+            }
         } else if(controllerState == CubeManipState.IN){
             System.out.println("Intake controller IN");
             if(_intake.state == CubeManipState.IDLE)

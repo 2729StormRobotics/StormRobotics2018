@@ -35,8 +35,12 @@ public class Elevator extends Subsystem {
 
 
     public void elevate(double liftSpeed) {
-        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos)
+        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos) {
             _elevator.set(ControlMode.PercentOutput, liftSpeed);
+        } else if(pot.get() < Constants.STRPOT_START_FRACTION) {
+
+        }
+
         if(liftSpeed > 0) {
             LEDs.elevatingUp = true;
         } else if(liftSpeed < 0){
@@ -56,14 +60,13 @@ public class Elevator extends Subsystem {
 
     public void setOutput(CubeManipState desiredState) {
         if(desiredState == CubeManipState.IN) {
-            _outputRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
-            _outputRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
             state = CubeManipState.OUT;
-
-            if(getHeight() > zeroPos)
-                Robot._intake.setIntake(CubeManipState.OUT);
+            //if(getHeight() > zeroPos)
+                //Robot._intake.setIntake(CubeManipState.OUT);
         } else {
             _outputRight.set(ControlMode.PercentOutput, 0);
             state = CubeManipState.IDLE;
@@ -82,7 +85,7 @@ public class Elevator extends Subsystem {
     }
 
     public static double getPotFrac() {
-        System.out.println(pot.get());
+        //System.out.println(pot.get());
         return pot.get();
     }
 

@@ -4,10 +4,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
-import edu.wpi.first.wpilibj.Solenoid;
 import robot.Robot;
 import util.CubeManipState;
-import util.PneumaticsPair;
 
 public class Intake extends Subsystem{
     public static TalonSRX _intakeLeft = new TalonSRX(Constants.PORT_MOTOR_INTAKE_LEFT);
@@ -51,7 +49,7 @@ public class Intake extends Subsystem{
         } else if (desiredState == CubeManipState.OUT) {
             _intakeRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
             _intakeLeft.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
-            Robot._elevator.setOutput(CubeManipState.IDLE);
+            Robot._elevator.setOutput(CubeManipState.OUT);
             state = CubeManipState.OUT;
         } else if (desiredState == CubeManipState.IDLE){
             _intakeRight.set(ControlMode.PercentOutput, 0);

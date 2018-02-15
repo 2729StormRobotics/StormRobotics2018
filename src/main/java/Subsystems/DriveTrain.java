@@ -3,11 +3,9 @@ package Subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import util.DriveState;
-import util.PneumaticsPair;
 
 public class DriveTrain extends Subsystem {
 
@@ -51,8 +49,10 @@ public class DriveTrain extends Subsystem {
 
         if (Math.abs(turn) > Constants.MIN_TURN_SPEED)
             turn = mult * turn;
-        else
+        else {
             turn = 0;
+            System.out.println("NO TURN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
 
         double leftSpeed = (combinedSpeed - turn);
         leftSpeed = leftSpeed * Math.abs(leftSpeed);
@@ -62,6 +62,7 @@ public class DriveTrain extends Subsystem {
 
         setMotorTolerance(Constants.MOTOR_TOLERANCE_DEFAULT);
 
+        System.out.println("left, right: " + leftSpeed + ", " + rightSpeed);
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 

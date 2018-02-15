@@ -103,7 +103,7 @@ public class Controller {
     }
 
     public boolean getPTO() {
-        return (weaponsThing.getBackButton() && weaponsThing.getStartButtonPressed()); //Like the CDR girl: "TRUST ME IT WORKS"
+        return (mainThing.getBackButton() && mainThing.getStartButtonPressed()); //Like the CDR girl: "TRUST ME IT WORKS"
         // .get(Button)Pressed checks if it was pressed since the last check and only checks when BackButton is true
     }
 
