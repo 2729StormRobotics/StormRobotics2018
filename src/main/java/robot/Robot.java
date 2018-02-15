@@ -148,7 +148,7 @@ public class Robot extends IterativeRobot {
         }
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
-            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn(), _controller.getLowGearLock());
+            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
         } else {
             _driveTrain.hang(_controller.getWinch());
         }
@@ -159,9 +159,8 @@ public class Robot extends IterativeRobot {
             _intake.toggleIntakeArm();
         }
 
+
         CubeManipState controllerState = _controller.getIntake();
-
-
         if(controllerState == CubeManipState.OUT) {
             System.out.println("Intake controller OUT");
             if(_intake.state == CubeManipState.IDLE)

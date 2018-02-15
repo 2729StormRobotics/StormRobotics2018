@@ -69,9 +69,6 @@ public class Controller {
     }
 
     public CubeManipState getIntake() {
-
-
-
         if(weaponsThing.getBumperPressed(GenericHID.Hand.kRight)) {
             System.out.println("Controller: Intake controller IN");
             return CubeManipState.IN;
@@ -80,8 +77,6 @@ public class Controller {
             System.out.println("Controller: Intake controller OUT");
             return CubeManipState.OUT;
         }
-
-
 
         return CubeManipState.IDLE;
     }

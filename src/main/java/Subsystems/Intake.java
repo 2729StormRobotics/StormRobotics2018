@@ -44,13 +44,13 @@ public class Intake extends Subsystem{
 
     public void setIntake(CubeManipState desiredState){
         if(desiredState == CubeManipState.IN){
-            _intakeRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
-            _intakeLeft.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            _intakeRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
+            _intakeLeft.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
             Robot._elevator.setOutput(CubeManipState.IN);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
-            _intakeRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
-            _intakeLeft.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
+            _intakeRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            _intakeLeft.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
             Robot._elevator.setOutput(CubeManipState.IDLE);
             state = CubeManipState.OUT;
         } else if (desiredState == CubeManipState.IDLE){

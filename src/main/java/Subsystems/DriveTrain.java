@@ -39,15 +39,8 @@ public class DriveTrain extends Subsystem {
 
     }
 
-    public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
-        //if(_PTO.get() == DoubleSolenoid.Value.kForward) _PTO.set(DoubleSolenoid.Value.kReverse);
-        //autoShift(combinedSpeed, forceLow);
-        stormDrive(combinedSpeed, turn);
-    }
-
-    private void stormDrive(double combinedSpeed, double turn) {
-        //Left and Right triggers control speed.  Steer with joystick
-
+    public void stormDrive(double combinedSpeed, double turn) {  //Left and Right triggers control speed.  Steer with joystick
+        autoShift(combinedSpeed);
         turn = turn * Math.abs(turn);
 
         int mult;
@@ -55,7 +48,6 @@ public class DriveTrain extends Subsystem {
             mult = 1;
         else
             mult = -1;
-
 
         if (Math.abs(turn) > Constants.MIN_TURN_SPEED)
             turn = mult * turn;
@@ -118,19 +110,15 @@ public class DriveTrain extends Subsystem {
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
 
-    private void autoShift(double speed, boolean force) {
-        /*
-        //False means in High Gear && True Means in Low
-        if(_gearShift.get() && speed >= Constants.SHIFT_UP) {
-            _gearShift.set(false);
-        } else if((!_gearShift.get() && speed <= Constants.SHIFT_DOWN) || force) {
-            _gearShift.set(true);
+    private void autoShift(double speed) { //add back force eventually
+        if(_gearShift.get() == lowGear && speed >= Constants.SHIFT_UP) {
+            gearShift(true);
+        } else if(_gearShift.get() == highGear && speed <= Constants.SHIFT_DOWN) {
+            gearShift(false);
         }
-        */
     }
 
     public void hang(double pullSpeed) {
-        if(_PTO.get() == DoubleSolenoid.Value.kReverse) togglePTO();
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
         _rightMain.set(ControlMode.PercentOutput, pullSpeed);
 
