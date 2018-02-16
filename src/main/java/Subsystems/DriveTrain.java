@@ -27,8 +27,8 @@ public class DriveTrain extends Subsystem {
     public static DoubleSolenoid.Value lowGear = DoubleSolenoid.Value.kReverse;  //check this
 
     public DriveTrain() {
-        _rightMain.setInverted(true);
-        _right2.setInverted(true);
+        _leftMain.setInverted(true);
+        _left2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
     }
@@ -54,16 +54,16 @@ public class DriveTrain extends Subsystem {
             turn = 0;
         }
 
-        double leftSpeed = (combinedSpeed - turn);
+        double leftSpeed = (combinedSpeed + turn);
         leftSpeed = leftSpeed * Math.abs(leftSpeed);
 
-        double rightSpeed = combinedSpeed + turn;
+        double rightSpeed = combinedSpeed - turn;
         rightSpeed = rightSpeed * Math.abs(rightSpeed);
 
         setMotorTolerance(Constants.MOTOR_TOLERANCE_DEFAULT);
 
-        _leftMain.set(ControlMode.PercentOutput, leftSpeed);
-        _rightMain.set(ControlMode.PercentOutput, rightSpeed);
+        _leftMain.set(ControlMode.PercentOutput, -leftSpeed);
+        _rightMain.set(ControlMode.PercentOutput, -rightSpeed);
 
         if(this.acceleration) {
             _leftMain.configOpenloopRamp(1, 10000);
@@ -94,8 +94,8 @@ public class DriveTrain extends Subsystem {
 
         setMotorTolerance(tolerance);
 
-        _leftMain.set(ControlMode.PercentOutput, leftSpeed);
-        _rightMain.set(ControlMode.PercentOutput, rightSpeed);
+        _leftMain.set(ControlMode.PercentOutput, -leftSpeed);
+        _rightMain.set(ControlMode.PercentOutput, -rightSpeed);
 
     }
 
