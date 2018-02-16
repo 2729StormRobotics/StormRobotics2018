@@ -35,7 +35,8 @@ public class Dashboard {
 
     void checkBug() {
         String s = "Info";
-        if(bug != null && bug.getName() != null) {
+        if(debugChooser != null && debugChooser.getSelected() != null) {
+            bug = debugChooser.getSelected();
             s = bug.getName();
         }
         switch(s) {

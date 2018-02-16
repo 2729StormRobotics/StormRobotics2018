@@ -36,12 +36,12 @@ public class Elevator extends Subsystem {
 
     public void elevate(double liftSpeed) {
 //        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos) {
-
-        System.out.println(_elevator.getSelectedSensorPosition(0));
+//
+//        System.out.println(_elevator.getSelectedSensorPosition(0));
 
         if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
             liftSpeed = 0;
-            zeroPos = _elevator.getSelectedSensorPosition(0);
+            updateBounds();
             System.out.println("ZeroPos: " + zeroPos);
         }
 
@@ -108,6 +108,11 @@ public class Elevator extends Subsystem {
         if (pot.get() >= Constants.STRPOT_SWITCH_FRACTION) {
             switchPos = _elevator.getSelectedSensorPosition(0);
         }
+    }
+
+    private static void updateBounds() {
+        zeroPos = _elevator.getSelectedSensorPosition(0);
+        maxPos = zeroPos + (Constants.ELEVATOR_MAX_TICKS);
     }
 
     private static double getHypotInches() {

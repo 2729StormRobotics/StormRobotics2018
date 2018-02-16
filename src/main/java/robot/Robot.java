@@ -17,7 +17,7 @@ public class Robot extends IterativeRobot {
 
     public static final DriveTrain _driveTrain = new DriveTrain();
     public static final Elevator _elevator = new Elevator();
-    //public static final NavX navx = new NavX();
+    public static final NavX navx = new NavX();
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         _dashboard.sendChooser();
         cameraInit();
-        //NavX.getNavx();
+        NavX.getNavx();
         _driveTrain.state = DriveState.DRIVE;
     }
 
@@ -101,7 +101,7 @@ public class Robot extends IterativeRobot {
     public void disabledPeriodic() {
         super.disabledPeriodic();
         _dashboard.checkBug();
-        //NavX.dashboardStats();
+        NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
     }
@@ -110,7 +110,7 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
         _dashboard.checkBug();
-        //NavX.dashboardStats();
+        NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
     }
@@ -127,7 +127,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        //NavX.dashboardStats();
+        NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();

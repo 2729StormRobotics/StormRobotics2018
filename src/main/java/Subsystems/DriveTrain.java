@@ -51,7 +51,6 @@ public class DriveTrain extends Subsystem {
             turn = mult * turn;
         else {
             turn = 0;
-            System.out.println("NO TURN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
         double leftSpeed = (combinedSpeed - turn);
@@ -62,7 +61,6 @@ public class DriveTrain extends Subsystem {
 
         setMotorTolerance(Constants.MOTOR_TOLERANCE_DEFAULT);
 
-        System.out.println("left, right: " + leftSpeed + ", " + rightSpeed);
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 
