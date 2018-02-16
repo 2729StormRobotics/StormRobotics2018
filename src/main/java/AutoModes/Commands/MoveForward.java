@@ -1,6 +1,7 @@
 package AutoModes.Commands;
 
 import Subsystems.DriveTrain;
+import Subsystems.NavX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -32,7 +33,6 @@ public class MoveForward extends Command {
 
         public double pidGet() { // Encoder Position robot @
             return DriveTrain._leftMain.getSelectedSensorPosition(0);
-
         }
     };
 
@@ -69,8 +69,7 @@ public class MoveForward extends Command {
 
         public double pidGet() { // Angle robot at
             try {
-                return 0.0;
-                //return NavX.getNavx().getYaw();
+                return NavX.getNavx().getYaw();
             } catch (NullPointerException npe) {
                 return 0.0;
             }

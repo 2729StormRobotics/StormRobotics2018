@@ -117,4 +117,11 @@ public class Controller {
         return b >= a ? c >= a && c <= b : c >= b && c <= a;
     }
 
+    public double getLeftSpeed(){
+        return mainThing.getY(GenericHID.Hand.kLeft);
+    }
+
+    public double getRightSpeed(){
+        return mainThing.getY(GenericHID.Hand.kRight);
+    }
 }

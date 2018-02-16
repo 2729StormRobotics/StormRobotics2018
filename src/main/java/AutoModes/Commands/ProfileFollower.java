@@ -1,6 +1,7 @@
 package AutoModes.Commands;
 
 import Subsystems.DriveTrain;
+import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -52,7 +53,7 @@ public class ProfileFollower extends Command {
         left.configurePIDVA(1.0, 0.0, 0.0, max_velocity, 0);
         right.configurePIDVA(1.0, 0.0, 0.0, max_velocity, 0);
         try {
-            //NavX.getNavx().zeroYaw();
+            NavX.getNavx().zeroYaw();
         } catch (NullPointerException npe) {
             npe.printStackTrace();
         }
@@ -97,8 +98,7 @@ public class ProfileFollower extends Command {
         double r = right.calculate(rightMotor.getSelectedSensorPosition(0));
         double gyro_heading;
         try {
-            gyro_heading = 0.0;
-            //gyro_heading = NavX.getNavx().getYaw();
+            gyro_heading = NavX.getNavx().getYaw();
         } catch(NullPointerException npe) {
             gyro_heading = 0;
         }

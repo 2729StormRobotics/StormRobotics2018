@@ -70,6 +70,7 @@ public class Constants {
     public static final double INTAKE_SPEED                     = 1.0;
 
     public static final double OUTPUT_SPEED                     = 1.0;
+    public static final double CART_IN_SPEED                    = 0.5;
 
     //do some calculations to determine optimal levels of motor output for shifting up and down
     public static final double SHIFT_UP                         = 0.8;

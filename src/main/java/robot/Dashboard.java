@@ -7,6 +7,7 @@ import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
+import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
@@ -184,7 +185,6 @@ public class Dashboard {
     }
 
     private void sendNavXAll() {
-        /*
         if (NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
@@ -203,7 +203,7 @@ public class Dashboard {
             SmartDashboard.putNumber("NavX/Quaternion/X", NavX.getNavx().getQuaternionX());
             SmartDashboard.putNumber("NavX/Quaternion/Y", NavX.getNavx().getQuaternionY());
             SmartDashboard.putNumber("NavX/Quaternion/Z", NavX.getNavx().getQuaternionZ());
-        }*/
+        }
     }
 
     void setBug(DebugLevel lvl) {

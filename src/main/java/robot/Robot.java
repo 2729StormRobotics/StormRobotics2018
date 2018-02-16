@@ -123,8 +123,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void testPeriodic() {
-        _driveTrain._rightMain.set(ControlMode.PercentOutput, 0.2);
-        _driveTrain._leftMain.set(ControlMode.PercentOutput, 0.2);
     }
 
     @Override
@@ -155,8 +153,8 @@ public class Robot extends IterativeRobot {
 
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
-            //_driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
-            _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
+            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
+            //_driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         } else {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }

@@ -66,10 +66,10 @@ public class Elevator extends Subsystem {
 
     public void setOutput(CubeManipState desiredState) {
         if(desiredState == CubeManipState.IN) {
-            _outputRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, -Constants.CART_IN_SPEED);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
-            _outputRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
             state = CubeManipState.OUT;
             //if(getHeight() > zeroPos)
                 //Robot._intake.setIntake(CubeManipState.OUT);
