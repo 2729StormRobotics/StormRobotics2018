@@ -35,11 +35,17 @@ public class Elevator extends Subsystem {
 
 
     public void elevate(double liftSpeed) {
-        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos) {
-            _elevator.set(ControlMode.PercentOutput, liftSpeed);
-        } else if(pot.get() < Constants.STRPOT_START_FRACTION) {
+//        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos) {
 
+        System.out.println(_elevator.getSelectedSensorPosition(0));
+
+        if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
+            liftSpeed = 0;
+            zeroPos = _elevator.getSelectedSensorPosition(0);
+            System.out.println("ZeroPos: " + zeroPos);
         }
+
+        _elevator.set(ControlMode.PercentOutput, liftSpeed);
 
         if(liftSpeed > 0) {
             LEDs.elevatingUp = true;

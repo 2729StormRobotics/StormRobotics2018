@@ -93,12 +93,9 @@ public class Robot extends IterativeRobot {
 
         _intake.setIntakeArm(false);
         _driveTrain.setPTO(false);
-        _driveTrain.gearShift(false);
+        _driveTrain.gearShift(true);
     }
 
-    @Override
-    public void testInit() {
-    }
 
     @Override
     public void disabledPeriodic() {
@@ -116,6 +113,18 @@ public class Robot extends IterativeRobot {
         //NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
+    }
+
+
+    @Override
+    public void testInit() {
+
+    }
+
+    @Override
+    public void testPeriodic() {
+        _driveTrain._rightMain.set(ControlMode.PercentOutput, 0.2);
+        _driveTrain._leftMain.set(ControlMode.PercentOutput, 0.2);
     }
 
     @Override
@@ -146,7 +155,8 @@ public class Robot extends IterativeRobot {
 
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
-            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
+            //_driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
+            _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         } else {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
