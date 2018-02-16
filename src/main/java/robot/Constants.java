@@ -2,8 +2,8 @@ package robot;
 
 public class Constants {
 
-    public static final int PORT_MOTOR_DRIVE_LEFT_MAIN 			= 1; //Front Left
-    public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 14; //Back left
+    public static final int PORT_MOTOR_DRIVE_LEFT_MAIN 			= 14; //Front Left
+    public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 1; //Back left
     public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 0;//Front right
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 15;//Back right
 
@@ -38,7 +38,7 @@ public class Constants {
     public static final double MIN_TURN_SPEED                   = 0.05;
     public static final double TICKS_PER_REV                    = 1024.0;
 
-    public static final double WHEEL_SIZE                       = 4.0 * 3.14;
+    public static final double WHEEL_SIZE                       = 6.0 * 3.14;
     public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 5.0;
     public static final double TOLERANCE_DEGREES                = 0.5;
 

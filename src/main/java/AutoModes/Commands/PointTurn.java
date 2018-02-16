@@ -59,8 +59,7 @@ public class PointTurn extends Command {
         double setpoint;
         double currentYaw = 0;
         try{
-            currentYaw = 0;
-            //currentYaw = NavX.getNavx().getYaw();
+            currentYaw = NavX.getNavx().getYaw();
         } catch (NullPointerException npe){
             npe.printStackTrace();
         }

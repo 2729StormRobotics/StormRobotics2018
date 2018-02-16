@@ -43,10 +43,7 @@ public class ProfileFollower extends Command {
         left = new EncoderFollower(leftTra);
         right = new EncoderFollower(rightTra);
 
-        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024, 0.1016 * 3.279);
-
-        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.1016 * 3.279);
 
         double max_velocity = 1.0 / 9.0;

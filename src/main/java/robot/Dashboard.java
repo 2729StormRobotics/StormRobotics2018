@@ -110,7 +110,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        //autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(5)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
         autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(5));
@@ -148,23 +148,22 @@ public class Dashboard {
     }
 
     private void sendElevatorEncoders() {
-        SmartDashboard.putNumber("Elevator Left Encoder", Elevator._elevator.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Elevator Right Encoder", Elevator._elevatorFollow.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Elevator Encoder", Elevator._elevator.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Lift Speed", Lift.elevatorSpeed);
         SmartDashboard.putNumber("Elevator String Pot Height", Elevator.getHeight());
         SmartDashboard.putNumber("String pot fraction", Elevator.getPotFrac());
         SmartDashboard.putNumber("Elevator maxPos", Elevator.maxPos);
         SmartDashboard.putNumber("Elevator zeroPos", Elevator.zeroPos);
         SmartDashboard.putNumber("Elevator switchPos", Elevator.switchPos);
-
     }
 
 
     private void sendEncoders() {
+        SmartDashboard.putNumber("Left Velocity", DriveTrain._leftMain.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Encoder Left", DriveTrain._leftMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Encoder Left Velocity", DriveTrain._leftMain.getSelectedSensorVelocity(0));
+        SmartDashboard.putNumber("Right Velocity", DriveTrain._rightMain.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Encoder Right", DriveTrain._rightMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Encoder Right Velocity", DriveTrain._rightMain.getSelectedSensorVelocity(0));
+
     }
 
     private void sendMotorControllerInfo(String category, TalonSRX talon) {

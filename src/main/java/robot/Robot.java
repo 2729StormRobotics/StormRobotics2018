@@ -132,6 +132,7 @@ public class Robot extends IterativeRobot {
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
+
         if(_controller.getLowGearLock()) {
             _driveTrain.toggleGear(); //for now this will just toggle, not hold low gear
         }
