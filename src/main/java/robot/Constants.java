@@ -67,7 +67,7 @@ public class Constants {
     public static final double FORWARD_ANGLE_F                  = 0.0;
     public static final double FORWARD_ANGLE_PERIOD             = 0.02;
 
-    public static final double INTAKE_SPEED                     = 1.0;
+    public static final double INTAKE_SPEED                     = 0.75;
 
     public static final double OUTPUT_SPEED                     = 1.0;
     public static final double CART_IN_SPEED                    = 0.5;
