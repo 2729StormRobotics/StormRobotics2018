@@ -48,9 +48,11 @@ public class PointTurn extends Command {
         }
     };
 
+
     @Override
     protected void initialize() {
         super.initialize();
+
         turnController = new PIDController(Constants.TURNCONTROLLER_P, Constants.TURNCONTROLLER_I, Constants.TURNCONTROLLER_D, Constants.TURNCONTROLLER_F, angleSource, motorSpeedWrite, Constants.TURNCONTROLLER_PERIOD);
         turnController.setInputRange(-180.0, 180.0);
         turnController.setOutputRange(-.80, .80);

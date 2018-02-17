@@ -37,9 +37,15 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        _intake.setIntakeArm(true);
+        _driveTrain.gearShift(true);
+
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
         char switchSide = ' ';
+
+        _driveTrain.gearShift(true);
+
         try {
             switchSide = gameData.charAt(0);
         } catch (IndexOutOfBoundsException ex) {
@@ -155,7 +161,7 @@ public class Robot extends IterativeRobot {
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
             _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
-            //_driveTrain.tankDrive(combinedSpeed, combinedSpeed);
+            //_driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getLeftSpeed(), );
         } else {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }

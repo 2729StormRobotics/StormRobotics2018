@@ -82,9 +82,17 @@ public class NavX extends Subsystem {
 
     public static synchronized void dashboardStats() {
         try {
-            SmartDashboard.putBoolean("NavX/Connected", NavX.connect());
+            SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
+            SmartDashboard.putNumber("NavX/Gyro/RawX", NavX.getNavx().getRawGyroX());
+            SmartDashboard.putNumber("NavX/Gyro/RawY", NavX.getNavx().getRawGyroY());
+            SmartDashboard.putNumber("NavX/Gyro/RawZ", NavX.getNavx().getRawGyroZ());
+            SmartDashboard.putNumber("NavX/Gyro/Angle", NavX.getNavx().getAngle());
+            SmartDashboard.putNumber("NavX/Gyro/AngleAdjustment", NavX.getNavx().getAngleAdjustment());
             SmartDashboard.putNumber("NavX/Gyro/Yaw", NavX.getNavx().getYaw());
+            SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
+            SmartDashboard.putNumber("NavX/Gyro/Roll", NavX.getNavx().getRoll());
         } catch (NullPointerException npe) {
+            SmartDashboard.putBoolean("NavX/Connected", false);
             NavX.connect();
         }
     }
