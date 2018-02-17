@@ -56,10 +56,10 @@ public class DriveTrain extends Subsystem {
             turn = 0;
         }
 
-        double leftSpeed = (combinedSpeed + turn);
+        double leftSpeed = (combinedSpeed - turn);
         leftSpeed = leftSpeed * Math.abs(leftSpeed);
 
-        double rightSpeed = combinedSpeed - turn;
+        double rightSpeed = combinedSpeed + turn;
         rightSpeed = rightSpeed * Math.abs(rightSpeed);
 
         setMotorTolerance(Constants.MOTOR_TOLERANCE_DEFAULT);

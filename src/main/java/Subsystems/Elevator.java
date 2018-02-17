@@ -45,6 +45,10 @@ public class Elevator extends Subsystem {
             System.out.println("ZeroPos: " + zeroPos);
         }
 
+        if(pot.get() < Constants.ELEVATOR_SLOW_DOWN_FRACTION && liftSpeed > 0) {
+            liftSpeed = 0.25;
+        }
+
         _elevator.set(ControlMode.PercentOutput, liftSpeed);
 
         if(liftSpeed > 0) {

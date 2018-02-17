@@ -23,13 +23,13 @@ public class NavX extends Subsystem {
                 // Failed to connect via MXP, trying next option.
             }
             */
-            try {
-                return connectUSB();
-            } catch (RuntimeException ex) {
-                // Failed to connect via USB, trying next option.
-                System.err.println("Failed to connect to NavX on USB!");
-                return false;
-            }
+//            try {
+//                return connectUSB();
+//            } catch (RuntimeException ex) {
+//                // Failed to connect via USB, trying next option.
+//                System.err.println("Failed to connect to NavX on USB!");
+//                return false;
+//            }
             /*
             try {
                 return connectI2C();
@@ -37,7 +37,7 @@ public class NavX extends Subsystem {
                 // Failed to connect via i2c. Throwing error.
                 System.err.println("Failed to connect to NavX on MXP, USB, or I2C!");
                 return false;
-            }
+            }simmer dumb
             */
         }
 

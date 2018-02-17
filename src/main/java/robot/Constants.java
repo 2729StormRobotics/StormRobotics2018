@@ -98,6 +98,7 @@ public class Constants {
     public static final double STRPOT_MAX                       = 56.0; //push
     public static final double STRPOT_START_FRACTION            = 0.1; //change later cause simmer doesn't like exact numbers
     public static final double STRPOT_SWITCH_FRACTION           = 0.6426; //36.0 in inches (Should be 0.6426)
+    public static final double ELEVATOR_SLOW_DOWN_FRACTION      = 0.25;
 
 //    public static final double SHIFT_UP_MULT                  = 0.406;
 //    public static final double SHIFT_DOWN_MULT                = 2.06;
@@ -105,7 +106,7 @@ public class Constants {
     static final String MID_SWITCH                              = "Mid Switch";
     static final String LEFT_SCALE                              = "Left Side Scale";
     static final String LEFT_SWITCH                             = "Left Side Switch";
-    static final String RIGHT_SCALE                             =  "Right Scale";
+    static final String RIGHT_SCALE                             = "Right Scale";
     static final String RIGHT_SWITCH                            = "Right Switch";
     static final String POINT_TURN                              = "Point Turn";
     static final String MOVE_FORWARD                            = "Move Forward";
