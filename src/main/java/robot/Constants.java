@@ -4,11 +4,11 @@ public class Constants {
 
     public static final int PORT_MOTOR_DRIVE_LEFT_MAIN 			= 14; //Front Left
     public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 1; //Back left
-    public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 15;//Front right
-    public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 0;//Back right
+    public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 0;//Front right
+    public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 15;//Back right
 
-    public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 12;//Elevator 1
-    public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 3;//Elevator 2
+    public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 3;//Elevator 1
+    public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 12;//Elevator 2
     public static final int PORT_STRING_POT 		            = 3;//Elevator 2
 
     public static final int PORT_MOTOR_INTAKE_LEFT              = 6; //Intake Left
@@ -24,7 +24,7 @@ public class Constants {
     public static final int PORT_SOLENOID_GEARSHIFT_OUT         = 3;
     public static final int PORT_SOLENOID_PTO_IN                = 7;
     public static final int PORT_SOLENOID_PTO_OUT               = 5;
-    public static final int PORT_SOLENOID_KBAR_IN               = 6; // following are just temp values
+    public static final int PORT_SOLENOID_KBAR_IN               = 6;
     public static final int PORT_SOLENOID_KBAR_OUT              = 4;
 
 
@@ -38,7 +38,7 @@ public class Constants {
     public static final double MIN_TURN_SPEED                   = 0.05;
     public static final double TICKS_PER_REV                    = 1024.0;
 
-    public static final double WHEEL_SIZE                       = 4.0 * 3.14;
+    public static final double WHEEL_SIZE                       = 6.0 * 3.14;
     public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 5.0;
     public static final double TOLERANCE_DEGREES                = 0.5;
 
@@ -67,9 +67,10 @@ public class Constants {
     public static final double FORWARD_ANGLE_F                  = 0.0;
     public static final double FORWARD_ANGLE_PERIOD             = 0.02;
 
-    public static final double INTAKE_SPEED                     = 0.4;
+    public static final double INTAKE_SPEED                     = 0.75;
 
     public static final double OUTPUT_SPEED                     = 1.0;
+    public static final double CART_IN_SPEED                    = 0.5;
 
     //do some calculations to determine optimal levels of motor output for shifting up and down
     public static final double SHIFT_UP                         = 0.8;
@@ -95,7 +96,7 @@ public class Constants {
     public static final double ELEVATOR_SCALE_HIGH_HEIGHT       = 72.0;
 
     public static final double STRPOT_MAX                       = 56.0; //push
-    public static final double STRPOT_START_FRACTION            = 0.0; //change later cause simmer doesn't like exact numbers
+    public static final double STRPOT_START_FRACTION            = 0.1; //change later cause simmer doesn't like exact numbers
     public static final double STRPOT_SWITCH_FRACTION           = 0.6426; //36.0 in inches (Should be 0.6426)
 
 //    public static final double SHIFT_UP_MULT                  = 0.406;
@@ -110,6 +111,7 @@ public class Constants {
     static final String MOVE_FORWARD                            = "Move Forward";
     static final String TEST_MODE                               = "Test Mode";
     static final String FOLLOW_PREF                             = "Follow";
+    static final String INTAKE_TIMED                            = "Intake Timed";
 
     public static final int CONTROLLER_INTAKE_BUFFER            = 250; //Time in ms where the intake controller stops listening.  (prevents double clicks)
 }

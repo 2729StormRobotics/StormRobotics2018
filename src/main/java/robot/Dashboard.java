@@ -1,12 +1,13 @@
 package robot;
 
+import AutoModes.Commands.IntakeTimed;
 import AutoModes.Commands.Lift;
 import AutoModes.Commands.MoveForward;
 import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
-import Subsystems.Intake;
+import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
@@ -34,7 +35,8 @@ public class Dashboard {
 
     void checkBug() {
         String s = "Info";
-        if(bug != null && bug.getName() != null) {
+        if(debugChooser != null && debugChooser.getSelected() != null) {
+            bug = debugChooser.getSelected();
             s = bug.getName();
         }
         switch(s) {
@@ -108,9 +110,10 @@ public class Dashboard {
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        //autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(5)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
+        autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(5));
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
@@ -135,7 +138,7 @@ public class Dashboard {
         SmartDashboard.putData("Debug Level", debugChooser);
     }
 
-    public void sendCustomDashInfo() {
+    private void sendCustomDashInfo() {
         //SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
         //SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
         //SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
@@ -144,19 +147,23 @@ public class Dashboard {
 
     }
 
-    public void sendElevatorEncoders() {
-        SmartDashboard.putNumber("Left Encoder", Elevator._elevator.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Right Encoder", Elevator._elevatorFollow.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Elevator Speed", Lift.elevatorSpeed);
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
+    private void sendElevatorEncoders() {
+        SmartDashboard.putNumber("Elevator Encoder", Elevator._elevator.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Elevator Lift Speed", Lift.elevatorSpeed);
+        SmartDashboard.putNumber("Elevator String Pot Height", Elevator.getHeight());
+        SmartDashboard.putNumber("String pot fraction", Elevator.getPotFrac());
+        SmartDashboard.putNumber("Elevator maxPos", Elevator.maxPos);
+        SmartDashboard.putNumber("Elevator zeroPos", Elevator.zeroPos);
+        SmartDashboard.putNumber("Elevator switchPos", Elevator.switchPos);
     }
 
 
     private void sendEncoders() {
+        SmartDashboard.putNumber("Left Velocity", DriveTrain._leftMain.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Encoder Left", DriveTrain._leftMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Encoder Left Velocity", DriveTrain._leftMain.getSelectedSensorVelocity(0));
+        SmartDashboard.putNumber("Right Velocity", DriveTrain._rightMain.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Encoder Right", DriveTrain._rightMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Encoder Right Velocity", DriveTrain._rightMain.getSelectedSensorVelocity(0));
+
     }
 
     private void sendMotorControllerInfo(String category, TalonSRX talon) {
@@ -178,7 +185,6 @@ public class Dashboard {
     }
 
     private void sendNavXAll() {
-        /*
         if (NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
@@ -197,7 +203,7 @@ public class Dashboard {
             SmartDashboard.putNumber("NavX/Quaternion/X", NavX.getNavx().getQuaternionX());
             SmartDashboard.putNumber("NavX/Quaternion/Y", NavX.getNavx().getQuaternionY());
             SmartDashboard.putNumber("NavX/Quaternion/Z", NavX.getNavx().getQuaternionZ());
-        }*/
+        }
     }
 
     void setBug(DebugLevel lvl) {

@@ -47,7 +47,7 @@ public class Controller {
     }
 
     public boolean getLowGearLock() {
-        return mainThing.getBButton();
+        return mainThing.getBButtonPressed();
     }
 
     public boolean getSmoothAccel() {
@@ -69,12 +69,16 @@ public class Controller {
     }
 
     public CubeManipState getIntake() {
-        if(weaponsThing.getBumperPressed(GenericHID.Hand.kLeft))
-            return CubeManipState.OUT;
-        else if(weaponsThing.getBumperPressed(GenericHID.Hand.kLeft))
+        if(weaponsThing.getBumperPressed(GenericHID.Hand.kRight)) {
+            System.out.println("Controller: Intake controller IN");
             return CubeManipState.IN;
-        else
-            return CubeManipState.IDLE;
+        }
+        if(weaponsThing.getBumperPressed(GenericHID.Hand.kLeft)) {
+            System.out.println("Controller: Intake controller OUT");
+            return CubeManipState.OUT;
+        }
+
+        return CubeManipState.IDLE;
     }
 
     public double getWinch() {
@@ -99,7 +103,7 @@ public class Controller {
     }
 
     public boolean getPTO() {
-        return (weaponsThing.getBackButton() && weaponsThing.getStartButtonPressed()); //Like the CDR girl: "TRUST ME IT WORKS"
+        return (mainThing.getBackButton() && mainThing.getStartButtonPressed()); //Like the CDR girl: "TRUST ME IT WORKS"
         // .get(Button)Pressed checks if it was pressed since the last check and only checks when BackButton is true
     }
 
@@ -113,4 +117,11 @@ public class Controller {
         return b >= a ? c >= a && c <= b : c >= b && c <= a;
     }
 
+    public double getLeftSpeed(){
+        return mainThing.getY(GenericHID.Hand.kLeft);
+    }
+
+    public double getRightSpeed(){
+        return mainThing.getY(GenericHID.Hand.kRight);
+    }
 }

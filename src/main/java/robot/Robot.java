@@ -17,20 +17,17 @@ public class Robot extends IterativeRobot {
 
     public static final DriveTrain _driveTrain = new DriveTrain();
     public static final Elevator _elevator = new Elevator();
-    //public static final NavX navx = new NavX();
+    public static final NavX navx = new NavX();
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
     public static final KBar _kbar = new KBar();
 
-
-    boolean idle = true;
-
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
         cameraInit();
-        //NavX.getNavx();
+        NavX.getNavx();
         _driveTrain.state = DriveState.DRIVE;
     }
 
@@ -93,17 +90,18 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         _driveTrain.state = DriveState.DRIVE;
         _intake.state = CubeManipState.IDLE;
+
+        _intake.setIntakeArm(false);
+        _driveTrain.setPTO(false);
+        _driveTrain.gearShift(true);
     }
 
-    @Override
-    public void testInit() {
-    }
 
     @Override
     public void disabledPeriodic() {
         super.disabledPeriodic();
         _dashboard.checkBug();
-        //NavX.dashboardStats();
+        NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
     }
@@ -112,23 +110,32 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
         _dashboard.checkBug();
-        //NavX.dashboardStats();
+        NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
     }
 
+
+    @Override
+    public void testInit() {
+
+    }
+
+    @Override
+    public void testPeriodic() {
+    }
+
     @Override
     public void teleopPeriodic() {
-        //NavX.dashboardStats();
+        NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
-        //_intake.setIntake(CubeManipState.IN);
-        //_driveTrain._leftMain.set(ControlMode.PercentOutput, 0.5);
-        //_intake._intakeRight.set(ControlMode.PercentOutput, 0.5);
 
-
+        if(_controller.getLowGearLock()) {
+            _driveTrain.toggleGear(); //for now this will just toggle, not hold low gear
+        }
         if(_controller.getBlockOutput()) {
             _elevator.toggleOutput();
             System.out.println("Toggling Block Output");
@@ -136,38 +143,39 @@ public class Robot extends IterativeRobot {
         }
 
         if(_controller.getSmoothAccel()) {
+            System.out.println("ACCELRATION TRIGGERED");
             _driveTrain.toggleAcceleration();
         }
-//hi - Dan Hong
+
         if(_controller.getPTO()) {
-            if(_driveTrain.state == DriveState.DRIVE) {
-                _driveTrain.state = DriveState.PTO;
-            } else {
-                _driveTrain.state = DriveState.DRIVE;
-            }
+            System.out.println("PTO BEING TRIGGERED");
+            _driveTrain.togglePTO();
         }
 
+
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
-            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn(), _controller.getLowGearLock());
+            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
+            //_driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         } else {
-            _driveTrain.hang(_controller.getWinch());
+            _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
 
         _elevator.elevate(_controller.getElevator());
 
-        if(_controller.getArmToggle())
+        if(_controller.getArmToggle()) {
             _intake.toggleIntakeArm();
+        }
 
-        System.out.println(_intake.state.getState());
 
         CubeManipState controllerState = _controller.getIntake();
-
         if(controllerState == CubeManipState.OUT) {
             System.out.println("Intake controller OUT");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.OUT);
-            else
+            else {
+                System.out.println("trying to set Intake to idle");
                 _intake.setIntake(CubeManipState.IDLE);
+            }
         } else if(controllerState == CubeManipState.IN){
             System.out.println("Intake controller IN");
             if(_intake.state == CubeManipState.IDLE)

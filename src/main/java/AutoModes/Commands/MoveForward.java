@@ -1,11 +1,13 @@
 package AutoModes.Commands;
 
 import Subsystems.DriveTrain;
+import Subsystems.NavX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.Constants;
 import robot.Robot;
 
@@ -32,7 +34,6 @@ public class MoveForward extends Command {
 
         public double pidGet() { // Encoder Position robot @
             return DriveTrain._leftMain.getSelectedSensorPosition(0);
-
         }
     };
 
@@ -69,8 +70,7 @@ public class MoveForward extends Command {
 
         public double pidGet() { // Angle robot at
             try {
-                return 0.0;
-                //return NavX.getNavx().getYaw();
+                return NavX.getNavx().getYaw();
             } catch (NullPointerException npe) {
                 return 0.0;
             }
@@ -128,8 +128,7 @@ public class MoveForward extends Command {
         angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
 
         try {
-            angle = 0.0;
-            //angle = NavX.getNavx().getYaw();
+            angle = NavX.getNavx().getYaw();
             angleController.setInputRange(-180.0, 180.0);
             angleController.setOutputRange(-0.3, 0.3);
             angleController.setAbsoluteTolerance(Constants.TOLERANCE_DEGREES);
@@ -159,6 +158,9 @@ public class MoveForward extends Command {
         moveRightController.setContinuous(true);
         moveRightController.setSetpoint(((DriveTrain._rightMain.getSelectedSensorPosition(0)) + targetTicks));
         moveRightController.enable();
+
+        SmartDashboard.putNumber("Left SetPoint", ((DriveTrain._leftMain.getSelectedSensorPosition(0)) + targetTicks));
+        SmartDashboard.putNumber("Right SetPoint", ((DriveTrain._rightMain.getSelectedSensorPosition(0)) + targetTicks));
     }
 
     @Override
@@ -216,6 +218,9 @@ public class MoveForward extends Command {
             return true;
         }
         */
+
+        SmartDashboard.putNumber("Left Error", moveLeftController.getError());
+        SmartDashboard.putNumber("Right Error", moveRightController.getError());
 
         if (Math.abs(moveLeftController.getError()) < Constants.TOLERANCE_TICKS && Math.abs(moveRightController.getError()) < Constants.TOLERANCE_TICKS) {
             moveLeftController.disable();

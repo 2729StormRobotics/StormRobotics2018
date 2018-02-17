@@ -42,8 +42,8 @@ public class Lift extends Command {
         }
     };
 
-    public Lift(double inches) {
-        setPoint = Elevator.checkHeight(Elevator._elevator.getSelectedSensorPosition(0) + (inches * Constants.ELEVATOR_TICKS_PER_INCH));
+    public Lift(double ticks) {
+        setPoint = Elevator.checkHeight(Elevator._elevator.getSelectedSensorPosition(0) + ticks);
     }
 
     public synchronized void start() {

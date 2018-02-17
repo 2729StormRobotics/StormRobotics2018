@@ -19,7 +19,7 @@ public class Elevator extends Subsystem {
     private static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
     public CubeManipState state;
 
-    private static double switchPos, zeroPos, maxPos;
+    public static double switchPos, zeroPos, maxPos;
 
     public Elevator() {
         _elevatorFollow.follow(_elevator);
@@ -35,9 +35,18 @@ public class Elevator extends Subsystem {
 
 
     public void elevate(double liftSpeed) {
+//        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos) {
+//
+//        System.out.println(_elevator.getSelectedSensorPosition(0));
 
-        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos)
-            _elevator.set(ControlMode.PercentOutput, liftSpeed);
+        if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
+            liftSpeed = 0;
+            updateBounds();
+            System.out.println("ZeroPos: " + zeroPos);
+        }
+
+        _elevator.set(ControlMode.PercentOutput, liftSpeed);
+
         if(liftSpeed > 0) {
             LEDs.elevatingUp = true;
         } else if(liftSpeed < 0){
@@ -57,14 +66,13 @@ public class Elevator extends Subsystem {
 
     public void setOutput(CubeManipState desiredState) {
         if(desiredState == CubeManipState.IN) {
-            _outputRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, -Constants.CART_IN_SPEED);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
-            _outputRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
             state = CubeManipState.OUT;
-
-            if(getHeight() > zeroPos)
-                Robot._intake.setIntake(CubeManipState.OUT);
+            //if(getHeight() > zeroPos)
+                //Robot._intake.setIntake(CubeManipState.OUT);
         } else {
             _outputRight.set(ControlMode.PercentOutput, 0);
             state = CubeManipState.IDLE;
@@ -82,6 +90,11 @@ public class Elevator extends Subsystem {
         }
     }
 
+    public static double getPotFrac() {
+        //System.out.println(pot.get());
+        return pot.get();
+    }
+
     public static double checkHeight(double ticks) {
         if(_elevator.getSelectedSensorPosition(0) + ticks <= zeroPos) {
             return zeroPos;
@@ -95,6 +108,11 @@ public class Elevator extends Subsystem {
         if (pot.get() >= Constants.STRPOT_SWITCH_FRACTION) {
             switchPos = _elevator.getSelectedSensorPosition(0);
         }
+    }
+
+    private static void updateBounds() {
+        zeroPos = _elevator.getSelectedSensorPosition(0);
+        maxPos = zeroPos + (Constants.ELEVATOR_MAX_TICKS);
     }
 
     private static double getHypotInches() {
