@@ -3,6 +3,7 @@ package Subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,29 +17,24 @@ public class NavX extends Subsystem {
 
     private static synchronized boolean connect() {
         if (navx == null || !navx.isConnected()) {
-            /*
+
             try {
-                return connectMXP();
+                return connectMXPSPI();
             } catch (RuntimeException ex) {
-                // Failed to connect via MXP, trying next option.
+                // Failed to connect via MXP SPI, trying next option.
             }
-            */
-//            try {
-//                return connectUSB();
-//            } catch (RuntimeException ex) {
-//                // Failed to connect via USB, trying next option.
-//                System.err.println("Failed to connect to NavX on USB!");
-//                return false;
-//            }
-            /*
             try {
-                return connectI2C();
+                return connectMXPI2C();
             } catch (RuntimeException ex) {
-                // Failed to connect via i2c. Throwing error.
-                System.err.println("Failed to connect to NavX on MXP, USB, or I2C!");
+                // Failed to connect via MXP I2C, trying next option.
+            }
+            try {
+                return connectMXPSerial();
+            } catch (RuntimeException ex) {
+                // Failed to connect via MXP Serial. Throwing error.
+                System.err.println("Failed to connect to NavX on MXP SPI, I2C, or Serial!");
                 return false;
-            }simmer dumb
-            */
+            }
         }
 
         return true;
@@ -52,7 +48,23 @@ public class NavX extends Subsystem {
         return true;
     }
 
-    private static synchronized boolean connectMXP() throws RuntimeException {
+    private static synchronized boolean connectMXPSPI() throws RuntimeException {
+        if (navx == null || !navx.isConnected()) {
+            navx = new AHRS(SPI.Port.kMXP);
+            System.out.println("NavX Connected: " + navx.isConnected());
+        }
+        return true;
+    }
+
+    private static synchronized boolean connectMXPI2C() throws RuntimeException {
+        if (navx == null || !navx.isConnected()) {
+            navx = new AHRS(I2C.Port.kMXP);
+            System.out.println("NavX Connected: " + navx.isConnected());
+        }
+        return true;
+    }
+
+    private static synchronized boolean connectMXPSerial() throws RuntimeException {
         if (navx == null || !navx.isConnected()) {
             navx = new AHRS(SerialPort.Port.kMXP);
             System.out.println("NavX Connected: " + navx.isConnected());
@@ -70,6 +82,7 @@ public class NavX extends Subsystem {
 
     public static synchronized void dashboardStats() {
         try {
+            SmartDashboard.putBoolean("NavX/Connected", NavX.connect());
             SmartDashboard.putNumber("NavX/Gyro/Yaw", NavX.getNavx().getYaw());
         } catch (NullPointerException npe) {
             NavX.connect();

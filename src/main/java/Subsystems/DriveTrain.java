@@ -64,8 +64,8 @@ public class DriveTrain extends Subsystem {
 
         setMotorTolerance(Constants.MOTOR_TOLERANCE_DEFAULT);
 
-        _leftMain.set(ControlMode.PercentOutput, -leftSpeed);
-        _rightMain.set(ControlMode.PercentOutput, -rightSpeed);
+        _leftMain.set(ControlMode.PercentOutput, leftSpeed);
+        _rightMain.set(ControlMode.PercentOutput, rightSpeed);
 
         if(this.acceleration) {
             _leftMain.configOpenloopRamp(1, 10000);

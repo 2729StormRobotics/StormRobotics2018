@@ -7,6 +7,7 @@ import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
+import Subsystems.Intake;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -139,9 +140,9 @@ public class Dashboard {
     }
 
     private void sendCustomDashInfo() {
-        //SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
-        //SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
-        //SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
+        SmartDashboard.putString("StormDashboard/Gear", DriveTrain._gearShift.get().toString());
+        SmartDashboard.putString("StormDashboard/Arm", Intake.sol.get().toString());
+        SmartDashboard.putString("StormDashboard/PTO", DriveTrain._PTO.get().toString());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
 
 
