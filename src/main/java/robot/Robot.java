@@ -23,6 +23,10 @@ public class Robot extends IterativeRobot {
     public static final Controller _controller = new Controller();
     public static final KBar _kbar = new KBar();
 
+    /**
+     * creates a robot
+     * @see IterativeRobot#robotInit()
+     */
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
@@ -31,10 +35,18 @@ public class Robot extends IterativeRobot {
         _driveTrain.state = DriveState.DRIVE;
     }
 
+    /**
+     * runs when robot is disables
+     * @see IterativeRobot#disabledInit()
+     */
     @Override
     public void disabledInit() {
     }
 
+    /**
+     * when autonomous is initialized
+     * @see IterativeRobot#autonomousInit()
+     */
     @Override
     public void autonomousInit() {
         _intake.setIntakeArm(true);
@@ -92,6 +104,10 @@ public class Robot extends IterativeRobot {
 
     }
 
+    /**
+     * when tele op is initialized
+     * @see IterativeRobot#teleopInit()
+     */
     @Override
     public void teleopInit() {
         _driveTrain.state = DriveState.DRIVE;
@@ -102,7 +118,10 @@ public class Robot extends IterativeRobot {
         _driveTrain.gearShift(true);
     }
 
-
+    /**
+     * runs periodically when the robot is disabled
+     * @see IterativeRobot#disabledPeriodic()
+     */
     @Override
     public void disabledPeriodic() {
         super.disabledPeriodic();
@@ -112,6 +131,10 @@ public class Robot extends IterativeRobot {
         LEDs.checkStatus();
     }
 
+    /**
+     * runs periodically when the robot is in autonomous
+     * @see IterativeRobot#autonomousPeriodic()
+     */
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
@@ -121,16 +144,27 @@ public class Robot extends IterativeRobot {
         LEDs.checkStatus();
     }
 
-
+    /**
+     * runs when test is initialized
+     * @see IterativeRobot#testInit()
+     */
     @Override
     public void testInit() {
 
     }
 
+    /**
+     * runs periodically when the robot is in test
+     * @see IterativeRobot#testPeriodic()
+     */
     @Override
     public void testPeriodic() {
     }
 
+    /**
+     * runs periodically when the robot is in tele op
+     * @see IterativeRobot#teleopPeriodic()
+     */
     @Override
     public void teleopPeriodic() {
         NavX.dashboardStats();
@@ -194,6 +228,9 @@ public class Robot extends IterativeRobot {
         LEDs.checkStatus();
     }
 
+    /**
+     * initializes the camera feed
+     */
     private static void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();

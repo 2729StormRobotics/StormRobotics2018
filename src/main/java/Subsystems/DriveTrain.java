@@ -40,6 +40,11 @@ public class DriveTrain extends Subsystem {
 
     }
 
+    /**
+     * Combines speed and turn value to drive each of the sides at different speeds
+     * @param combinedSpeed overall input speed from the controller
+     * @param turn half the difference between right and left speed of the wheels
+     */
     public void stormDrive(double combinedSpeed, double turn) {  //Left and Right triggers control speed.  Steer with joystick
         autoShift(combinedSpeed);
         turn = turn * Math.abs(turn);
@@ -84,7 +89,13 @@ public class DriveTrain extends Subsystem {
         tankDrive(leftSpeed, rightSpeed, squareValues, Constants.MOTOR_TOLERANCE_DEFAULT);
     }
 
-
+    /**
+     * Takes two input speeds and runs sides at each of the speeds
+     * @param leftSpeed speed of left side
+     * @param rightSpeed speed of right side
+     * @param squareValues maps the speeds to a square function for finer control
+     * @param tolerance dead zone for input
+     */
     public void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues, double tolerance) {
         _leftMain.configOpenloopRamp(0, 10000);
         _rightMain.configOpenloopRamp(0, 10000);
@@ -101,6 +112,10 @@ public class DriveTrain extends Subsystem {
 
     }
 
+    /**
+     * Configures dead zone for inputs
+     * @param tolerance dead zone value
+     */
     private void setMotorTolerance(double tolerance) {
         if (tolerance > Constants.MOTOR_TOLERANCE_MAX) {
             tolerance = Constants.MOTOR_TOLERANCE_MAX;
@@ -112,6 +127,10 @@ public class DriveTrain extends Subsystem {
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
 
+    /**
+     * automatically shifts gears
+     * @param speed current speed of the robot
+     */
     private void autoShift(double speed) { //add back force eventually
         if(_gearShift.get() == lowGear && speed >= Constants.SHIFT_UP) {
             gearShift(true);
@@ -120,6 +139,10 @@ public class DriveTrain extends Subsystem {
         }
     }
 
+    /**
+     * Hangs the robot setting hanging speeds
+     * @param pullSpeed speed of motors for hanging
+     */
     public void hang(double pullSpeed) {
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
         _rightMain.set(ControlMode.PercentOutput, pullSpeed);
@@ -127,6 +150,9 @@ public class DriveTrain extends Subsystem {
         LEDs.hanging = pullSpeed > 0;
     }
 
+    /**
+     * toggles the power take off
+     */
     public void togglePTO(){
         if(_PTO.get() == PTODisabled)
             setPTO(true);
@@ -135,6 +161,11 @@ public class DriveTrain extends Subsystem {
         _gearShift.set(highGear);
     }
 
+
+    /**
+     * toggles the power take off
+     * @param engaged PTO on or off
+     */
     public void setPTO(boolean engaged){
         if(engaged){
             _PTO.set(PTOEnabled);
@@ -146,6 +177,10 @@ public class DriveTrain extends Subsystem {
         _gearShift.set(highGear);
     }
 
+    /**
+     * Shifts gears
+     * @param high shift to high gear
+     */
     public void gearShift(boolean high){
         if(high){
             _gearShift.set(highGear);
@@ -154,6 +189,9 @@ public class DriveTrain extends Subsystem {
         }
     }
 
+    /**
+     * toggles the gear the robot is in
+     */
     public void toggleGear(){
         if(_gearShift.get() == highGear){
             _gearShift.set(lowGear);
@@ -162,11 +200,17 @@ public class DriveTrain extends Subsystem {
         }
     }
 
-
+    /**
+     * toggles acceleration code
+     */
     public void toggleAcceleration(){
         acceleration = ! acceleration;
     }
 
+    /**
+     * toggles acceleration
+     * @param enabled enable acceleration
+     */
     public void setAcceleration(boolean enabled){
         acceleration = ! enabled;
     }
