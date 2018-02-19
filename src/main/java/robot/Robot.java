@@ -25,6 +25,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * creates a robot
+     * @see IterativeRobot#robotInit()
      */
     @Override
     public void robotInit() {
@@ -36,6 +37,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * runs when robot is disables
+     * @see IterativeRobot#disabledInit()
      */
     @Override
     public void disabledInit() {
@@ -43,6 +45,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * when autonomous is initialized
+     * @see IterativeRobot#autonomousInit()
      */
     @Override
     public void autonomousInit() {
@@ -103,6 +106,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * when tele op is initialized
+     * @see IterativeRobot#teleopInit()
      */
     @Override
     public void teleopInit() {
@@ -116,6 +120,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * runs periodically when the robot is disabled
+     * @see IterativeRobot#disabledPeriodic()
      */
     @Override
     public void disabledPeriodic() {
@@ -128,6 +133,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * runs periodically when the robot is in autonomous
+     * @see IterativeRobot#autonomousPeriodic()
      */
     @Override
     public void autonomousPeriodic() {
@@ -140,6 +146,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * runs when test is initialized
+     * @see IterativeRobot#testInit()
      */
     @Override
     public void testInit() {
@@ -148,6 +155,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * runs periodically when the robot is in test
+     * @see IterativeRobot#testPeriodic()
      */
     @Override
     public void testPeriodic() {
@@ -155,6 +163,7 @@ public class Robot extends IterativeRobot {
 
     /**
      * runs periodically when the robot is in tele op
+     * @see IterativeRobot#teleopPeriodic()
      */
     @Override
     public void teleopPeriodic() {
