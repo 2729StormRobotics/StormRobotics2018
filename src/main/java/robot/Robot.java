@@ -23,6 +23,9 @@ public class Robot extends IterativeRobot {
     public static final Controller _controller = new Controller();
     public static final KBar _kbar = new KBar();
 
+    /**
+     * creates a robot
+     */
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
@@ -31,10 +34,16 @@ public class Robot extends IterativeRobot {
         _driveTrain.state = DriveState.DRIVE;
     }
 
+    /**
+     * runs when robot is disables
+     */
     @Override
     public void disabledInit() {
     }
 
+    /**
+     * when autonomous is initialized
+     */
     @Override
     public void autonomousInit() {
         _intake.setIntakeArm(true);
@@ -92,6 +101,9 @@ public class Robot extends IterativeRobot {
 
     }
 
+    /**
+     * when tele op is initialized
+     */
     @Override
     public void teleopInit() {
         _driveTrain.state = DriveState.DRIVE;
@@ -102,7 +114,9 @@ public class Robot extends IterativeRobot {
         _driveTrain.gearShift(true);
     }
 
-
+    /**
+     * runs periodically when the robot is disabled
+     */
     @Override
     public void disabledPeriodic() {
         super.disabledPeriodic();
@@ -112,6 +126,9 @@ public class Robot extends IterativeRobot {
         LEDs.checkStatus();
     }
 
+    /**
+     * runs periodically when the robot is in autonomous
+     */
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
@@ -121,16 +138,24 @@ public class Robot extends IterativeRobot {
         LEDs.checkStatus();
     }
 
-
+    /**
+     * runs when test is initialized
+     */
     @Override
     public void testInit() {
 
     }
 
+    /**
+     * runs periodically when the robot is in test
+     */
     @Override
     public void testPeriodic() {
     }
 
+    /**
+     * runs periodically when the robot is in tele op
+     */
     @Override
     public void teleopPeriodic() {
         NavX.dashboardStats();
@@ -194,6 +219,9 @@ public class Robot extends IterativeRobot {
         LEDs.checkStatus();
     }
 
+    /**
+     * initializes the camera feed
+     */
     private static void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
