@@ -15,12 +15,18 @@ public class Intake extends Subsystem{
     public static DoubleSolenoid.Value armsUp = DoubleSolenoid.Value.kForward;
     public static DoubleSolenoid.Value armsDown = DoubleSolenoid.Value.kReverse;
 
+    /**
+     * The intake subsystem.  Controls both intake arms and intake wheels.
+     */
     public Intake() {
         _intakeRight.setInverted(true);
         _intakeLeft.follow(_intakeRight);
         System.out.println("Reached Intake()");
     }
 
+    /**
+     * Moves arm between up and down state.
+     */
     public void toggleIntakeArm(){
         if(sol.get() == armsUp){
             setIntakeArm(false);
@@ -29,6 +35,11 @@ public class Intake extends Subsystem{
         }
     }
 
+
+    /**
+     * Sets intake arm to a desired state.
+     * @param up true moves arm up, false moves down
+     */
     public void setIntakeArm(boolean up) {
         if(up)
             sol.set(armsUp);
@@ -40,6 +51,10 @@ public class Intake extends Subsystem{
 
     }
 
+    /**
+     * Turns Intake in, reverse or off.
+     * @param desiredState CubeManipState.IN moves inward, CubeManipState.OUT moves outward, CubeManipState.IDLE is off
+     */
     public void setIntake(CubeManipState desiredState){
         if(desiredState == CubeManipState.IN){
             _intakeRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);

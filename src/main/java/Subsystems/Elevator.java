@@ -21,6 +21,9 @@ public class Elevator extends Subsystem {
 
     public static double switchPos, zeroPos, maxPos;
 
+    /**
+     * The Elevator subsystem.  Controls vertical movement of elevator and the cart that ejects the cube.
+     */
     public Elevator() {
         _elevatorFollow.follow(_elevator);
         zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
@@ -34,6 +37,10 @@ public class Elevator extends Subsystem {
     }
 
 
+    /**
+     * Moves elevator at set speed.
+     * @param liftSpeed the speed to lift the elevator.  positive moves down.  Negative moves up.
+     */
     public void elevate(double liftSpeed) {
 //        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos) {
 //
@@ -58,6 +65,9 @@ public class Elevator extends Subsystem {
         }
     }
 
+    /**
+     * Changed intake between IN and IDLE state.
+     */
     public void toggleOutput(){
         if (state != CubeManipState.IN)
             setOutput(CubeManipState.IN);
@@ -68,6 +78,10 @@ public class Elevator extends Subsystem {
 
     }
 
+    /**
+     * Sets state of Cart, either IN, REVERSE or OFF
+     * @param desiredState CubeManipState.IN moves inward, CubeManipState.OUT moves outward, CubeManipState.IDLE is off
+     */
     public void setOutput(CubeManipState desiredState) {
         if(desiredState == CubeManipState.IN) {
             _outputRight.set(ControlMode.PercentOutput, -Constants.CART_IN_SPEED);
@@ -83,8 +97,16 @@ public class Elevator extends Subsystem {
         }
     }
 
+    /**
+     * Returns height of String pot in inches.
+     * @return height of String pot after accounting for horizontal displacement.
+     */
     private static double getPotInches() { return convertHypotToY(); }
 
+    /**
+     * Returns height of elevator.  Uses string pot if in range.  Otherwise uses encoders.
+     * @return
+     */
     public static double getHeight() {
         if(pot.get() <= Constants.STRPOT_SWITCH_FRACTION) {
             updateSwitchPos();
@@ -94,11 +116,15 @@ public class Elevator extends Subsystem {
         }
     }
 
+    /**
+     * Gets fraction of String Pot extended.
+     * @return the fraction of String Pot extended.
+     */
     public static double getPotFrac() {
         //System.out.println(pot.get());
         return pot.get();
     }
-
+    
     public static double checkHeight(double ticks) {
         if(_elevator.getSelectedSensorPosition(0) + ticks <= zeroPos) {
             return zeroPos;

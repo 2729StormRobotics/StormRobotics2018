@@ -108,6 +108,11 @@ public class NavX extends Subsystem {
         NavX.connect();
     }
 
+    /**
+     *
+     * @return
+     * @throws NullPointerException
+     */
     public static synchronized AHRS getNavx() throws NullPointerException {
         if (NavX.connect()) {
             return navx;
