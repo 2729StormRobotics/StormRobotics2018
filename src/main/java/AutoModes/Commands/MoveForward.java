@@ -99,6 +99,10 @@ public class MoveForward extends Command {
         }
     };
 
+    /**
+     * initializes a move forward command
+     * @param _dist distance to move forward
+     */
     public MoveForward(double _dist) {
         //requires(robot.navx);
         distance = _dist;
@@ -112,12 +116,20 @@ public class MoveForward extends Command {
         return (inches / Constants.WHEEL_SIZE) * Constants.TICKS_PER_REV;
     }
 
+    /**
+     * starts move forward
+     * @see Command#start()
+     */
     @Override
     public synchronized void start() {
         super.start();
         System.err.println("start Move Forward");
     }
 
+    /**
+     * initializes move forward command
+     * @see Command#initialize()
+     */
     @Override
     protected void initialize() {
         super.initialize();
@@ -163,6 +175,10 @@ public class MoveForward extends Command {
         SmartDashboard.putNumber("Right SetPoint", ((DriveTrain._rightMain.getSelectedSensorPosition(0)) + targetTicks));
     }
 
+    /**
+     * ends command
+     * @see Command#end()
+     */
     @Override
     protected void end() {
         System.err.println("end Move Forward");
@@ -172,6 +188,10 @@ public class MoveForward extends Command {
         super.end();
     }
 
+    /**
+     * is called if command is interrupted
+     * @see Command#interrupted()
+     */
     @Override
     protected void interrupted() {
         System.err.println("interrupted Move Forward");
@@ -183,6 +203,10 @@ public class MoveForward extends Command {
         super.interrupted();
     }
 
+    /**
+     * executes command
+     * @see Command#execute()
+     */
     @Override
     protected void execute() {
         super.execute();
@@ -200,7 +224,11 @@ public class MoveForward extends Command {
         Robot._driveTrain.tankDrive(moveLeftSpeed, moveRightSpeed);
     }
 
-
+    /**
+     * runs when command is finished
+     * @return is it finished
+     * @see Command#isFinished()
+     */
     @Override
     protected boolean isFinished() {
         //System.err.println("moveLeftController.onTarget(): " + moveLeftController.onTarget() + "moveLeftController.get(): " + moveLeftController.get());
