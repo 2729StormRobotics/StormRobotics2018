@@ -28,13 +28,20 @@ public class Dashboard {
     SendableChooser<DebugLevel> debugChooser;
 
     public Dashboard() {
-
     }
 
+
+    /**
+     * Returns the state of the controller to see if smooth acceleration is enabled/disabled.
+     */
     private void checkAccel() {
         SmartDashboard.putBoolean("Accel Disable", Robot._controller.getSmoothAccel());
     }
 
+    /**
+     * Checks the dashboard SendableChooser to see which debug level is chosen.
+     * Returns specific amount of information to the dashboard depending on the debug level.
+     */
     void checkBug() {
         String s = "Info";
         if(debugChooser != null && debugChooser.getSelected() != null) {
@@ -81,11 +88,16 @@ public class Dashboard {
         //SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
     }
 
-
+    /**
+     * Returns the value of the left joystick from the driver controller.
+     */
     public void checkTurnSpeed() {
         SmartDashboard.putNumber("Turn Speed", MoveForward.turnSpeed);
     }
 
+    /**
+     * Returns the alliance color taken from the game data on the driver station.
+     */
     private void sendAlliance() {
         DriverStation.Alliance a = DriverStation.getInstance().getAlliance();
         switch (a) {
@@ -103,6 +115,9 @@ public class Dashboard {
 
     }
 
+    /**
+     * Sends four SendableChoosers to the dashboard for autonomous modes, field position, switch/scale, and debug level respectively.
+     */
     void sendChooser() {
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Constants.MOVE_FORWARD, new MoveForward(132.5));

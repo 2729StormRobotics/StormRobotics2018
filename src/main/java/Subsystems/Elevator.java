@@ -22,7 +22,7 @@ public class Elevator extends Subsystem {
     public static double switchPos, zeroPos, maxPos;
 
     /**
-     * The Elevator subsystem.  Controls vertical movement of elevator and the cart that ejects the cube.
+     * The Elevator subsystem. Controls vertical movement of elevator and the cart that ejects the cube.
      */
     public Elevator() {
         _elevatorFollow.follow(_elevator);
@@ -39,12 +39,9 @@ public class Elevator extends Subsystem {
 
     /**
      * Moves elevator at set speed.
-     * @param liftSpeed the speed to lift the elevator.  positive moves down.  Negative moves up.
+     * @param liftSpeed the speed to lift the elevator. Positive moves down. Negative moves up.
      */
     public void elevate(double liftSpeed) {
-//        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos) {
-//
-//        System.out.println(_elevator.getSelectedSensorPosition(0));
 
         if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
             liftSpeed = 0;
@@ -105,7 +102,7 @@ public class Elevator extends Subsystem {
 
     /**
      * Returns height of elevator.  Uses string pot if in range.  Otherwise uses encoders.
-     * @return
+     * @return height of the y component of the String Pot if below the max String Pot fraction else returns encoder height in inches.
      */
     public static double getHeight() {
         if(pot.get() <= Constants.STRPOT_SWITCH_FRACTION) {
@@ -124,7 +121,12 @@ public class Elevator extends Subsystem {
         //System.out.println(pot.get());
         return pot.get();
     }
-    
+
+    /**
+     * Checks if a given height is within the lower or upper bound of the elevator.
+     * @param ticks the amount of ticks that are going to be added / subtracted from its current position. Positive is up. Negative is down.
+     * @return zeroPos if encoder value would be lower than zeroPos, maxPos if encoder value would be higher than maxPos, else returns the desired encoder position.
+     */
     public static double checkHeight(double ticks) {
         if(_elevator.getSelectedSensorPosition(0) + ticks <= zeroPos) {
             return zeroPos;
@@ -145,6 +147,10 @@ public class Elevator extends Subsystem {
         maxPos = zeroPos + (Constants.ELEVATOR_MAX_TICKS);
     }
 
+    /**
+     * Multiplies the fraction of the String Pot w/ its max length.
+     * @return the height of the String Pot relative to its max length.
+     */
     private static double getHypotInches() {
         return pot.get() * Constants.STRPOT_MAX;
     }
