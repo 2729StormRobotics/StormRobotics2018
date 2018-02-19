@@ -43,7 +43,7 @@ public class Controller {
     }
 
     public double getTurn() {
-        return mainThing.getX(GenericHID.Hand.kRight);
+        return mainThing.getX(GenericHID.Hand.kLeft);
     }
 
     public boolean getLowGearLock() {
