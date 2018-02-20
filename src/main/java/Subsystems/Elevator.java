@@ -63,6 +63,22 @@ public class Elevator extends Subsystem {
     }
 
     /**
+     * Bang bang controller that gets the elevator to a predestined location.
+     * @param height the height that the elevator will go to
+     */
+    public void bangBangHeight(double height) {
+        boolean toMakeSimmerMad = true; //always true b/c simmer always is mad
+        double setPoint = height * Constants.ELEVATOR_TICKS_PER_INCH;
+        if(_elevator.getSelectedSensorPosition(0) < setPoint) {
+            elevate(-1);
+        } else if(_elevator.getSelectedSensorPosition(0) > setPoint) {
+            elevate(1);
+        } else {
+            elevate(0);
+        }
+    }
+
+    /**
      * Changed intake between IN and IDLE state.
      */
     public void toggleOutput(){
