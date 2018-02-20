@@ -130,6 +130,14 @@ public class Elevator extends Subsystem {
     }
 
     /**
+     * Returns the zero position of the elevator encoder.
+     * @return returns the zero position of the elevator encoder.
+     */
+    public static double getZeroPos() {
+        return zeroPos;
+    }
+
+    /**
      * Returns the percentage that the elevator is elevated relative to the total rotations that the elevator elevator can rotate.
      * @return percentage the elevator is elevated between 0 and 1.
      */
@@ -144,6 +152,14 @@ public class Elevator extends Subsystem {
     public static double getPotFrac() {
         //System.out.println(pot.get());
         return pot.get();
+    }
+
+    /**
+     * Gets fraction of String Pot extended.
+     * @return the fraction of String Pot extended.
+     */
+    public static double getTicks() {
+        return _elevator.getSelectedSensorPosition(0);
     }
 
     /**

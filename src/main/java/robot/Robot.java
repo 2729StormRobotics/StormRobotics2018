@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
-    public static final KBar _kbar = new KBar();
+    //public static final KBar _kbar = new KBar();
 
     /**
      * creates a robot

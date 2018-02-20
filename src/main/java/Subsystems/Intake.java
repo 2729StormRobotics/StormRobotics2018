@@ -41,7 +41,7 @@ public class Intake extends Subsystem{
      * @param up true moves arm up, false moves down
      */
     public void setIntakeArm(boolean up) {
-        if(up)
+        if(up && Elevator.getPercentageHeight() > .2)
             sol.set(armsUp);
         else
             sol.set(armsDown);
