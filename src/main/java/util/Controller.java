@@ -118,10 +118,10 @@ public class Controller {
     }
 
     public double getLeftSpeed(){
-        return mainThing.getY(GenericHID.Hand.kLeft);
+        return -mainThing.getY(GenericHID.Hand.kLeft);
     }
 
     public double getRightSpeed(){
-        return mainThing.getY(GenericHID.Hand.kRight);
+        return -mainThing.getY(GenericHID.Hand.kRight);
     }
 }

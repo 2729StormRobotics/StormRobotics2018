@@ -125,7 +125,7 @@ public class PointTurn extends Command {
     /**
      * Once gyro returns gyro within acceptable range turn off motors.
      * @return true means finished.  False means to call execute again
-     * @see Command#isFinished() 
+     * @see Command#isFinished()
      */
     @Override
     protected boolean isFinished() {

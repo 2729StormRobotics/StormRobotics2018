@@ -46,9 +46,9 @@ public class ProfileFollower extends Command {
         left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024*4, 0.15 * 3.279);
         right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024*4, 0.15 * 3.279);
 
-        double max_velocity = 1.0 / 9.0;
-        left.configurePIDVA(1.0, 0.0, 0.3, max_velocity, 0);
-        right.configurePIDVA(1.0, 0.0, 0.3, max_velocity, 0);
+        double max_velocity = 1.0 / 18.0;
+        left.configurePIDVA(1.0, 0.0, 0.05, max_velocity, 0);
+        right.configurePIDVA(1.0, 0.0, 0.05, max_velocity, 0);
         try {
             NavX.getNavx().zeroYaw();
         } catch (NullPointerException npe) {
@@ -105,10 +105,10 @@ public class ProfileFollower extends Command {
         System.out.println("Left: " + (l));// + turn));
         System.out.println("Right: " + (r));// - turn));
         Robot._driveTrain.tankDrive(l, r, false, 0);
-        leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
-        rightMotor.set(ControlMode.PercentOutput, (r - turn));// - turn));
+        //leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
+        //rightMotor.set(ControlMode.PercentOutput, (r - turn));// - turn));
 
-        Robot._driveTrain.tankDrive(l+turn, r-turn);
+        //Robot._driveTrain.tankDrive(l+turn, r-turn);
 
 
     }

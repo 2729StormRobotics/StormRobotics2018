@@ -3,19 +3,16 @@ package AutoModes.Commands;
 import edu.wpi.first.wpilibj.command.Command;
 import robot.Robot;
 import util.CubeManipState;
-
-import java.rmi.server.RemoteObject;
-
 public class IntakeTimed extends Command {
 
-    long startTime, addedTime;
+    long startTime, addedTime, delay, endTime;
 
     /**
      * A command that runs our intake for a set time.
      * @param seconds time in seconds to run intake
      */
-    public IntakeTimed(long seconds) {
-        startTime = System.currentTimeMillis();
+    public IntakeTimed(long _delay, long seconds) {
+        delay = _delay * 1000;
         addedTime = seconds * 1000;
     }
 
@@ -26,9 +23,9 @@ public class IntakeTimed extends Command {
     @Override
     protected void initialize() {
         System.out.println("Should be output");
-        startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis() + delay;
         super.initialize();
-        Robot._elevator.setOutput(CubeManipState.OUT);
+        endTime = startTime + addedTime;
     }
 
     /**
@@ -39,7 +36,9 @@ public class IntakeTimed extends Command {
     protected void execute() {
         System.out.println("IntakeTimed: execute");
         super.execute();
-        Robot._elevator.setOutput(CubeManipState.OUT);
+
+        if(System.currentTimeMillis() >= startTime)
+            Robot._elevator.setOutput(CubeManipState.OUT);
     }
 
     /**
@@ -71,7 +70,7 @@ public class IntakeTimed extends Command {
      */
     @Override
     protected boolean isFinished() {
-        if(System.currentTimeMillis() >= startTime + addedTime) {
+        if(System.currentTimeMillis() >= endTime) {
             System.out.println("IntakeTimed: isFinished");
             end();
             return true;

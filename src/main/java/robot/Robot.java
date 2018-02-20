@@ -50,7 +50,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         _intake.setIntakeArm(true);
-        _driveTrain.gearShift(true);
+        _driveTrain.gearShift(false);
 
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -129,6 +129,10 @@ public class Robot extends IterativeRobot {
         NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
+        SmartDashboard.putString("LeftMain Control Mode", DriveTrain._leftMain.getControlMode().toString());
+        SmartDashboard.putString("Left2 Control Mode", DriveTrain._left2.getControlMode().toString());
+        SmartDashboard.putString("RightMain Control Mode", DriveTrain._rightMain.getControlMode().toString());
+        SmartDashboard.putString("Right2 Control Mode", DriveTrain._right2.getControlMode().toString());
     }
 
     /**
@@ -142,6 +146,10 @@ public class Robot extends IterativeRobot {
         NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
+        SmartDashboard.putString("LeftMain Control Mode", DriveTrain._leftMain.getControlMode().toString());
+        SmartDashboard.putString("Left2 Control Mode", DriveTrain._left2.getControlMode().toString());
+        SmartDashboard.putString("RightMain Control Mode", DriveTrain._rightMain.getControlMode().toString());
+        SmartDashboard.putString("Right2 Control Mode", DriveTrain._right2.getControlMode().toString());
     }
 
     /**
@@ -172,6 +180,10 @@ public class Robot extends IterativeRobot {
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
+        SmartDashboard.putString("LeftMain Control Mode", DriveTrain._leftMain.getControlMode().toString());
+        SmartDashboard.putString("Left2 Control Mode", DriveTrain._left2.getControlMode().toString());
+        SmartDashboard.putString("RightMain Control Mode", DriveTrain._rightMain.getControlMode().toString());
+        SmartDashboard.putString("Right2 Control Mode", DriveTrain._right2.getControlMode().toString());
 
         if(_controller.getLowGearLock()) {
             _driveTrain.toggleGear(); //for now this will just toggle, not hold low gear
@@ -194,8 +206,8 @@ public class Robot extends IterativeRobot {
 
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
-            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
-            //_driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getLeftSpeed(), );
+            //_driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
+            _driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());
         } else {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }

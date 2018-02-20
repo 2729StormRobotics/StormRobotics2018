@@ -109,7 +109,6 @@ public class DriveTrain extends Subsystem {
 
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
-
     }
 
     /**

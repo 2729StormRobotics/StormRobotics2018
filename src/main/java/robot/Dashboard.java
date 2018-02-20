@@ -130,7 +130,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(132.5)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
-        autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(5));
+        autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
