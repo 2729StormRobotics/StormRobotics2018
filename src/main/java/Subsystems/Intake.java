@@ -52,7 +52,7 @@ public class Intake extends Subsystem{
     }
 
     /**
-     * Turns Intake in, reverse or off.
+     * Turns Intake in, reverse or off. If elevator is higher than 60% of max extension, half output speed.
      * @param desiredState CubeManipState.IN moves inward, CubeManipState.OUT moves outward, CubeManipState.IDLE is off
      */
     public void setIntake(CubeManipState desiredState){
@@ -62,8 +62,13 @@ public class Intake extends Subsystem{
             Robot._elevator.setOutput(CubeManipState.IN);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
-            _intakeRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
-            _intakeLeft.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            if(Elevator.getPercentageHeight() > 0.6) {
+                _intakeRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED / 2);
+                _intakeLeft.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED / 2);
+            } else {
+                _intakeRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+                _intakeLeft.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
+            }
             Robot._elevator.setOutput(CubeManipState.OUT);
             state = CubeManipState.OUT;
         } else if (desiredState == CubeManipState.IDLE){

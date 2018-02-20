@@ -83,6 +83,7 @@ public class Constants {
     public static final double ELEVATOR_PERIOD                  = 0.02;
     public static final double ELEVATOR_TOLERANCE               = 2.0;
     public static final double ELEVATOR_MAX                     = 0.0; //max height in inches
+    public static final double ELEVATOR_ENCODER_RANGE           = 0.0; //test 5 times going to the max height of the scale and subtract from the zeroPos to get range
     public static final double ELEVATOR_INCH_PER_REV            = 2.0 * Math.PI; //Change 2 later for actual diameter
     public static final double ELEVATOR_TICKS_PER_INCH          = TICKS_PER_REV / ELEVATOR_INCH_PER_REV;
     public static final double ELEVATOR_MAX_TICKS               = ELEVATOR_MAX * ELEVATOR_TICKS_PER_INCH;

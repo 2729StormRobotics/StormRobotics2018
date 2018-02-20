@@ -130,6 +130,14 @@ public class Elevator extends Subsystem {
     }
 
     /**
+     * Returns the percentage that the elevator is elevated relative to the total rotations that the elevator elevator can rotate.
+     * @return percentage the elevator is elevated between 0 and 1.
+     */
+    public static double getPercentageHeight() {
+        return (_elevator.getSelectedSensorPosition(0) - zeroPos) / Constants.ELEVATOR_ENCODER_RANGE;
+    }
+
+    /**
      * Gets fraction of String Pot extended.
      * @return the fraction of String Pot extended.
      */
