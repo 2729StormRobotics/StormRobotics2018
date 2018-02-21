@@ -175,6 +175,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
+        System.out.println(Elevator.getTicks());
         NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();

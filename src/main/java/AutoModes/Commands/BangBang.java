@@ -45,9 +45,9 @@ public class BangBang extends Command {
     protected void execute() {
         super.execute();
         if(Elevator.getTicks() < setPoint) {
-            Robot._elevator.elevate(-1);
+            Robot._elevator.elevate(-0.5);
         } else {
-            Robot._elevator.elevate(1);
+            Robot._elevator.elevate(0.5);
         }
     }
     /**
@@ -57,7 +57,7 @@ public class BangBang extends Command {
      */
     @Override
     protected boolean isFinished() {
-        if(Math.abs(setPoint - Elevator.getTicks()) < 1024) {
+        if(Math.abs(setPoint - Elevator.getTicks()) < (1024 * 2)) {
             Robot._elevator.elevate(0);
             return true;
         }

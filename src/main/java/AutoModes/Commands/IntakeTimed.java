@@ -5,13 +5,13 @@ import robot.Robot;
 import util.CubeManipState;
 public class IntakeTimed extends Command {
 
-    long startTime, addedTime, delay, endTime;
+    double startTime, addedTime, delay, endTime;
 
     /**
      * A command that runs our intake for a set time.
      * @param seconds time in seconds to run intake
      */
-    public IntakeTimed(long _delay, long seconds) {
+    public IntakeTimed(double _delay, double seconds) {
         delay = _delay * 1000;
         addedTime = seconds * 1000;
     }

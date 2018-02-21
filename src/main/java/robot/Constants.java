@@ -39,7 +39,7 @@ public class Constants {
     public static final double TICKS_PER_REV                    = 1024.0 * 4;
 
     public static final double WHEEL_SIZE                       = 6.0 * 3.14;
-    public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 5.0;
+    public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 2.0;
     public static final double TOLERANCE_DEGREES                = 0.5;
 
     public static final double TURNCONTROLLER_P                 = 0.015;
@@ -51,13 +51,13 @@ public class Constants {
 
     public static final double FORWARD_LEFT_P                   = 0.000035;
     public static final double FORWARD_LEFT_I                   = 0.0; //0.000004
-    public static final double FORWARD_LEFT_D                   = 0.00003; //0.008
+    public static final double FORWARD_LEFT_D                   = 0.0005; //0.008
     public static final double FORWARD_LEFT_F                   = 0.0;
     public static final double FORWARD_LEFT_PERIOD              = 0.02; //0.02
 
     public static final double FORWARD_RIGHT_P                  = 0.000035;
     public static final double FORWARD_RIGHT_I                  = 0.0;
-    public static final double FORWARD_RIGHT_D                  = 0.00003;
+    public static final double FORWARD_RIGHT_D                  = 0.0005;
     public static final double FORWARD_RIGHT_F                  = 0.0;
     public static final double FORWARD_RIGHT_PERIOD             = 0.02;
 
@@ -114,6 +114,7 @@ public class Constants {
     static final String TEST_MODE                               = "Test Mode";
     static final String FOLLOW_PREF                             = "Follow";
     static final String INTAKE_TIMED                            = "Intake Timed";
+    static final String BANG_BANG                               = "Bang Bang";
 
     public static final int CONTROLLER_INTAKE_BUFFER            = 250; //Time in ms where the intake controller stops listening.  (prevents double clicks)
 }

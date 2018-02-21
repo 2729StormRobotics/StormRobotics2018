@@ -12,12 +12,12 @@ public class MidSwitch extends CommandGroup {
         if(side == 'R') {
             addParallel(new ProfileFollower("/home/lvuser/MotionProfiles/MidRightSwitch/_left_detailed.csv",
                     "/home/lvuser/MotionProfiles/MidRightSwitch/_right_detailed.csv"));
-            addParallel(new IntakeTimed( 4, 1));
+            addParallel(new IntakeTimed( 4.0, 1));
         }
         else if(side == 'L'){
             addParallel(new ProfileFollower("/home/lvuser/MotionProfiles/MidLeftSwitch/_left_detailed.csv",
                     "/home/lvuser/MotionProfiles/MidLeftSwitch/_right_detailed.csv"));
-            addParallel(new IntakeTimed(3,1));
+            addParallel(new IntakeTimed(4.0,1));
         }
     }
 }

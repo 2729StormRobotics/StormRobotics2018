@@ -131,7 +131,7 @@ public class Elevator extends Subsystem {
 
     private static void updateBounds() {
         zeroPos = _elevator.getSelectedSensorPosition(0);
-        maxPos = zeroPos + Constants.ELEVATOR_ENCODER_RANGE - 1000;
+        maxPos = zeroPos + Constants.ELEVATOR_ENCODER_RANGE - 1000; //this is most definitely a magic number
     }
 
 }
