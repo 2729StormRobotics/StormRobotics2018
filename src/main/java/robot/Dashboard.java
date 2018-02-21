@@ -7,6 +7,7 @@ import AutoModes.Commands.PointTurn;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
+import Subsystems.Intake;
 import Subsystems.NavX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -33,6 +34,10 @@ public class Dashboard {
         SmartDashboard.putBoolean("Accel Disable", Robot._controller.getSmoothAccel());
     }
 
+    /**
+     * Checks the dashboard SendableChooser to see which debug level is chosen.
+     * Returns specific amount of information to the dashboard depending on the debug level.
+     */
     void checkBug() {
         String s = "Info";
         if(debugChooser != null && debugChooser.getSelected() != null) {
@@ -79,7 +84,9 @@ public class Dashboard {
         //SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
     }
 
-
+    /**
+     * Returns the value of the left joystick from the driver controller.
+     */
     public void checkTurnSpeed() {
         SmartDashboard.putNumber("Turn Speed", MoveForward.turnSpeed);
     }
@@ -101,19 +108,22 @@ public class Dashboard {
 
     }
 
+    /**
+     * Sends four SendableChoosers to the dashboard for autonomous modes, field position, switch/scale, and debug level respectively.
+     */
     void sendChooser() {
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addDefault(Constants.MOVE_FORWARD, new MoveForward(132.5));
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
         autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(5)); //change distance
+        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(132.5)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
-        autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(5));
+        autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
@@ -139,9 +149,9 @@ public class Dashboard {
     }
 
     private void sendCustomDashInfo() {
-        //SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
-        //SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
-        //SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
+        SmartDashboard.putString("StormDashboard/Gear", DriveTrain._gearShift.get().toString());
+        SmartDashboard.putString("StormDashboard/Arm", Intake.sol.get().toString());
+        SmartDashboard.putString("StormDashboard/PTO", DriveTrain._PTO.get().toString());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
 
 
@@ -150,7 +160,6 @@ public class Dashboard {
     private void sendElevatorEncoders() {
         SmartDashboard.putNumber("Elevator Encoder", Elevator._elevator.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Lift Speed", Lift.elevatorSpeed);
-        SmartDashboard.putNumber("Elevator String Pot Height", Elevator.getHeight());
         SmartDashboard.putNumber("String pot fraction", Elevator.getPotFrac());
         SmartDashboard.putNumber("Elevator maxPos", Elevator.maxPos);
         SmartDashboard.putNumber("Elevator zeroPos", Elevator.zeroPos);

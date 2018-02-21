@@ -21,8 +21,12 @@ public class Robot extends IterativeRobot {
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
-    public static final KBar _kbar = new KBar();
+    //public static final KBar _kbar = new KBar();
 
+    /**
+     * creates a robot
+     * @see IterativeRobot#robotInit()
+     */
     @Override
     public void robotInit() {
         _dashboard.sendChooser();
@@ -31,15 +35,29 @@ public class Robot extends IterativeRobot {
         _driveTrain.state = DriveState.DRIVE;
     }
 
+    /**
+     * runs when robot is disables
+     * @see IterativeRobot#disabledInit()
+     */
     @Override
     public void disabledInit() {
     }
 
+    /**
+     * when autonomous is initialized
+     * @see IterativeRobot#autonomousInit()
+     */
     @Override
     public void autonomousInit() {
+        _intake.setIntakeArm(true);
+        _driveTrain.gearShift(false);
+
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
         char switchSide = ' ';
+
+        _driveTrain.gearShift(true);
+
         try {
             switchSide = gameData.charAt(0);
         } catch (IndexOutOfBoundsException ex) {
@@ -86,6 +104,10 @@ public class Robot extends IterativeRobot {
 
     }
 
+    /**
+     * when tele op is initialized
+     * @see IterativeRobot#teleopInit()
+     */
     @Override
     public void teleopInit() {
         _driveTrain.state = DriveState.DRIVE;
@@ -96,7 +118,10 @@ public class Robot extends IterativeRobot {
         _driveTrain.gearShift(true);
     }
 
-
+    /**
+     * runs periodically when the robot is disabled
+     * @see IterativeRobot#disabledPeriodic()
+     */
     @Override
     public void disabledPeriodic() {
         super.disabledPeriodic();
@@ -104,8 +129,16 @@ public class Robot extends IterativeRobot {
         NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
+        SmartDashboard.putString("LeftMain Control Mode", DriveTrain._leftMain.getControlMode().toString());
+        SmartDashboard.putString("Left2 Control Mode", DriveTrain._left2.getControlMode().toString());
+        SmartDashboard.putString("RightMain Control Mode", DriveTrain._rightMain.getControlMode().toString());
+        SmartDashboard.putString("Right2 Control Mode", DriveTrain._right2.getControlMode().toString());
     }
 
+    /**
+     * runs periodically when the robot is in autonomous
+     * @see IterativeRobot#autonomousPeriodic()
+     */
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
@@ -113,18 +146,33 @@ public class Robot extends IterativeRobot {
         NavX.dashboardStats();
         PDP.dashboardStats();
         LEDs.checkStatus();
+        SmartDashboard.putString("LeftMain Control Mode", DriveTrain._leftMain.getControlMode().toString());
+        SmartDashboard.putString("Left2 Control Mode", DriveTrain._left2.getControlMode().toString());
+        SmartDashboard.putString("RightMain Control Mode", DriveTrain._rightMain.getControlMode().toString());
+        SmartDashboard.putString("Right2 Control Mode", DriveTrain._right2.getControlMode().toString());
     }
 
-
+    /**
+     * runs when test is initialized
+     * @see IterativeRobot#testInit()
+     */
     @Override
     public void testInit() {
 
     }
 
+    /**
+     * runs periodically when the robot is in test
+     * @see IterativeRobot#testPeriodic()
+     */
     @Override
     public void testPeriodic() {
     }
 
+    /**
+     * runs periodically when the robot is in tele op
+     * @see IterativeRobot#teleopPeriodic()
+     */
     @Override
     public void teleopPeriodic() {
         NavX.dashboardStats();
@@ -132,6 +180,10 @@ public class Robot extends IterativeRobot {
         _dashboard.checkBug();
         double combinedSpeed = _controller.getForward() - _controller.getReverse();
 
+        SmartDashboard.putString("LeftMain Control Mode", DriveTrain._leftMain.getControlMode().toString());
+        SmartDashboard.putString("Left2 Control Mode", DriveTrain._left2.getControlMode().toString());
+        SmartDashboard.putString("RightMain Control Mode", DriveTrain._rightMain.getControlMode().toString());
+        SmartDashboard.putString("Right2 Control Mode", DriveTrain._right2.getControlMode().toString());
 
         if(_controller.getLowGearLock()) {
             _driveTrain.toggleGear(); //for now this will just toggle, not hold low gear
@@ -152,10 +204,9 @@ public class Robot extends IterativeRobot {
             _driveTrain.togglePTO();
         }
 
-
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
             _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
-            //_driveTrain.tankDrive(combinedSpeed, combinedSpeed);
+            //_driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());
         } else {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
@@ -188,6 +239,9 @@ public class Robot extends IterativeRobot {
         LEDs.checkStatus();
     }
 
+    /**
+     * initializes the camera feed
+     */
     private static void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();

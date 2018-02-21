@@ -16,7 +16,7 @@ public class PDP extends Subsystem {
 
     public static void dashboardStats() {
         SmartDashboard.putString("PDP/.type", "PowerDistributionPanel");
-        SmartDashboard.putNumber("PDP/TotalCurrent", pdp.getTotalCurrent());
+        SmartDashboard.putNumber("PDP/TotalCurrent", 0);
         SmartDashboard.putNumber("PDP/Voltage", pdp.getVoltage());
         SmartDashboard.putNumber("PDP/TotalEnergy", pdp.getTotalEnergy());
         SmartDashboard.putNumber("PDP/TotalPower", pdp.getTotalPower());

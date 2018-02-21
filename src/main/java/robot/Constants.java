@@ -36,32 +36,32 @@ public class Constants {
     public static final double MOTOR_TOLERANCE_MIN              = 0.01;
 
     public static final double MIN_TURN_SPEED                   = 0.05;
-    public static final double TICKS_PER_REV                    = 1024.0;
+    public static final double TICKS_PER_REV                    = 1024.0 * 4;
 
     public static final double WHEEL_SIZE                       = 6.0 * 3.14;
     public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 5.0;
     public static final double TOLERANCE_DEGREES                = 0.5;
 
-    public static final double TURNCONTROLLER_P                 = 0.006;
+    public static final double TURNCONTROLLER_P                 = 0.015;
     public static final double TURNCONTROLLER_I                 = 0.0000;
-    public static final double TURNCONTROLLER_D                 = 0.00005;
+    public static final double TURNCONTROLLER_D                 = 0.05;
     public static final double TURNCONTROLLER_F                 = 0.0;
     public static final double TURNCONTROLLER_PERIOD            = 0.02;
     public static final double POINT_TURN_TOLERANCE             = 2.0;
 
-    public static final double FORWARD_LEFT_P                   = 0.0002;
-    public static final double FORWARD_LEFT_I                   = 0.000004;
-    public static final double FORWARD_LEFT_D                   = 0.008;
+    public static final double FORWARD_LEFT_P                   = 0.000035;
+    public static final double FORWARD_LEFT_I                   = 0.0; //0.000004
+    public static final double FORWARD_LEFT_D                   = 0.00003; //0.008
     public static final double FORWARD_LEFT_F                   = 0.0;
-    public static final double FORWARD_LEFT_PERIOD              = 0.02;
+    public static final double FORWARD_LEFT_PERIOD              = 0.02; //0.02
 
-    public static final double FORWARD_RIGHT_P                  = 0.0002;
-    public static final double FORWARD_RIGHT_I                  = 0.000004;
-    public static final double FORWARD_RIGHT_D                  = 0.008;
+    public static final double FORWARD_RIGHT_P                  = 0.000035;
+    public static final double FORWARD_RIGHT_I                  = 0.0;
+    public static final double FORWARD_RIGHT_D                  = 0.00003;
     public static final double FORWARD_RIGHT_F                  = 0.0;
     public static final double FORWARD_RIGHT_PERIOD             = 0.02;
 
-    public static final double FORWARD_ANGLE_P                  = 0.05;
+    public static final double FORWARD_ANGLE_P                  = 0.8;
     public static final double FORWARD_ANGLE_I                  = 0.0;
     public static final double FORWARD_ANGLE_D                  = 0.04;
     public static final double FORWARD_ANGLE_F                  = 0.0;
@@ -83,6 +83,7 @@ public class Constants {
     public static final double ELEVATOR_PERIOD                  = 0.02;
     public static final double ELEVATOR_TOLERANCE               = 2.0;
     public static final double ELEVATOR_MAX                     = 0.0; //max height in inches
+    public static final double ELEVATOR_ENCODER_RANGE           = 0.0; //test 5 times going to the max height of the scale and subtract from the zeroPos to get range
     public static final double ELEVATOR_INCH_PER_REV            = 2.0 * Math.PI; //Change 2 later for actual diameter
     public static final double ELEVATOR_TICKS_PER_INCH          = TICKS_PER_REV / ELEVATOR_INCH_PER_REV;
     public static final double ELEVATOR_MAX_TICKS               = ELEVATOR_MAX * ELEVATOR_TICKS_PER_INCH;
@@ -96,8 +97,9 @@ public class Constants {
     public static final double ELEVATOR_SCALE_HIGH_HEIGHT       = 72.0;
 
     public static final double STRPOT_MAX                       = 56.0; //push
-    public static final double STRPOT_START_FRACTION            = 0.1; //change later cause simmer doesn't like exact numbers
+    public static final double STRPOT_START_FRACTION            = 0.1;
     public static final double STRPOT_SWITCH_FRACTION           = 0.6426; //36.0 in inches (Should be 0.6426)
+    public static final double ELEVATOR_SLOW_DOWN_FRACTION      = 0.25;
 
 //    public static final double SHIFT_UP_MULT                  = 0.406;
 //    public static final double SHIFT_DOWN_MULT                = 2.06;
@@ -105,7 +107,7 @@ public class Constants {
     static final String MID_SWITCH                              = "Mid Switch";
     static final String LEFT_SCALE                              = "Left Side Scale";
     static final String LEFT_SWITCH                             = "Left Side Switch";
-    static final String RIGHT_SCALE                             =  "Right Scale";
+    static final String RIGHT_SCALE                             = "Right Scale";
     static final String RIGHT_SWITCH                            = "Right Switch";
     static final String POINT_TURN                              = "Point Turn";
     static final String MOVE_FORWARD                            = "Move Forward";
