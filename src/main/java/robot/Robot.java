@@ -204,7 +204,6 @@ public class Robot extends IterativeRobot {
             _driveTrain.togglePTO();
         }
 
-
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
             _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
             //_driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());

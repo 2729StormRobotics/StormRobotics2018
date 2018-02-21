@@ -28,22 +28,18 @@ public class Lift extends Command {
         }
 
         public double pidGet() { // Encoder Position robot @
-            /*
-                get input from potentiometer
-             */
             return Elevator._elevator.getSelectedSensorPosition(0);  //just an arbitrary number bc it needed to return something
         }
     };
 
     private PIDOutput elevatorWrite = new PIDOutput() {
         public void pidWrite(double a) {
-            //System.out.println("PID output: " + a);
             elevatorSpeed = a;
         }
     };
 
-    public Lift(double ticks) {
-        setPoint = Elevator.checkHeight(Elevator._elevator.getSelectedSensorPosition(0) + ticks);
+    public Lift(double inches) {
+        setPoint = Elevator.checkHeight(inches * Constants.ELEVATOR_TICKS_PER_INCH);
     }
 
     public synchronized void start() {

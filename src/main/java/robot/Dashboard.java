@@ -30,10 +30,6 @@ public class Dashboard {
     public Dashboard() {
     }
 
-
-    /**
-     * Returns the state of the controller to see if smooth acceleration is enabled/disabled.
-     */
     private void checkAccel() {
         SmartDashboard.putBoolean("Accel Disable", Robot._controller.getSmoothAccel());
     }
@@ -95,9 +91,6 @@ public class Dashboard {
         SmartDashboard.putNumber("Turn Speed", MoveForward.turnSpeed);
     }
 
-    /**
-     * Returns the alliance color taken from the game data on the driver station.
-     */
     private void sendAlliance() {
         DriverStation.Alliance a = DriverStation.getInstance().getAlliance();
         switch (a) {
@@ -167,7 +160,6 @@ public class Dashboard {
     private void sendElevatorEncoders() {
         SmartDashboard.putNumber("Elevator Encoder", Elevator._elevator.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("Elevator Lift Speed", Lift.elevatorSpeed);
-        SmartDashboard.putNumber("Elevator String Pot Height", Elevator.getHeight());
         SmartDashboard.putNumber("String pot fraction", Elevator.getPotFrac());
         SmartDashboard.putNumber("Elevator maxPos", Elevator.maxPos);
         SmartDashboard.putNumber("Elevator zeroPos", Elevator.zeroPos);

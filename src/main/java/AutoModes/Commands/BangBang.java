@@ -10,7 +10,7 @@ public class BangBang extends Command {
     double setPoint;
 
     public BangBang(double height) {
-        setPoint = Elevator.checkHeight(Elevator.getZeroPos() + (height * Constants.ELEVATOR_TICKS_PER_INCH));
+        setPoint = Elevator.checkHeight(height * Constants.ELEVATOR_TICKS_PER_INCH);
     }
 
     public synchronized void start() {
