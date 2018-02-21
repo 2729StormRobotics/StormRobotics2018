@@ -206,8 +206,8 @@ public class Robot extends IterativeRobot {
 
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
-            //_driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
-            _driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());
+            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
+            //_driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());
         } else {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
