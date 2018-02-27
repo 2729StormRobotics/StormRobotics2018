@@ -31,6 +31,10 @@ public class DriveTrain extends Subsystem {
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
+        _rightMain.configPeakCurrentLimit(35, 500);
+        _right2.configPeakCurrentLimit(35, 500);
+        _leftMain.configPeakCurrentLimit(35, 500);
+        _left2.configPeakCurrentLimit(35, 500);
     }
 
     @Override
