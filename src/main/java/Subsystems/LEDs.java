@@ -11,52 +11,82 @@ public class LEDs {
     public static boolean armsUp;
     public static boolean gearHigh;
 
-    private static SerialPort ledOut = new SerialPort(9600, SerialPort.Port.kMXP);
+    //private static SerialPort ledOut = new SerialPort(9600, SerialPort.Port.kMXP);
     private static byte ledCode[] = {(byte) 255};
 
+    /**
+     * initializes led connection
+     */
     public LEDs() {
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
+    /**
+     * sends the led code for hanging
+     */
     private static void hang(){
         ledCode[0] = (byte) 170;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
+    /**
+     * sends the led code for high gear
+     */
     private static void gear() {
         ledCode[0] = (byte) 190;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
+    /**
+     * sends the led code for arms up
+     */
     private static void arms(){
         ledCode[0] = (byte) 230;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
+    /**
+     * sends the led code for which alliance we're on
+     * @param red red or blue alliance
+     */
     private static void alliance(boolean red){
         if(red){
             ledCode[0] = (byte) 236;
         } else {
             ledCode[0] = (byte) 237;
         }
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
+    /**
+     * sends the led code for idle
+     */
     private static void idle(){
         ledCode[0] = (byte) 0;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
+    /**
+     * sends the led code for elevator down
+     */
     private static void elevator(){
         ledCode[0] = (byte) 246;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
+    /**
+     * sends the led code for shooting
+     */
     private static void shoot(){
         ledCode[0] = (byte) 252;
-        ledOut.write(ledCode, 1);
+        //ledOut.write(ledCode, 1);
     }
 
+    /**
+     * calls the send functions
+     * @param mode which function to call
+     * @param state if the function requires a state what is it
+     */
     private static void lightUp(String mode, boolean state){
 
         switch (mode){
@@ -85,6 +115,9 @@ public class LEDs {
 
     }
 
+    /**
+     * checks the status of each subsystem in the hierarchy order reversed
+     */
     public static void checkStatus() {
 
         String mode = "Idle";

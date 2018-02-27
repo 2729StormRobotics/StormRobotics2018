@@ -1,8 +1,6 @@
 package robot;
 
-import AutoModes.Commands.Lift;
-import AutoModes.Commands.MoveForward;
-import AutoModes.Commands.PointTurn;
+import AutoModes.Commands.*;
 import AutoModes.Modes.*;
 import Subsystems.DriveTrain;
 import Subsystems.Elevator;
@@ -33,9 +31,14 @@ public class Dashboard {
         SmartDashboard.putBoolean("Accel Disable", Robot._controller.getSmoothAccel());
     }
 
+    /**
+     * Checks the dashboard SendableChooser to see which debug level is chosen.
+     * Returns specific amount of information to the dashboard depending on the debug level.
+     */
     void checkBug() {
         String s = "Info";
-        if(bug != null && bug.getName() != null) {
+        if(debugChooser != null && debugChooser.getSelected() != null) {
+            bug = debugChooser.getSelected();
             s = bug.getName();
         }
         switch(s) {
@@ -75,10 +78,12 @@ public class Dashboard {
     }
 
     private void checkPneumatics() {
-        SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
+        //SmartDashboard.putNumber("Intake Pneumatics", Math.sin((double) Robot._controller.getIntake()));
     }
 
-
+    /**
+     * Returns the value of the left joystick from the driver controller.
+     */
     public void checkTurnSpeed() {
         SmartDashboard.putNumber("Turn Speed", MoveForward.turnSpeed);
     }
@@ -100,18 +105,23 @@ public class Dashboard {
 
     }
 
+    /**
+     * Sends four SendableChoosers to the dashboard for autonomous modes, field position, switch/scale, and debug level respectively.
+     */
     void sendChooser() {
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addDefault(Constants.BANG_BANG, new BangBang(7));
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
         autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        //autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(262)); //change distance
+        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(176)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
+        autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
+        autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(70));
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
@@ -136,46 +146,49 @@ public class Dashboard {
         SmartDashboard.putData("Debug Level", debugChooser);
     }
 
-    public void sendCustomDashInfo() {
-        //SmartDashboard.putBoolean("StormDashboard/Gear", DriveTrain._gearShift.get());
-        //SmartDashboard.putBoolean("StormDashboard/Arm", Intake.sol.get());
-        //SmartDashboard.putBoolean("StormDashboard/PTO", DriveTrain._PTO.get());
+    private void sendCustomDashInfo() {
+        SmartDashboard.putString("StormDashboard/Gear", DriveTrain._gearShift.get().toString());
+        SmartDashboard.putString("StormDashboard/Arm", Intake.sol.get().toString());
+        SmartDashboard.putString("StormDashboard/PTO", DriveTrain._PTO.get().toString());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
 
 
     }
 
-    public void sendElevatorEncoders() {
-        SmartDashboard.putNumber("Left Encoder", Elevator._elevator.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Right Encoder", Elevator._elevatorFollow.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Elevator Speed", Lift.elevatorSpeed);
-        SmartDashboard.putNumber("Elevator String Pot", Elevator.getHeight());
+    private void sendElevatorEncoders() {
+        SmartDashboard.putNumber("Elevator Encoder", Elevator._elevator.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Elevator Lift Speed", Lift.elevatorSpeed);
+        SmartDashboard.putNumber("String pot fraction", Elevator.getPotFrac());
+        SmartDashboard.putNumber("Elevator maxPos", Elevator.maxPos);
+        SmartDashboard.putNumber("Elevator zeroPos", Elevator.zeroPos);
+        SmartDashboard.putNumber("Elevator switchPos", Elevator.switchPos);
     }
 
 
     private void sendEncoders() {
+        SmartDashboard.putNumber("Left Velocity", DriveTrain._leftMain.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Encoder Left", DriveTrain._leftMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Encoder Left Velocity", DriveTrain._leftMain.getSelectedSensorVelocity(0));
+        SmartDashboard.putNumber("Right Velocity", DriveTrain._rightMain.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Encoder Right", DriveTrain._rightMain.getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("Encoder Right Velocity", DriveTrain._rightMain.getSelectedSensorVelocity(0));
+
     }
 
     private void sendMotorControllerInfo(String category, TalonSRX talon) {
-        SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
-        SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
-        SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
-        SmartDashboard.putNumber(category + "Output Current", talon.getOutputCurrent());
-        SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
+        //SmartDashboard.putNumber(category + "Bus Voltage", talon.getBusVoltage());
+        //SmartDashboard.putNumber(category + "Output Percent", talon.getMotorOutputPercent());
+        //SmartDashboard.putNumber(category + "Output Voltage", talon.getMotorOutputVoltage());
+        //SmartDashboard.putNumber(category + "Output Current", talon.getOutputCurrent());
+        //SmartDashboard.putNumber(category + "Output Watts", talon.getOutputCurrent() * talon.getMotorOutputVoltage());
         SmartDashboard.putString(category + "control Mode", talon.getControlMode().toString());
         SmartDashboard.putNumber(category + "Temperature", talon.getTemperature());
         SmartDashboard.putBoolean(category + "Inverted", talon.getInverted());
     }
 
     private void sendNavXInfo() {
-        if(NavX.getNavx() != null) {
+        /*if(NavX.getNavx() != null) {
             SmartDashboard.putBoolean("NavX/Connected", NavX.getNavx().isConnected());
             SmartDashboard.putNumber("NavX/Gyro/Pitch", NavX.getNavx().getPitch());
-        }
+        }*/
     }
 
     private void sendNavXAll() {

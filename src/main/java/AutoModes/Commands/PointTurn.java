@@ -14,6 +14,10 @@ public class PointTurn extends Command {
     private final double targetAngle;
     private PIDController turnController;
 
+    /**
+     * Turns robot to desired angle relative to current position
+     * @param angle clockwise angle in degrees to rotate.  Range (-180, 180)
+     */
     public PointTurn(double angle) { //Accepts only values between (-180, 180)
         targetAngle = angle;
     }
@@ -48,9 +52,13 @@ public class PointTurn extends Command {
         }
     };
 
+    /**
+     * Sets up PID Controller for point turn.  Accounts for ranges > 180 and < -180
+     */
     @Override
     protected void initialize() {
         super.initialize();
+
         turnController = new PIDController(Constants.TURNCONTROLLER_P, Constants.TURNCONTROLLER_I, Constants.TURNCONTROLLER_D, Constants.TURNCONTROLLER_F, angleSource, motorSpeedWrite, Constants.TURNCONTROLLER_PERIOD);
         turnController.setInputRange(-180.0, 180.0);
         turnController.setOutputRange(-.80, .80);
@@ -78,6 +86,10 @@ public class PointTurn extends Command {
         System.err.println("start Point Turn");
     }
 
+    /**
+     * After Command is finished turn off drive motors
+     * @see Command#end()
+     */
     @Override
     protected void end() {
         super.end();
@@ -87,6 +99,10 @@ public class PointTurn extends Command {
         Robot._driveTrain.tankDrive(0, 0);
     }
 
+    /**
+     * If interrupted call end
+     * @see Command#interrupted()
+     */
     @Override
     protected void interrupted() {
         super.interrupted();
@@ -94,6 +110,10 @@ public class PointTurn extends Command {
         end();
     }
 
+    /**
+     * Sets motors to newly calculated turn speed
+     * @see Command#execute()
+     */
     @Override
     protected void execute() {
         super.execute();
@@ -102,6 +122,11 @@ public class PointTurn extends Command {
         Robot._driveTrain.tankDrive(turnSpeed, -turnSpeed, false, 0);
     }
 
+    /**
+     * Once gyro returns gyro within acceptable range turn off motors.
+     * @return true means finished.  False means to call execute again
+     * @see Command#isFinished()
+     */
     @Override
     protected boolean isFinished() {
         if (Math.abs(turnController.getError()) < Constants.POINT_TURN_TOLERANCE) {

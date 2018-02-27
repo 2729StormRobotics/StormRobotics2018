@@ -5,8 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
-
-import javax.naming.ldap.Control;
+import util.CubeManipState;
 
 public class Elevator extends Subsystem {
 
@@ -15,30 +14,49 @@ public class Elevator extends Subsystem {
 
     private static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     private static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
+    private static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
+    public CubeManipState state;
 
-    private boolean shooting = false;
-    private boolean checkTicks;
-    private static final AnalogPotentiometer pot = new AnalogPotentiometer(0);
+    public static double switchPos, zeroPos, maxPos;
 
-    private static double switchPos, startPos, zeroPos, maxPos;
-
+    /**
+     * The Elevator subsystem. Controls vertical movement of elevator and the cart that ejects the cube.
+     */
     public Elevator() {
         _elevatorFollow.follow(_elevator);
-        startPos = getHypotInches();
         zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
-        maxPos = zeroPos + (Constants.ELEVATOR_MAX_TICKS);
-        _outputRight.follow(_outputLeft);
-        checkTicks = true;
+        maxPos = zeroPos + (Constants.ELEVATOR_ENCODER_RANGE);
+        _outputLeft.follow(_outputRight);
+        _elevator.configPeakCurrentLimit(35, 500);
+        _elevatorFollow.configPeakCurrentLimit(35, 500);
+        _outputLeft.configPeakCurrentLimit(25, 500);
+        _outputRight.configPeakCurrentLimit(25, 500);
     }
 
     @Override
     protected void initDefaultCommand() {
     }
 
-
+    /**
+     * Moves elevator at set speed.
+     * @param liftSpeed the speed to lift the elevator. Positive moves down. Negative moves up.
+     */
     public void elevate(double liftSpeed) {
-        if(_elevator.getSelectedSensorPosition(0) >= zeroPos || _elevator.getSelectedSensorPosition(0) <= maxPos)
-            _elevator.set(ControlMode.PercentOutput, liftSpeed);
+
+
+
+        if((pot.get() < Constants.ELEVATOR_SLOW_DOWN_FRACTION && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.10; }
+
+        if((pot.get() < (Constants.ELEVATOR_SLOW_DOWN_FRACTION * 2) && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.30; }
+        //if(_elevator.getSelectedSensorPosition(0) >= maxPos) { liftSpeed = 0.0; }
+        if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
+            liftSpeed = 0;
+            updateBounds();
+            System.out.println("ZeroPos: " + zeroPos);
+        }
+
+        _elevator.set(ControlMode.PercentOutput, liftSpeed);
+
         if(liftSpeed > 0) {
             LEDs.elevatingUp = true;
         } else if(liftSpeed < 0){
@@ -46,56 +64,79 @@ public class Elevator extends Subsystem {
         }
     }
 
-    public void output(double speed){
-//        this.shooting = !this.shooting;
-//
-//        if (shooting)
-//            _elevatorLeft.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
-//        LEDs.shooting = this.shooting;
-        _elevator.set(ControlMode.PercentOutput, speed);
+    /**
+     * Changed intake between IN and IDLE state.
+     */
+    public void toggleOutput(){
+        if (state != CubeManipState.IN)
+            setOutput(CubeManipState.IN);
+        else
+            setOutput(CubeManipState.IDLE);
+
+        LEDs.shooting = (state == CubeManipState.OUT);
 
     }
 
-    public void outputSet(boolean _shooting) {
-        this.shooting = _shooting;
-
-        if (shooting)
-            _elevator.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
-    }
-
-    private static double getPotInches() { return convertHypotToY(); }
-
-    public static double getHeight() {
-        if(pot.get() <= Constants.STRPOT_SWITCH_FRACTION) {
-            updateSwitchPos();
-            return getPotInches();
+    /**
+     * Sets state of Cart, either IN, REVERSE or OFF
+     * @param desiredState CubeManipState.IN moves inward, CubeManipState.OUT moves outward, CubeManipState.IDLE is off
+     */
+    public void setOutput(CubeManipState desiredState) {
+        if(desiredState == CubeManipState.IN) {
+            _outputRight.set(ControlMode.PercentOutput, -Constants.CART_IN_SPEED);
+            state = CubeManipState.IN;
+        } else if (desiredState == CubeManipState.OUT) {
+            _outputRight.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+            state = CubeManipState.OUT;
+            //if(getHeight() > zeroPos)
+                //Robot._intake.setIntake(CubeManipState.OUT);
         } else {
-            return ((_elevator.getSelectedSensorPosition(0) - switchPos) / Constants.ELEVATOR_TICKS_PER_INCH) + getPotInches();
+            _outputRight.set(ControlMode.PercentOutput, 0);
+            state = CubeManipState.IDLE;
         }
     }
 
+    /**
+     * Returns the percentage that the elevator is elevated relative to the total rotations that the elevator elevator can rotate.
+     * @return percentage the elevator is elevated between 0 and 1.
+     */
+    public static double getPercentageHeight() {
+        return (_elevator.getSelectedSensorPosition(0) - zeroPos) / Constants.ELEVATOR_ENCODER_RANGE;
+    }
+
+    /**
+     * Gets fraction of String Pot extended.
+     * @return the fraction of String Pot extended.
+     */
+    public static double getPotFrac() {
+        return pot.get();
+    }
+
+    /**
+     * Gets the current encoder value.
+     * @return current encoder value.
+     */
+    public static double getTicks() {
+        return _elevator.getSelectedSensorPosition(0);
+    }
+
+    /**
+     * Checks if a given height is within the lower or upper bound of the elevator.
+     * @param ticks the amount of ticks that are going to be added / subtracted from its current position. Positive is up. Negative is down.
+     * @return zeroPos if encoder value would be lower than zeroPos, maxPos if encoder value would be higher than maxPos, else returns the desired encoder position.
+     */
     public static double checkHeight(double ticks) {
-        if(_elevator.getSelectedSensorPosition(0) + ticks <= zeroPos) {
+        if(zeroPos + ticks <= zeroPos) {
             return zeroPos;
-        } else if(_elevator.getSelectedSensorPosition(0) + ticks >= maxPos) {
+        } else if(zeroPos + ticks >= maxPos) {
             return maxPos;
         }
-        return _elevator.getSelectedSensorPosition(0) + ticks;
+        return ticks;
     }
 
-    private static void updateSwitchPos() {
-        if (pot.get() >= Constants.STRPOT_SWITCH_FRACTION) {
-            switchPos = _elevator.getSelectedSensorPosition(0);
-        }
+    private static void updateBounds() {
+        zeroPos = _elevator.getSelectedSensorPosition(0);
+        maxPos = zeroPos + Constants.ELEVATOR_ENCODER_RANGE - 1000; //this is most definitely a magic number
     }
 
-    private static double getHypotInches() {
-        return pot.get() * Constants.STRPOT_MAX;
-    }
-
-    private static double convertHypotToY() {
-        return Math.sqrt(Math.pow(getHypotInches(), 2) - 1);
-    }
 }
-
-/* Different approach: Get the fraction of the string pot at starting height and get the max fraction that it extends. If stringPot.get() > than the max value, use encoders*/

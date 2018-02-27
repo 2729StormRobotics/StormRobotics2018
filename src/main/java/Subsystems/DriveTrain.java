@@ -1,10 +1,12 @@
 package Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
+import util.DriveState;
 
 public class DriveTrain extends Subsystem {
 
@@ -16,30 +18,39 @@ public class DriveTrain extends Subsystem {
     public static TalonSRX _rightMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_MAIN);
     public static final TalonSRX _right2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_RIGHT_2);
 
-//    public static Solenoid _gearShift = new Solenoid(Constants.PORT_SOLENOID_GEARSHIFT);
-//    public static Solenoid _PTO = new Solenoid(Constants.PORT_SOLENOID_PTO);
+    public static DoubleSolenoid _gearShift = new DoubleSolenoid(Constants.PORT_SOLENOID_GEARSHIFT_IN, Constants.PORT_SOLENOID_GEARSHIFT_OUT);
+    public static DoubleSolenoid _PTO = new DoubleSolenoid(Constants.PORT_SOLENOID_PTO_IN, Constants.PORT_SOLENOID_PTO_OUT);  //kforward is disengaged
+    public DriveState state;
+    public static DoubleSolenoid.Value PTOEnabled = DoubleSolenoid.Value.kReverse;
+    public static DoubleSolenoid.Value PTODisabled = DoubleSolenoid.Value.kForward;
+    public static DoubleSolenoid.Value highGear = DoubleSolenoid.Value.kForward;  //check this
+    public static DoubleSolenoid.Value lowGear = DoubleSolenoid.Value.kReverse;  //check this
 
     public DriveTrain() {
         _rightMain.setInverted(true);
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
+        _rightMain.configPeakCurrentLimit(35, 500);
+        _right2.configPeakCurrentLimit(35, 500);
+        _leftMain.configPeakCurrentLimit(35, 500);
+        _left2.configPeakCurrentLimit(35, 500);
     }
 
     @Override
     protected void initDefaultCommand() {
+        _leftMain.setSensorPhase(true);
+        _rightMain.setSensorPhase(true);
 
     }
 
-    public void stormDrive(double combinedSpeed, double turn, boolean forceLow) {
-//        if(_PTO.get()) _PTO.set(false);
-        autoShift(combinedSpeed, forceLow);
-        stormDrive(combinedSpeed, turn);
-    }
-
-    private void stormDrive(double combinedSpeed, double turn) {
-        //Left and Right triggers control speed.  Steer with joystick
-
+    /**
+     * Combines speed and turn value to drive each of the sides at different speeds
+     * @param combinedSpeed overall input speed from the controller
+     * @param turn half the difference between right and left speed of the wheels
+     */
+    public void stormDrive(double combinedSpeed, double turn) {  //Left and Right triggers control speed.  Steer with joystick
+        autoShift(combinedSpeed);
         turn = turn * Math.abs(turn);
 
         int mult;
@@ -48,11 +59,11 @@ public class DriveTrain extends Subsystem {
         else
             mult = -1;
 
-
         if (Math.abs(turn) > Constants.MIN_TURN_SPEED)
             turn = mult * turn;
-        else
+        else {
             turn = 0;
+        }
 
         double leftSpeed = (combinedSpeed - turn);
         leftSpeed = leftSpeed * Math.abs(leftSpeed);
@@ -82,7 +93,13 @@ public class DriveTrain extends Subsystem {
         tankDrive(leftSpeed, rightSpeed, squareValues, Constants.MOTOR_TOLERANCE_DEFAULT);
     }
 
-
+    /**
+     * Takes two input speeds and runs sides at each of the speeds
+     * @param leftSpeed speed of left side
+     * @param rightSpeed speed of right side
+     * @param squareValues maps the speeds to a square function for finer control
+     * @param tolerance dead zone for input
+     */
     public void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues, double tolerance) {
         _leftMain.configOpenloopRamp(0, 10000);
         _rightMain.configOpenloopRamp(0, 10000);
@@ -96,9 +113,12 @@ public class DriveTrain extends Subsystem {
 
         _leftMain.set(ControlMode.PercentOutput, leftSpeed);
         _rightMain.set(ControlMode.PercentOutput, rightSpeed);
-
     }
 
+    /**
+     * Configures dead zone for inputs
+     * @param tolerance dead zone value
+     */
     private void setMotorTolerance(double tolerance) {
         if (tolerance > Constants.MOTOR_TOLERANCE_MAX) {
             tolerance = Constants.MOTOR_TOLERANCE_MAX;
@@ -110,30 +130,91 @@ public class DriveTrain extends Subsystem {
         _rightMain.configNeutralDeadband(tolerance, 500);
     }
 
-    private void autoShift(double speed, boolean force) {
-        //False means in High Gear && True Means in Low
-//        if(_gearShift.get() && speed >= Constants.SHIFT_UP) {
-//            _gearShift.set(false);
-//        } else if((!_gearShift.get() && speed <= Constants.SHIFT_DOWN) || force) {
-//            _gearShift.set(true);
-//        }
+    /**
+     * automatically shifts gears
+     * @param speed current speed of the robot
+     */
+    private void autoShift(double speed) { //add back force eventually
+        if(_gearShift.get() == lowGear && speed >= Constants.SHIFT_UP) {
+            gearShift(true);
+        } else if(_gearShift.get() == highGear && speed <= Constants.SHIFT_DOWN) {
+            gearShift(false);
+        }
     }
 
+    /**
+     * Hangs the robot setting hanging speeds
+     * @param pullSpeed speed of motors for hanging
+     */
     public void hang(double pullSpeed) {
-//        if(!_PTO.get()) togglePTO();
         _leftMain.set(ControlMode.PercentOutput, pullSpeed);
         _rightMain.set(ControlMode.PercentOutput, pullSpeed);
 
         LEDs.hanging = pullSpeed > 0;
     }
 
-    private static void togglePTO(){
-//        _PTO.set(!_PTO.get());
-//        _gearShift.set(true);
+    /**
+     * toggles the power take off
+     */
+    public void togglePTO(){
+        if(_PTO.get() == PTODisabled)
+            setPTO(true);
+        else if(_PTO.get() == PTOEnabled)
+            setPTO(false);
+        _gearShift.set(highGear);
     }
 
 
+    /**
+     * toggles the power take off
+     * @param engaged PTO on or off
+     */
+    public void setPTO(boolean engaged){
+        if(engaged){
+            _PTO.set(PTOEnabled);
+            state = DriveState.PTO;
+        } else {
+            _PTO.set(PTODisabled);
+            state = DriveState.DRIVE;
+        }
+        _gearShift.set(highGear);
+    }
+
+    /**
+     * Shifts gears
+     * @param high shift to high gear
+     */
+    public void gearShift(boolean high){
+        if(high){
+            _gearShift.set(highGear);
+        } else {
+            _gearShift.set(lowGear);
+        }
+    }
+
+    /**
+     * toggles the gear the robot is in
+     */
+    public void toggleGear(){
+        if(_gearShift.get() == highGear){
+            _gearShift.set(lowGear);
+        } else {
+            _gearShift.set(highGear);
+        }
+    }
+
+    /**
+     * toggles acceleration code
+     */
     public void toggleAcceleration(){
         acceleration = ! acceleration;
+    }
+
+    /**
+     * toggles acceleration
+     * @param enabled enable acceleration
+     */
+    public void setAcceleration(boolean enabled){
+        acceleration = ! enabled;
     }
 }

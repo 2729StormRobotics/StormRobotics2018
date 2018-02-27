@@ -28,16 +28,12 @@ public class Lift extends Command {
         }
 
         public double pidGet() { // Encoder Position robot @
-            /*
-                get input from potentiometer
-             */
             return Elevator._elevator.getSelectedSensorPosition(0);  //just an arbitrary number bc it needed to return something
         }
     };
 
     private PIDOutput elevatorWrite = new PIDOutput() {
         public void pidWrite(double a) {
-            //System.out.println("PID output: " + a);
             elevatorSpeed = a;
         }
     };
@@ -56,6 +52,10 @@ public class Lift extends Command {
         super.end();
     }
 
+    /**
+     * In the case the Command is interrupted turn off Elevator
+     * @see Command#interrupted()
+     */
     @Override
     protected void interrupted() {
         System.err.println("interrupted Lift");
@@ -64,6 +64,11 @@ public class Lift extends Command {
         Elevator._elevator.set(ControlMode.PercentOutput, 0);
         super.interrupted();
     }
+
+    /**
+     * Sets up PID controller for Elevator
+     * @see Command#initialize()
+     */
     protected void initialize() {
         super.initialize();
         elevatorController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D, Constants.ELEVATOR_F, elevatorSource, elevatorWrite, Constants.ELEVATOR_PERIOD); //i: 0.000003 d: 0002
@@ -71,11 +76,14 @@ public class Lift extends Command {
         elevatorController.setOutputRange(-.5, .5);
         elevatorController.setAbsoluteTolerance(Constants.ELEVATOR_TOLERANCE);
         elevatorController.setContinuous(true);
-        elevatorController.setSetpoint(((Elevator._elevator.getSelectedSensorPosition(0))));
+        elevatorController.setSetpoint(setPoint);
         elevatorController.enable();
-        Robot._dashboard.sendElevatorEncoders();
     }
 
+    /**
+     * Calculates desired motor output speed using PID controller.
+     * @see Command#execute()
+     */
     protected void execute() {
         super.execute();
         if (!elevatorController.isEnabled()) {
@@ -85,6 +93,11 @@ public class Lift extends Command {
         Elevator._elevator.set(ControlMode.PercentOutput, elevatorSpeed);
     }
 
+    /**
+     * Checks if Command is done.  If it's done set elevator motor to 0
+     * @return true means finished.  False means to call execute again
+     * @see Command#isFinished()
+     */
     @Override
     protected boolean isFinished() {
         if (Math.abs(elevatorController.getError()) < Constants.TOLERANCE_TICKS) {
