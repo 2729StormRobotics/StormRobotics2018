@@ -92,7 +92,7 @@ public class Constants {
     public static final double ELEVATOR_SCALE_HIGH_HEIGHT       = 72.0;
 
     public static final double STRPOT_MAX                       = 56.0; //push
-    public static final double STRPOT_START_FRACTION            = 0.1;
+    public static final double STRPOT_START_FRACTION            = 0.12; //maybe too high
     public static final double STRPOT_SWITCH_FRACTION           = 0.6426; //36.0 in inches (Should be 0.6426)
     public static final double ELEVATOR_SLOW_DOWN_FRACTION      = 0.25;
 

@@ -16,7 +16,7 @@ import util.*;
 public class Robot extends IterativeRobot {
 
     public static final DriveTrain _driveTrain = new DriveTrain();
-    public static final Elevator _elevator = new Elevator();
+    public static final Elevator _elevator = new Elevator();  //Try ramp up ramp down for Elevator
     public static final NavX navx = new NavX();
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
@@ -175,6 +175,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
+        System.out.println(_elevator.getPotFrac());
         System.out.println(Elevator.getTicks());
         NavX.dashboardStats();
         PDP.dashboardStats();

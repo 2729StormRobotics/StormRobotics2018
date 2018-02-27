@@ -43,16 +43,17 @@ public class Elevator extends Subsystem {
      */
     public void elevate(double liftSpeed) {
 
-        if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
-            liftSpeed = 0;
-            updateBounds();
-            System.out.println("ZeroPos: " + zeroPos);
-        }
+
 
         if((pot.get() < Constants.ELEVATOR_SLOW_DOWN_FRACTION && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.10; }
 
         if((pot.get() < (Constants.ELEVATOR_SLOW_DOWN_FRACTION * 2) && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.30; }
         //if(_elevator.getSelectedSensorPosition(0) >= maxPos) { liftSpeed = 0.0; }
+        if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
+            liftSpeed = 0;
+            updateBounds();
+            System.out.println("ZeroPos: " + zeroPos);
+        }
 
         _elevator.set(ControlMode.PercentOutput, liftSpeed);
 
