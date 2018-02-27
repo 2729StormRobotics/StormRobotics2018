@@ -25,7 +25,7 @@ public class Elevator extends Subsystem {
     public Elevator() {
         _elevatorFollow.follow(_elevator);
         zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
-        maxPos = zeroPos + (Constants.ELEVATOR_MAX_TICKS);
+        maxPos = zeroPos + (Constants.ELEVATOR_ENCODER_RANGE);
         _outputLeft.follow(_outputRight);
     }
 
