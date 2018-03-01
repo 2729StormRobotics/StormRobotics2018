@@ -44,8 +44,8 @@ public class ProfileFollower extends Command {
         left = new EncoderFollower(leftTra);
         right = new EncoderFollower(rightTra);
 
-        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, 0.15 * 3.279);
-        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, 0.15 * 3.279);
+        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, .2916);
+        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, .2916);
 
         double max_velocity = 1.0 / 18.0;
         left.configurePIDVA(1.0, 0.0, 0.05, max_velocity, 0);
@@ -105,11 +105,11 @@ public class ProfileFollower extends Command {
         double turn = 0.8 * (-1.0/80.0) * angleDifference;
         System.out.println("Left: " + (l));// + turn));
         System.out.println("Right: " + (r));// - turn));
-        Robot._driveTrain.tankDrive(l, r, false, 0);
+        //Robot._driveTrain.tankDrive(l, r, false, 0);
         //leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
         //rightMotor.set(ControlMode.PercentOutput, (r - turn));// - turn));
 
-        //Robot._driveTrain.tankDrive(l+turn, r-turn);
+        Robot._driveTrain.tankDrive(l+turn, r-turn);
 
 
     }
