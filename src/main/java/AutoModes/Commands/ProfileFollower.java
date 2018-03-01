@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
+import robot.Constants;
 import robot.Robot;
 
 import java.io.File;
@@ -43,8 +44,8 @@ public class ProfileFollower extends Command {
         left = new EncoderFollower(leftTra);
         right = new EncoderFollower(rightTra);
 
-        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024*4, 0.15 * 3.279);
-        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024*4, 0.15 * 3.279);
+        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, 0.15 * 3.279);
+        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, 0.15 * 3.279);
 
         double max_velocity = 1.0 / 18.0;
         left.configurePIDVA(1.0, 0.0, 0.05, max_velocity, 0);
