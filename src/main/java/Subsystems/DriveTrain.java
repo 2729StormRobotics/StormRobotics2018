@@ -39,8 +39,8 @@ public class DriveTrain extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        _leftMain.setSensorPhase(true);
-        _rightMain.setSensorPhase(true);
+        _leftMain.setSensorPhase(false);
+        _rightMain.setSensorPhase(false);
 
     }
 
