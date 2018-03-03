@@ -118,10 +118,12 @@ public class Dashboard {
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
         autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(176)); //change distance
+        autoChooser.addObject(Constants.JENKY_MOVE_FORWARD, new JenkyMoveForward(176)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
         autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
         autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(70));
+        autoChooser.addObject(Constants.LEFT_CROSS_SCALE, new LeftCrossScale());
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);

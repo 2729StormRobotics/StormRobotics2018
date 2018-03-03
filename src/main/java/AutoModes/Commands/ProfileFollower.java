@@ -48,8 +48,8 @@ public class ProfileFollower extends Command {
         right.configureEncoder(rightMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, .2916);
 
         double max_velocity = 1.0 / 18.0;
-        left.configurePIDVA(1.0, 0.0, 0.05, max_velocity, 0);
-        right.configurePIDVA(1.0, 0.0, 0.05, max_velocity, 0);
+        left.configurePIDVA(1.0, 0.0, 0.15, max_velocity, 0); //d 0.05
+        right.configurePIDVA(1.0, 0.0, 0.15, max_velocity, 0);
         try {
             NavX.getNavx().zeroYaw();
         } catch (NullPointerException npe) {

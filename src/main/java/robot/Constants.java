@@ -104,10 +104,12 @@ public class Constants {
     static final String RIGHT_SWITCH                            = "Right Switch";
     static final String POINT_TURN                              = "Point Turn";
     static final String MOVE_FORWARD                            = "Move Forward";
+    static final String JENKY_MOVE_FORWARD                      = "Jenky Move Forward";
     static final String TEST_MODE                               = "Test Mode";
     static final String FOLLOW_PREF                             = "Follow";
     static final String INTAKE_TIMED                            = "Intake Timed";
     static final String BANG_BANG                               = "Bang Bang";
+    static final String LEFT_CROSS_SCALE                        = "Left Cross Scale";
 
     public static final int CONTROLLER_INTAKE_BUFFER            = 250; //Time in ms where the intake controller stops listening.  (prevents double clicks)
 }
