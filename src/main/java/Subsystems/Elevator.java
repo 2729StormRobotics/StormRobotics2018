@@ -62,6 +62,7 @@ public class Elevator extends Subsystem {
         } else if(liftSpeed < 0){
             LEDs.elevatingUp = false;
         }
+        System.out.println(pot.get());
     }
 
     /**

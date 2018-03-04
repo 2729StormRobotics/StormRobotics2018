@@ -10,7 +10,7 @@ public class LeftScale extends CommandGroup {
         System.err.println("LeftScale.");
         addSequential(new MoveForward(176));
         addSequential(new ProfileFollower("/home/lvuser/MotionProfiles/LeftScale/_left_detailed.csv",
-                "/home/lvuser/MotionProfiles/LeftScale/_right_detailed.csv"));
+                "/home/lvuser/MotionProfiles/LeftScale/_right_detailed.csv", 0.05));
 
     }
 
