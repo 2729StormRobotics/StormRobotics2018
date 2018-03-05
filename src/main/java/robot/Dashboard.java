@@ -110,18 +110,18 @@ public class Dashboard {
      */
     void sendChooser() {
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Constants.BANG_BANG, new BangBang(7));
+        autoChooser.addDefault(Constants.BANG_BANG, new BangBang(5000));
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
         autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
-        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(176)); //change distance
+        autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(176, Constants.FORWARD_LEFT_D)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
         autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
-        autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(70));
+        autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(5000));
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);

@@ -55,7 +55,7 @@ public class Constants {
     public static final double FORWARD_LEFT_F                   = 0.0;
     public static final double FORWARD_LEFT_PERIOD              = 0.02; //0.02
 
-    public static final double FORWARD_RIGHT_P                  = 0.000035;
+    public static final double FORWARD_RIGHT_P                  = 0.00004; //.00035
     public static final double FORWARD_RIGHT_I                  = 0.0;
     public static final double FORWARD_RIGHT_D                  = 0.0005;
     public static final double FORWARD_RIGHT_F                  = 0.0;

@@ -31,6 +31,7 @@ public class Elevator extends Subsystem {
         _elevatorFollow.configPeakCurrentLimit(35, 500);
         _outputLeft.configPeakCurrentLimit(25, 500);
         _outputRight.configPeakCurrentLimit(25, 500);
+        _elevator.setSensorPhase(true);
     }
 
     @Override
@@ -45,15 +46,17 @@ public class Elevator extends Subsystem {
 
 
 
-        if((pot.get() < Constants.ELEVATOR_SLOW_DOWN_FRACTION && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.10; }
+        //if((pot.get() < Constants.ELEVATOR_SLOW_DOWN_FRACTION && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.10; }
 
-        if((pot.get() < (Constants.ELEVATOR_SLOW_DOWN_FRACTION * 2) && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.30; }
+        //if((pot.get() < (Constants.ELEVATOR_SLOW_DOWN_FRACTION * 2) && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.30; }
         //if(_elevator.getSelectedSensorPosition(0) >= maxPos) { liftSpeed = 0.0; }
+        /*
         if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
             liftSpeed = 0;
             updateBounds();
             System.out.println("ZeroPos: " + zeroPos);
         }
+        */
 
         _elevator.set(ControlMode.PercentOutput, liftSpeed);
 
