@@ -35,15 +35,15 @@ public class Controller {
     //Driver
 
     public double getForward() {
-        return mainThing.getTriggerAxis(GenericHID.Hand.kRight);
+        return mainThing.getTriggerAxis(GenericHID.Hand.kRight)/2;
     }
 
     public double getReverse() {
-        return mainThing.getTriggerAxis(GenericHID.Hand.kLeft);
+        return mainThing.getTriggerAxis(GenericHID.Hand.kLeft)/2;
     }
 
     public double getTurn() {
-        return mainThing.getX(GenericHID.Hand.kLeft);
+        return mainThing.getX(GenericHID.Hand.kLeft)/2;
     }
 
     public boolean getLowGearLock() {
