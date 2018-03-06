@@ -1,5 +1,6 @@
 package robot;
 
+import AutoModes.Commands.MoveForward;
 import AutoModes.Modes.*;
 import Subsystems.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -50,27 +51,28 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         _intake.setIntakeArm(true);
+        _driveTrain.gearShift(true);
+        _driveTrain.setPTO(false);
+        SmartDashboard.putBoolean("Match Started:", true);
 
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
         char switchSide = ' ';
-
-        _driveTrain.gearShift(true);
-
+        char scaleSide = ' ';
         try {
             switchSide = gameData.charAt(0);
+            scaleSide = gameData.charAt(1);
         } catch (IndexOutOfBoundsException ex) {
             System.out.println("No Game Data");
         }
 
-        SmartDashboard.putBoolean("Match Started:", true);
 
         Command autonomousCommand = _dashboard.autoChooser.getSelected();
         AutoPosition position = _dashboard.positionChooser.getSelected();
         AutoPreference preference = _dashboard.preferenceChooser.getSelected();
         _dashboard.setBug(_dashboard.debugChooser.getSelected());
-
         System.out.println(autonomousCommand.getName());
+
 
         if (!autonomousCommand.getName().equalsIgnoreCase("DummyCommand")) {
             System.err.println("Auto " + _dashboard.autoChooser.getSelected() + " selected!");
@@ -80,19 +82,39 @@ public class Robot extends IterativeRobot {
 
         switch (position.getName() + '-' + preference.getName()) {
             case "Left-Scale":
-                autonomousCommand = new LeftScale();
+                if(scaleSide == 'L')
+                    autonomousCommand = new LeftScale();
+                else if(switchSide == 'L')
+                    autonomousCommand = new LeftSwitch();
+                else
+                    autonomousCommand = new MoveForward(176.0, 0.008);
                 break;
             case "Left-Switch":
-                autonomousCommand = new LeftSwitch();
+                if(switchSide == 'L')
+                    autonomousCommand = new LeftSwitch();
+                    //else if(scaleSide == 'L')
+                    //    autonomousCommand = new LeftScale();
+                else
+                    autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
             case "Middle-Switch":
                 autonomousCommand = new MidSwitch(switchSide);
                 break;
             case "Right-Scale":
-                autonomousCommand = new RightScale();
+                if (scaleSide == 'R')
+                    autonomousCommand = new RightScale();
+                else if (switchSide == 'R')
+                    autonomousCommand = new RightSwitch();
+                else
+                    autonomousCommand = new MoveForward(176.0, 0.008);
                 break;
             case "Right-Switch":
-                autonomousCommand = new RightSwitch();
+                if(switchSide == 'R')
+                    autonomousCommand = new RightSwitch();
+                    //else if (scaleSide == 'R')
+                    //    autonomousCommand = new RightScale();
+                else
+                    autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
             default: break;
         }
@@ -100,7 +122,6 @@ public class Robot extends IterativeRobot {
         _dashboard.checkBug();
         autonomousCommand.start();
         System.out.println("Running" + autonomousCommand.getName());
-
     }
 
     /**
@@ -157,7 +178,6 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void testInit() {
-
     }
 
     /**
@@ -166,6 +186,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void testPeriodic() {
+
     }
 
     /**
