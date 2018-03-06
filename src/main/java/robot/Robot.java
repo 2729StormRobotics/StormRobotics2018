@@ -50,7 +50,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         _intake.setIntakeArm(true);
-        _driveTrain.gearShift(false);
 
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
