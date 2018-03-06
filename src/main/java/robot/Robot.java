@@ -1,5 +1,6 @@
 package robot;
 
+import AutoModes.Commands.MoveForward;
 import AutoModes.Modes.*;
 import Subsystems.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -50,7 +51,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         _intake.setIntakeArm(true);
-        _driveTrain.gearShift(false);
         _driveTrain.gearShift(true);
         SmartDashboard.putBoolean("Match Started:", true);
 
@@ -65,13 +65,14 @@ public class Robot extends IterativeRobot {
             System.out.println("No Game Data");
         }
 
+
         Command autonomousCommand = _dashboard.autoChooser.getSelected();
         AutoPosition position = _dashboard.positionChooser.getSelected();
         AutoPreference preference = _dashboard.preferenceChooser.getSelected();
         _dashboard.setBug(_dashboard.debugChooser.getSelected());
         System.out.println(autonomousCommand.getName());
 
-        /*  Used for ShuffleBoard
+
         if (!autonomousCommand.getName().equalsIgnoreCase("DummyCommand")) {
             System.err.println("Auto " + _dashboard.autoChooser.getSelected() + " selected!");
             autonomousCommand.start();
@@ -80,25 +81,42 @@ public class Robot extends IterativeRobot {
 
         switch (position.getName() + '-' + preference.getName()) {
             case "Left-Scale":
-                autonomousCommand = new LeftScale();
+                if(scaleSide == 'L')
+                    autonomousCommand = new LeftScale();
+                else if(switchSide == 'L')
+                    autonomousCommand = new LeftSwitch();
+                else
+                    autonomousCommand = new MoveForward(176.0, 0.008);
                 break;
             case "Left-Switch":
-                autonomousCommand = new LeftSwitch();
+                if(switchSide == 'L')
+                    autonomousCommand = new LeftSwitch();
+                //else if(scaleSide == 'L')
+                //    autonomousCommand = new LeftScale();
+                else
+                    autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
             case "Middle-Switch":
                 autonomousCommand = new MidSwitch(switchSide);
                 break;
             case "Right-Scale":
-                autonomousCommand = new RightScale();
+                if (scaleSide == 'R')
+                    autonomousCommand = new RightScale();
+                else if (switchSide == 'R')
+                    autonomousCommand = new RightSwitch();
+                else
+                    autonomousCommand = new MoveForward(176.0, 0.008);
                 break;
             case "Right-Switch":
-                autonomousCommand = new RightSwitch();
+                if(switchSide == 'R')
+                    autonomousCommand = new RightSwitch();
+                //else if (scaleSide == 'R')
+                //    autonomousCommand = new RightScale();
+                else
+                    autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
             default: break;
-        }*/
-
-        // Used For Custom Dashboard
-
+        }
 
         _dashboard.checkBug();
         autonomousCommand.start();
@@ -159,7 +177,6 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void testInit() {
-
     }
 
     /**
@@ -168,6 +185,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void testPeriodic() {
+
     }
 
     /**

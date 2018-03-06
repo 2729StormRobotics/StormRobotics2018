@@ -50,7 +50,7 @@ public class Elevator extends Subsystem {
 
         //if((pot.get() < (Constants.ELEVATOR_SLOW_DOWN_FRACTION * 2) && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.30; }
         //if(_elevator.getSelectedSensorPosition(0) >= maxPos) { liftSpeed = 0.0; }
-        /*
+        /*  Uncomment once stringpot works again
         if(pot.get() < Constants.STRPOT_START_FRACTION && liftSpeed > 0) {
             liftSpeed = 0;
             updateBounds();
@@ -65,7 +65,6 @@ public class Elevator extends Subsystem {
         } else if(liftSpeed < 0){
             LEDs.elevatingUp = false;
         }
-        System.out.println(pot.get());
     }
 
     /**
@@ -122,6 +121,14 @@ public class Elevator extends Subsystem {
      */
     public static double getTicks() {
         return _elevator.getSelectedSensorPosition(0);
+    }
+
+    /**
+     * Returns height in ticks relative to zeroPos
+     * @return height in ticks relative to zeroPos
+     */
+    public double getHeight() {
+        return _elevator.getSelectedSensorPosition(0) - zeroPos;
     }
 
     /**
