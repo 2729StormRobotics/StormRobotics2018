@@ -7,13 +7,17 @@ import robot.Robot;
 
 public class BangBang extends Command {
 
-    double setPoint;
+    double setPoint, height;
 
-    public BangBang(double height) {
-        setPoint = Elevator.checkHeight(height * Constants.ELEVATOR_TICKS_PER_INCH);
+
+    public BangBang(double _height) {
+        height = _height;
     }
 
     public synchronized void start() {
+        setPoint = Elevator.getTicks() + height;
+        System.out.println("setpoint: " + setPoint);
+        System.out.println("starting: " + Elevator.getTicks());
         super.start();
         System.err.println("start BangBang");
     }
@@ -43,11 +47,12 @@ public class BangBang extends Command {
      * @see Command#execute()
      */
     protected void execute() {
+        //System.out.println(Elevator.getTicks());
         super.execute();
         if(Elevator.getTicks() < setPoint) {
-            Robot._elevator.elevate(-0.5);
+            Robot._elevator.elevate(-0.7);
         } else {
-            Robot._elevator.elevate(0.5);
+            Robot._elevator.elevate(0.7);
         }
     }
     /**

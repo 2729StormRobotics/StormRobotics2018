@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
-import robot.Constants;
 import robot.Robot;
 
 import java.io.File;
@@ -21,13 +20,15 @@ public class ProfileFollower extends Command {
     private EncoderFollower right;
     private final Trajectory leftTra;
     private final Trajectory rightTra;
+    private double kd;
 
 
-    public ProfileFollower(String leftCSV, String rightCSV) {
+    public ProfileFollower(String leftCSV, String rightCSV, double _kd) {
         requires(Robot._driveTrain);
         requires(Robot.navx);
         File leftMotionProfile = new File(leftCSV);
         File rightMotionProfile = new File(rightCSV);
+        kd = _kd;
 
         leftMotor = DriveTrain._leftMain;
         rightMotor = DriveTrain._rightMain;
@@ -44,12 +45,12 @@ public class ProfileFollower extends Command {
         left = new EncoderFollower(leftTra);
         right = new EncoderFollower(rightTra);
 
-        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, .2916);
-        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), Constants.TICKS_PER_REV, .2916);
+        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024*4, 0.15 * 3.279);
+        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024*4, 0.15 * 3.279);
 
         double max_velocity = 1.0 / 18.0;
-        left.configurePIDVA(1.0, 0.0, 0.15, max_velocity, 0); //d 0.05
-        right.configurePIDVA(1.0, 0.0, 0.15, max_velocity, 0);
+        left.configurePIDVA(1.0, 0.0, kd, max_velocity, 0);
+        right.configurePIDVA(1.0, 0.0, kd, max_velocity, 0);
         try {
             NavX.getNavx().zeroYaw();
         } catch (NullPointerException npe) {
@@ -105,11 +106,11 @@ public class ProfileFollower extends Command {
         double turn = 0.8 * (-1.0/80.0) * angleDifference;
         System.out.println("Left: " + (l));// + turn));
         System.out.println("Right: " + (r));// - turn));
-        //Robot._driveTrain.tankDrive(l, r, false, 0);
+        Robot._driveTrain.tankDrive(l, r, false, 0);
         //leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
         //rightMotor.set(ControlMode.PercentOutput, (r - turn));// - turn));
 
-        Robot._driveTrain.tankDrive(l+turn, r-turn);
+        //Robot._driveTrain.tankDrive(l+turn, r-turn);
 
 
     }
