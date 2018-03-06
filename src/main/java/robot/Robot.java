@@ -51,28 +51,27 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         _intake.setIntakeArm(true);
         _driveTrain.gearShift(false);
+        _driveTrain.gearShift(true);
+        SmartDashboard.putBoolean("Match Started:", true);
 
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
         char switchSide = ' ';
-
-        _driveTrain.gearShift(true);
-
+        char scaleSide = ' ';
         try {
             switchSide = gameData.charAt(0);
+            scaleSide = gameData.charAt(1);
         } catch (IndexOutOfBoundsException ex) {
             System.out.println("No Game Data");
         }
-
-        SmartDashboard.putBoolean("Match Started:", true);
 
         Command autonomousCommand = _dashboard.autoChooser.getSelected();
         AutoPosition position = _dashboard.positionChooser.getSelected();
         AutoPreference preference = _dashboard.preferenceChooser.getSelected();
         _dashboard.setBug(_dashboard.debugChooser.getSelected());
-
         System.out.println(autonomousCommand.getName());
 
+        /*  Used for ShuffleBoard
         if (!autonomousCommand.getName().equalsIgnoreCase("DummyCommand")) {
             System.err.println("Auto " + _dashboard.autoChooser.getSelected() + " selected!");
             autonomousCommand.start();
@@ -96,12 +95,14 @@ public class Robot extends IterativeRobot {
                 autonomousCommand = new RightSwitch();
                 break;
             default: break;
-        }
+        }*/
+
+        // Used For Custom Dashboard
+
 
         _dashboard.checkBug();
         autonomousCommand.start();
         System.out.println("Running" + autonomousCommand.getName());
-
     }
 
     /**
