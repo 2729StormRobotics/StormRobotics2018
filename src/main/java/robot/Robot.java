@@ -52,6 +52,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         _intake.setIntakeArm(true);
         _driveTrain.gearShift(true);
+        _driveTrain.setPTO(false);
         SmartDashboard.putBoolean("Match Started:", true);
 
         String gameData;
