@@ -15,11 +15,8 @@ public class BangBang extends Command {
     }
 
     public synchronized void start() {
-        setPoint = Elevator.getTicks() + height;
-        System.out.println("setpoint: " + setPoint);
-        System.out.println("starting: " + Elevator.getTicks());
         super.start();
-        System.err.println("start BangBang");
+
     }
     protected void end() {
         super.end();
@@ -34,12 +31,14 @@ public class BangBang extends Command {
         super.interrupted();
     }
 
-    /**
-     * Sets up PID controller for Elevator
-     * @see Command#initialize()
-     */
+
     protected void initialize() {
         super.initialize();
+        setPoint = Elevator.getTicks() + height;
+        System.out.println("setpoint: " + setPoint);
+        System.out.println("starting: " + Elevator.getTicks());
+
+        System.err.println("start BangBang");
     }
 
     /**
