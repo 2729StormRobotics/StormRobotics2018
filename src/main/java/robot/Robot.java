@@ -210,8 +210,9 @@ public class Robot extends IterativeRobot {
         if(_controller.getLowGearLock()) {
             _driveTrain.toggleGear(); //for now this will just toggle, not hold low gear
         }
+
         if(_controller.getBlockOutput()) {
-            _elevator.toggleOutput();
+            _elevator.toggleOutput(0.5);
             System.out.println("Toggling Block Output");
             System.out.println("Elevator Status" + _elevator.state);
         }

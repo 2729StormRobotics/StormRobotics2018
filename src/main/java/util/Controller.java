@@ -13,22 +13,22 @@ public class Controller {
 
     private final XboxController mainThing;
     private final XboxController weaponsThing;
-    private final Button scaleHighElevator;
-    private final Button scaleMidElevator;
-    private final Button switchElevator;
+    //private final Button scaleHighElevator;
+    //private final Button scaleMidElevator;
+    //private final Button switchElevator;
     private Timestamp intakePressedTime;
 
     public Controller() {
         mainThing = new XboxController(Constants.PORT_XBOX_DRIVE);
         weaponsThing = new XboxController(Constants.PORT_XBOX_WEAPONS);
-        scaleHighElevator = new JoystickButton(weaponsThing, 4);
+        /*scaleHighElevator = new JoystickButton(weaponsThing, 4);
         scaleMidElevator = new JoystickButton(weaponsThing, 3);
         switchElevator = new JoystickButton(weaponsThing, 1);
 
         scaleHighElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_HIGH_HEIGHT));  //YButton
         scaleMidElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_MID_HEIGHT));  //XButton
         switchElevator.whenPressed(new Lift(Constants.ELEVATOR_SWITCH_HEIGHT));  //AButton
-
+        */
         intakePressedTime = new Timestamp(System.currentTimeMillis());
     }
 

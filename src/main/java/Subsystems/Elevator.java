@@ -70,11 +70,11 @@ public class Elevator extends Subsystem {
     /**
      * Changed intake between IN and IDLE state.
      */
-    public void toggleOutput(){
+    public void toggleOutput(double speed){
         if (state != CubeManipState.IN)
-            setOutput(CubeManipState.IN);
+            setOutput(CubeManipState.IN, speed);
         else
-            setOutput(CubeManipState.IDLE);
+            setOutput(CubeManipState.IDLE, speed);
 
         LEDs.shooting = (state == CubeManipState.OUT);
 
@@ -84,12 +84,12 @@ public class Elevator extends Subsystem {
      * Sets state of Cart, either IN, REVERSE or OFF
      * @param desiredState CubeManipState.IN moves inward, CubeManipState.OUT moves outward, CubeManipState.IDLE is off
      */
-    public void setOutput(CubeManipState desiredState) {
+    public void setOutput(CubeManipState desiredState, double speed) {
         if(desiredState == CubeManipState.IN) {
             _outputRight.set(ControlMode.PercentOutput, -Constants.CART_IN_SPEED);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
-            _outputRight.set(ControlMode.PercentOutput, Constants.OUTPUT_SPEED);
+            _outputRight.set(ControlMode.PercentOutput, speed);
             state = CubeManipState.OUT;
             //if(getHeight() > zeroPos)
             //Robot._intake.setIntake(CubeManipState.OUT);
