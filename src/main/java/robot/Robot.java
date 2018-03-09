@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
         _intake.setIntakeArm(true);
         _driveTrain.gearShift(true);
         _driveTrain.setPTO(false);
-        SmartDashboard.putBoolean("Match Started:", true);
+        SmartDashboard.putBoolean("StormDashboard/MatchStarted", true);
 
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -153,6 +153,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putString("Left2 Control Mode", DriveTrain._left2.getControlMode().toString());
         SmartDashboard.putString("RightMain Control Mode", DriveTrain._rightMain.getControlMode().toString());
         SmartDashboard.putString("Right2 Control Mode", DriveTrain._right2.getControlMode().toString());
+        SmartDashboard.putBoolean("StormDashboard/MatchStarted", false);
     }
 
     /**
