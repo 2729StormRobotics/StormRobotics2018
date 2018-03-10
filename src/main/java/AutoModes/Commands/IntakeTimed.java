@@ -38,7 +38,7 @@ public class IntakeTimed extends Command {
         super.execute();
 
         if(System.currentTimeMillis() >= startTime)
-            Robot._elevator.setOutput(CubeManipState.OUT);
+            Robot._elevator.setOutput(CubeManipState.OUT, 1.0);
     }
 
     /**
@@ -48,7 +48,7 @@ public class IntakeTimed extends Command {
     @Override
     protected void end() {
         super.end();
-        Robot._elevator.setOutput(CubeManipState.IDLE);
+        Robot._elevator.setOutput(CubeManipState.IDLE, 0);
         System.out.println("IntakeTimed: end");
     }
 

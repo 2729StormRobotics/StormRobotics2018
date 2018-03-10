@@ -197,7 +197,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         //System.out.println(_elevator.getPotFrac());
-        System.out.println(Elevator.getTicks());
+        //System.out.println(Elevator.getTicks());
         NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
@@ -213,7 +213,10 @@ public class Robot extends IterativeRobot {
         }
 
         if(_controller.getBlockOutput()) {
-            _elevator.toggleOutput(0.5);
+            if(_elevator.state == CubeManipState.IDLE)
+                _elevator.setOutput(CubeManipState.OUT, 0.5);
+            else
+                _elevator.setOutput(CubeManipState.IDLE, 0);
             System.out.println("Toggling Block Output");
             System.out.println("Elevator Status" + _elevator.state);
         }
@@ -229,8 +232,8 @@ public class Robot extends IterativeRobot {
         }
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
-            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
-            //_driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());
+            //_driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
+            _driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());
         } else {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }

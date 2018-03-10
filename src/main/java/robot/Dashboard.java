@@ -110,7 +110,7 @@ public class Dashboard {
      */
     void sendChooser() {
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Constants.BANG_BANG, new BangBang(5000));
+        autoChooser.addDefault(Constants.BANG_BANG, new BangBang(10000));
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
         autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
@@ -121,7 +121,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
         autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
-        autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(5000));
+        autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(10000));
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);

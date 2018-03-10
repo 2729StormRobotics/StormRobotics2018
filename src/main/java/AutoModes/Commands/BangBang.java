@@ -63,6 +63,7 @@ public class BangBang extends Command {
     protected boolean isFinished() {
         if(Math.abs(setPoint - Elevator.getTicks()) < (1024 * 2)) {
             Robot._elevator.elevate(0);
+            System.out.println("ending: " + Elevator.getTicks());
             return true;
         }
         return false;
