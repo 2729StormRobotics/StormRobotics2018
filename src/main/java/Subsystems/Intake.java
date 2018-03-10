@@ -7,6 +7,8 @@ import robot.Constants;
 import robot.Robot;
 import util.CubeManipState;
 
+import static Subsystems.Elevator._elevator;
+
 public class Intake extends Subsystem{
     public static TalonSRX _intakeLeft = new TalonSRX(Constants.PORT_MOTOR_INTAKE_LEFT);
     public static TalonSRX _intakeRight = new TalonSRX(Constants.PORT_MOTOR_INTAKE_RIGHT);
@@ -14,6 +16,7 @@ public class Intake extends Subsystem{
     public CubeManipState state;
     public static DoubleSolenoid.Value armsUp = DoubleSolenoid.Value.kForward;
     public static DoubleSolenoid.Value armsDown = DoubleSolenoid.Value.kReverse;
+    Elevator elevator = Robot._elevator;
 
     /**
      * The intake subsystem.  Controls both intake arms and intake wheels.
@@ -47,6 +50,7 @@ public class Intake extends Subsystem{
             sol.set(armsUp);
         else
             sol.set(armsDown);
+//        elevator.setArmsUp(up);
     }
 
     protected void initDefaultCommand() {

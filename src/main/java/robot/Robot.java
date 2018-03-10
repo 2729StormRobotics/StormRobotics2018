@@ -136,6 +136,8 @@ public class Robot extends IterativeRobot {
         _intake.setIntakeArm(false);
         _driveTrain.setPTO(false);
         _driveTrain.gearShift(true);
+        _elevator.setStartPos();
+
     }
 
     /**
@@ -162,6 +164,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
+        _elevator.setStartPos();
         Scheduler.getInstance().run();
         _dashboard.checkBug();
         NavX.dashboardStats();
@@ -243,6 +246,9 @@ public class Robot extends IterativeRobot {
         if(_controller.getArmToggle()) {
             _intake.toggleIntakeArm();
         }
+        if(_controller.getSetStart()) {
+            _elevator.setStartPos();
+        }
 
 
         CubeManipState controllerState = _controller.getIntake();
@@ -272,7 +278,7 @@ public class Robot extends IterativeRobot {
     private static void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-            camera.setResolution(640, 480);
+            camera.setResolution(320, 240);
 
             CvSink cvSink = CameraServer.getInstance().getVideo();
             CvSource outputStream = CameraServer.getInstance().putVideo("FirstP", 640, 480);

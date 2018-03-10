@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import util.CubeManipState;
 
+import static robot.Robot._controller;
+import static robot.Robot._intake;
+
 public class Elevator extends Subsystem {
 
     public static final TalonSRX _elevator = new TalonSRX(Constants.PORT_MOTOR_DRIVE_ELEVATOR_MAIN);
@@ -15,16 +18,19 @@ public class Elevator extends Subsystem {
     private static final TalonSRX _outputLeft = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_LEFT);
     private static final TalonSRX _outputRight = new TalonSRX(Constants.PORT_MOTOR_OUTPUT_RIGHT);
     private static final AnalogPotentiometer pot = new AnalogPotentiometer(Constants.PORT_STRING_POT);
+
+    public boolean armsUp;
+
     public CubeManipState state;
 
-    public static double switchPos, zeroPos, maxPos;
+    public static double switchPos, zeroPos, maxPos, startPos;
 
     /**
      * The Elevator subsystem. Controls vertical movement of elevator and the cart that ejects the cube.
      */
     public Elevator() {
         _elevatorFollow.follow(_elevator);
-        zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
+        //zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
         maxPos = zeroPos + (Constants.ELEVATOR_ENCODER_RANGE);
         _outputLeft.follow(_outputRight);
         _elevator.configPeakCurrentLimit(35, 500);
@@ -32,6 +38,12 @@ public class Elevator extends Subsystem {
         _outputLeft.configPeakCurrentLimit(25, 500);
         _outputRight.configPeakCurrentLimit(25, 500);
         _elevator.setSensorPhase(true);
+        armsUp = false;
+    }
+
+    public void setStartPos(){
+        startPos = _elevator.getSelectedSensorPosition(0);
+        System.out.println(startPos);
     }
 
     @Override
@@ -43,8 +55,6 @@ public class Elevator extends Subsystem {
      * @param liftSpeed the speed to lift the elevator. Positive moves down. Negative moves up.
      */
     public void elevate(double liftSpeed) {
-
-
 
         //if((pot.get() < Constants.ELEVATOR_SLOW_DOWN_FRACTION && liftSpeed > 0) /*|| (getPercentageHeight() > 0.9 && liftSpeed < 0)*/) { liftSpeed = 0.10; }
 
@@ -66,6 +76,17 @@ public class Elevator extends Subsystem {
         } else if(liftSpeed < 0){
             LEDs.elevatingUp = false;
         }
+
+        if(armsUp == false && _elevator.getSelectedSensorPosition(0) > startPos + 500) {
+            armsUp = false;
+            _intake.toggleIntakeArm();
+            System.out.println("Arms should be going up");
+        } else if(armsUp == true && _elevator.getSelectedSensorPosition(0) <= startPos + 300) {
+            armsUp = true;
+            _intake.toggleIntakeArm();
+            System.out.println("Arms should be going down");
+        }
+
     }
 
     /**
@@ -79,6 +100,10 @@ public class Elevator extends Subsystem {
 
         LEDs.shooting = (state == CubeManipState.OUT);
 
+    }
+
+    public void setArmsUp(boolean arm) {
+        armsUp = arm;
     }
 
     /**

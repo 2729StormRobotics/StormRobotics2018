@@ -107,6 +107,10 @@ public class Controller {
         // .get(Button)Pressed checks if it was pressed since the last check and only checks when BackButton is true
     }
 
+    public boolean getSetStart() {
+        return (weaponsThing.getBackButton() && weaponsThing.getStartButtonPressed()); //Like the CDR girl: "TRUST ME IT WORKS"
+    }
+
     public void printDoubt() {
         if(mainThing.getXButtonPressed() || weaponsThing.getXButtonPressed()) {
             System.out.println("(X) Doubt");
