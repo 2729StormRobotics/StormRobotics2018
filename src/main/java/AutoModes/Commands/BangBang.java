@@ -20,6 +20,7 @@ public class BangBang extends Command {
     }
     protected void end() {
         super.end();
+        Robot._elevator.elevate(0);
     }
 
     /**

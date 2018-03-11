@@ -42,7 +42,7 @@ public class Constants {
     public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 2.0;
     public static final double TOLERANCE_DEGREES                = 0.5;
 
-    public static final double TURNCONTROLLER_P                 = 0.015;
+    public static final double TURNCONTROLLER_P                 = 0.0175;
     public static final double TURNCONTROLLER_I                 = 0.0000;
     public static final double TURNCONTROLLER_D                 = 0.05;
     public static final double TURNCONTROLLER_F                 = 0.0;

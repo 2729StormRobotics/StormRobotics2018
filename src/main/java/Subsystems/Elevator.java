@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import util.CubeManipState;
 
+import javax.naming.ldap.Control;
+
 import static robot.Robot._controller;
 import static robot.Robot._intake;
 
@@ -79,11 +81,11 @@ public class Elevator extends Subsystem {
 
         if(armsUp == false && _elevator.getSelectedSensorPosition(0) > startPos + 500) {
             armsUp = false;
-            _intake.toggleIntakeArm();
+//            _intake.toggleIntakeArm();
             System.out.println("Arms should be going up");
         } else if(armsUp == true && _elevator.getSelectedSensorPosition(0) <= startPos + 300) {
             armsUp = true;
-            _intake.toggleIntakeArm();
+//            _intake.toggleIntakeArm();
             System.out.println("Arms should be going down");
         }
 
@@ -117,9 +119,15 @@ public class Elevator extends Subsystem {
         } else if (desiredState == CubeManipState.OUT) {
             _outputRight.set(ControlMode.PercentOutput, speed);
             state = CubeManipState.OUT;
-            //if(getHeight() > zeroPos)
-            //Robot._intake.setIntake(CubeManipState.OUT);
-        } else {
+        } /*else if (desiredState == CubeManipState.CLOCKWISE) {
+            _outputRight.set(ControlMode.PercentOutput, speed);
+            _outputLeft.set(ControlMode.PercentOutput, -speed);
+            state = CubeManipState.CLOCKWISE;
+        } else if (desiredState == CubeManipState.COUNTERCLOCKWISE) {
+            _outputRight.set(ControlMode.PercentOutput, -speed);
+            _outputLeft.set(ControlMode.PercentOutput, speed);
+            state = CubeManipState.COUNTERCLOCKWISE;
+        } */else {
             _outputRight.set(ControlMode.PercentOutput, 0);
             state = CubeManipState.IDLE;
         }

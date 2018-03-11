@@ -92,8 +92,8 @@ public class Robot extends IterativeRobot {
             case "Left-Switch":
                 if(switchSide == 'L')
                     autonomousCommand = new LeftSwitch();
-                    //else if(scaleSide == 'L')
-                    //    autonomousCommand = new LeftScale();
+                else if(scaleSide == 'L')
+                    autonomousCommand = new LeftScale();
                 else
                     autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
@@ -111,8 +111,8 @@ public class Robot extends IterativeRobot {
             case "Right-Switch":
                 if(switchSide == 'R')
                     autonomousCommand = new RightSwitch();
-                    //else if (scaleSide == 'R')
-                    //    autonomousCommand = new RightScale();
+                else if (scaleSide == 'R')
+                    autonomousCommand = new RightScale();
                 else
                     autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
@@ -147,6 +147,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledPeriodic() {
         super.disabledPeriodic();
+        _elevator.setOutput(CubeManipState.IDLE, 0);
+        _elevator.elevate(0);
         _dashboard.checkBug();
         NavX.dashboardStats();
         PDP.dashboardStats();
@@ -250,7 +252,6 @@ public class Robot extends IterativeRobot {
             _elevator.setStartPos();
         }
 
-
         CubeManipState controllerState = _controller.getIntake();
         if(controllerState == CubeManipState.OUT) {
             System.out.println("Intake controller OUT");
@@ -260,10 +261,22 @@ public class Robot extends IterativeRobot {
                 System.out.println("trying to set Intake to idle");
                 _intake.setIntake(CubeManipState.IDLE);
             }
-        } else if(controllerState == CubeManipState.IN){
+        } else if(controllerState == CubeManipState.IN) {
             System.out.println("Intake controller IN");
-            if(_intake.state == CubeManipState.IDLE)
+            if (_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.IN);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
+        } else if(controllerState == CubeManipState.CLOCKWISE) {
+            System.out.println("Intake controller CLOCKWISE");
+            if(_intake.state == CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.CLOCKWISE);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
+        } else if(controllerState == CubeManipState.COUNTERCLOCKWISE) {
+            System.out.println("Intake controller COUNTERCLOCKWISE");
+            if(_intake.state == CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.COUNTERCLOCKWISE);
             else
                 _intake.setIntake(CubeManipState.IDLE);
         }

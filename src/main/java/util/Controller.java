@@ -77,6 +77,14 @@ public class Controller {
             System.out.println("Controller: Intake controller OUT");
             return CubeManipState.OUT;
         }
+        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kRight) > 0.09) {
+            System.out.println("Controller: Intake controller Clockwise");
+            return CubeManipState.CLOCKWISE;
+        }
+        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft) > 0.09) {
+            System.out.println("Controller: Intake controller CounterClockwise");
+            return CubeManipState.COUNTERCLOCKWISE;
+        }
 
         return CubeManipState.IDLE;
     }
@@ -128,4 +136,13 @@ public class Controller {
     public double getRightSpeed(){
         return -mainThing.getY(GenericHID.Hand.kRight);
     }
+
+    public double getClockwiseIntakeSpeed() {
+        return weaponsThing.getTriggerAxis(GenericHID.Hand.kRight);
+    }
+
+    public double getCounterClockwiseIntakeSpeed() {
+        return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft);
+    }
+
 }

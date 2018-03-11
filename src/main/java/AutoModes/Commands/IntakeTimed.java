@@ -38,7 +38,7 @@ public class IntakeTimed extends Command {
         super.execute();
 
         if(System.currentTimeMillis() >= startTime)
-            Robot._elevator.setOutput(CubeManipState.OUT, 1.0);
+            Robot._elevator.setOutput(CubeManipState.OUT, 0.7);
     }
 
     /**

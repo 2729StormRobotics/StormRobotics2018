@@ -122,6 +122,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
         autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
         autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(10000));
+        autoChooser.addObject("RightCross", new RightCross());
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);
