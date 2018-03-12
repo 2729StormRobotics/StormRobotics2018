@@ -77,16 +77,15 @@ public class Controller {
             System.out.println("Controller: Intake controller OUT");
             return CubeManipState.OUT;
         }
-        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kRight) > 0.09) {
+        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kRight) > 0.1) {
             System.out.println("Controller: Intake controller Clockwise");
             return CubeManipState.CLOCKWISE;
-        }
-        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft) > 0.09) {
+        } else if(weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft) > 0.1) {
             System.out.println("Controller: Intake controller CounterClockwise");
             return CubeManipState.COUNTERCLOCKWISE;
+        } else {
+            return CubeManipState.IDLE;
         }
-
-        return CubeManipState.IDLE;
     }
 
     public double getWinch() {

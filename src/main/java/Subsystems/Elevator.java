@@ -34,7 +34,6 @@ public class Elevator extends Subsystem {
         _elevatorFollow.follow(_elevator);
         //zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
         maxPos = zeroPos + (Constants.ELEVATOR_ENCODER_RANGE);
-        _outputLeft.follow(_outputRight);
         _elevator.configPeakCurrentLimit(35, 500);
         _elevatorFollow.configPeakCurrentLimit(35, 500);
         _outputLeft.configPeakCurrentLimit(25, 500);
@@ -115,11 +114,13 @@ public class Elevator extends Subsystem {
     public void setOutput(CubeManipState desiredState, double speed) {
         if(desiredState == CubeManipState.IN) {
             _outputRight.set(ControlMode.PercentOutput, -Constants.CART_IN_SPEED);
+            _outputLeft.set(ControlMode.PercentOutput, -Constants.CART_IN_SPEED);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
             _outputRight.set(ControlMode.PercentOutput, speed);
+            _outputLeft.set(ControlMode.PercentOutput, speed);
             state = CubeManipState.OUT;
-        } /*else if (desiredState == CubeManipState.CLOCKWISE) {
+        } else if (desiredState == CubeManipState.CLOCKWISE) {
             _outputRight.set(ControlMode.PercentOutput, speed);
             _outputLeft.set(ControlMode.PercentOutput, -speed);
             state = CubeManipState.CLOCKWISE;
@@ -127,8 +128,9 @@ public class Elevator extends Subsystem {
             _outputRight.set(ControlMode.PercentOutput, -speed);
             _outputLeft.set(ControlMode.PercentOutput, speed);
             state = CubeManipState.COUNTERCLOCKWISE;
-        } */else {
+        } else {
             _outputRight.set(ControlMode.PercentOutput, 0);
+            _outputLeft.set(ControlMode.PercentOutput, 0);
             state = CubeManipState.IDLE;
         }
     }

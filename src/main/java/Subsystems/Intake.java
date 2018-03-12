@@ -80,11 +80,11 @@ public class Intake extends Subsystem{
         } else if (desiredState == CubeManipState.CLOCKWISE) {
             _intakeRight.set(ControlMode.PercentOutput, Robot._controller.getClockwiseIntakeSpeed());
             _intakeLeft.set(ControlMode.PercentOutput, -Robot._controller.getClockwiseIntakeSpeed());
-            Robot._elevator.setOutput(CubeManipState.CLOCKWISE, 0);
+            Robot._elevator.setOutput(CubeManipState.CLOCKWISE, Robot._controller.getClockwiseIntakeSpeed());
         } else if (desiredState == CubeManipState.COUNTERCLOCKWISE) {
-             _intakeRight.set(ControlMode.PercentOutput, Robot._controller.getCounterClockwiseIntakeSpeed());
-             _intakeLeft.set(ControlMode.PercentOutput, -Robot._controller.getCounterClockwiseIntakeSpeed());
-             Robot._elevator.setOutput(CubeManipState.IDLE, 0);
+             _intakeRight.set(ControlMode.PercentOutput, -Robot._controller.getCounterClockwiseIntakeSpeed());
+             _intakeLeft.set(ControlMode.PercentOutput, Robot._controller.getCounterClockwiseIntakeSpeed());
+             Robot._elevator.setOutput(CubeManipState.COUNTERCLOCKWISE, Robot._controller.getCounterClockwiseIntakeSpeed());
         } else if (desiredState == CubeManipState.IDLE) {
             _intakeRight.set(ControlMode.PercentOutput, 0);
             _intakeLeft.set(ControlMode.PercentOutput, 0);
