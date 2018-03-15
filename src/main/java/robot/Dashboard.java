@@ -121,6 +121,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
         autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
+        autoChooser.addObject("Left Scale Angled", new LeftScaleAngled());
         autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(5000));
 
         positionChooser = new SendableChooser<>();
