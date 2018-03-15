@@ -45,8 +45,8 @@ public class ProfileFollower extends Command {
         left = new EncoderFollower(leftTra);
         right = new EncoderFollower(rightTra);
 
-        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024, 0.15 * 3.279);
-        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.15 * 3.279);
+        left.configureEncoder(leftMotor.getSelectedSensorPosition(0), 1024, 0.333);
+        right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024, 0.333);
 
         double max_velocity = 1.0 / 18.0;
         left.configurePIDVA(1.0, 0.0, kd, max_velocity, 0);
