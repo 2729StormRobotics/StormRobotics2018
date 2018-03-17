@@ -10,13 +10,15 @@ import robot.Constants;
 public class LeftCross extends CommandGroup {
 
     public LeftCross() {
-        addSequential(new MoveForward(225, Constants.FORWARD_LEFT_D));
+        addSequential(new MoveForward(204, Constants.FORWARD_LEFT_D));
         addSequential(new PointTurn(90), 2);
         addSequential(new MoveForward(180, Constants.FORWARD_LEFT_D));
         addSequential(new PointTurn(-90), 2);
         addSequential(new MoveForward(32, Constants.FORWARD_LEFT_D));
-        addSequential(new BangBang(10000), 3.5);
+        addSequential(new BangBang(10000, 0), 3.5); //10000
         addSequential(new IntakeTimed(0, 2));
     }
 
 }
+//drive 5 sec
+//elevator 2.5 sec

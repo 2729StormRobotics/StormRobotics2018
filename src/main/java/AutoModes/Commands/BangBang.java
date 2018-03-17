@@ -4,18 +4,22 @@ import Subsystems.Elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import robot.Constants;
 import robot.Robot;
+import util.CubeManipState;
 
 public class BangBang extends Command {
 
-    double setPoint, height;
+    double setPoint, height, delay, startTime, endTime, addedTime;
 
 
-    public BangBang(double _height) {
+    public BangBang(double _height, double _delay) {
+        delay = _delay * 1000;
         height = _height;
     }
 
     public synchronized void start() {
         super.start();
+        startTime = System.currentTimeMillis() + delay;
+        endTime = startTime;
 
     }
     protected void end() {
@@ -47,13 +51,15 @@ public class BangBang extends Command {
      * @see Command#execute()
      */
     protected void execute() {
-        //System.out.println(Elevator.getTicks());
+        System.out.println("Simmer is " + Elevator.getTicks());
         super.execute();
-        if(Elevator.getTicks() < setPoint) {
-            Robot._elevator.elevate(-0.7);
-        } else {
-            Robot._elevator.elevate(0.7);
-        }
+        //if(System.currentTimeMillis() >= startTime) {
+            if(Elevator.getTicks() < setPoint) {
+                Robot._elevator.elevate(-0.7);
+            } else {
+                Robot._elevator.elevate(0.7);
+            }
+        //}
     }
     /**
      * Checks if Command is done.  If it's done set elevator motor to 0

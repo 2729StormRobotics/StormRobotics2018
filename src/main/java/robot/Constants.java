@@ -6,6 +6,7 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 1; //Back left
     public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 0;//Front right
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 15;//Back right
+    public static final double twoCubeAngle                     = 170;
 
     public static final int DRIVE_AMPERAGE_LIMIT_PEAK = 60;
     public static final int DRIVE_AMPERAGE_PEAK_DURATION = 250;
@@ -59,7 +60,7 @@ public class Constants {
 
     public static final double FORWARD_LEFT_P                   = 0.000035;
     public static final double FORWARD_LEFT_I                   = 0.0; //0.000004
-    public static final double FORWARD_LEFT_D                   = 0.0005; //0.008
+    public static final double FORWARD_LEFT_D                   = 0.0009; //0.008
     public static final double FORWARD_LEFT_F                   = 0.0;
     public static final double FORWARD_LEFT_PERIOD              = 0.02; //0.02
 

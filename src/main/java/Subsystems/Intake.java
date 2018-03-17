@@ -27,6 +27,7 @@ public class Intake extends Subsystem{
         System.out.println("Reached Intake()");
         _intakeLeft.configPeakCurrentLimit(25, 500);
         _intakeRight.configPeakCurrentLimit(25, 500);
+        state = CubeManipState.IDLE;
     }
 
     /**

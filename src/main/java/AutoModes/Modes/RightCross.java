@@ -14,7 +14,7 @@ public class RightCross extends CommandGroup {
         addSequential(new MoveForward(185, Constants.FORWARD_LEFT_D));
         addSequential(new PointTurn(90), 2);
         addSequential(new MoveForward(32, Constants.FORWARD_LEFT_D));
-        addSequential(new BangBang(10000), 3.5);
+        addSequential(new BangBang(10000, 0), 3.5);
         addSequential(new IntakeTimed(0, 2));
     }
 }

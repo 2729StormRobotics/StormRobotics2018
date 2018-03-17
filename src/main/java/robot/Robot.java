@@ -23,6 +23,7 @@ public class Robot extends IterativeRobot {
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
     public static final AnalogInput _proxSens = new AnalogInput(Constants.PORT_PROX_SENS);
+    public static double startAngle;
     //public static final KBar _kbar = new KBar();
 
     /**
@@ -51,6 +52,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousInit() {
+        startAngle = NavX.getNavx().getYaw();
         _intake.setIntakeArm(true);
         _driveTrain.gearShift(true);
         _driveTrain.setPTO(false);
@@ -286,7 +288,7 @@ public class Robot extends IterativeRobot {
 
         _controller.printDoubt();
         LEDs.checkStatus();
-        System.out.println(_proxSens.getValue());
+        System.out.println(Elevator.getTicks());
     }
 
     /**
