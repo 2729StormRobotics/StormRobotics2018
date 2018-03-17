@@ -153,7 +153,7 @@ public class Dashboard {
         SmartDashboard.putString("StormDashboard/Arm", Intake.sol.get().toString());
         SmartDashboard.putString("StormDashboard/PTO", DriveTrain._PTO.get().toString());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
-        SmartDashboard.putNumber("ProximitySensor", )
+        //SmartDashboard.putNumber("ProximitySensor", )
 
 
     }
