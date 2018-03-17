@@ -134,11 +134,11 @@ public class Controller {
     }
 
     public double getClockwiseIntakeSpeed() {
-        return weaponsThing.getTriggerAxis(GenericHID.Hand.kRight);
+        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kRight) >= 0.05) return weaponsThing.getTriggerAxis(GenericHID.Hand.kRight); else return 0;
     }
 
     public double getCounterClockwiseIntakeSpeed() {
-        return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft);
+        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft) >= 0.05) return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft); else return 0;
     }
 
 }

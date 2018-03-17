@@ -22,6 +22,7 @@ public class Robot extends IterativeRobot {
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
+    public static final AnalogInput _proxSens = new AnalogInput(Constants.PORT_PROX_SENS);
     //public static final KBar _kbar = new KBar();
 
     /**
@@ -254,27 +255,29 @@ public class Robot extends IterativeRobot {
 
         CubeManipState controllerState = _controller.getIntake();
         if(controllerState == CubeManipState.OUT) {
-            System.out.println("Intake controller OUT");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.OUT);
             else {
-                System.out.println("trying to set Intake to idle");
                 _intake.setIntake(CubeManipState.IDLE);
             }
         } else if(controllerState == CubeManipState.IN) {
-            System.out.println("Intake controller IN");
             if (_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.IN);
             else
                 _intake.setIntake(CubeManipState.IDLE);
-        } else if(controllerState == CubeManipState.CLOCKWISE) {
-            System.out.println("Intake controller CLOCKWISE");
+        }
+        if(_proxSens.getValue() >= 690) {
+            _intake.setIntake(CubeManipState.IDLE);
+            SmartDashboard.putBoolean("StormDashboard/CubeIn", true);
+        } else {
+            SmartDashboard.putBoolean("StormDashboard/CubeIn", false);
+        }
+        if(controllerState == CubeManipState.CLOCKWISE) {
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.CLOCKWISE);
             else
                 _intake.setIntake(CubeManipState.IDLE);
         } else if(controllerState == CubeManipState.COUNTERCLOCKWISE) {
-            System.out.println("Intake controller COUNTERCLOCKWISE");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.COUNTERCLOCKWISE);
             else
@@ -283,6 +286,7 @@ public class Robot extends IterativeRobot {
 
         _controller.printDoubt();
         LEDs.checkStatus();
+        System.out.println(_proxSens.getValue());
     }
 
     /**

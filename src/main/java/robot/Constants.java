@@ -7,9 +7,17 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 0;//Front right
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 15;//Back right
 
+    public static final int DRIVE_AMPERAGE_LIMIT_PEAK = 60;
+    public static final int DRIVE_AMPERAGE_PEAK_DURATION = 250;
+    public static final int DRIVE_AMPERAGE_LIMIT_CONTINUOUS = 35;
+
+    public static final int CAN_TIMEOUT_SETUP = 500;
+
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 3;//Elevator 1
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 12;//Elevator 2
     public static final int PORT_STRING_POT 		            = 3;//Elevator 2
+
+    public static final int PORT_PROX_SENS                      = 2;
 
     public static final int PORT_MOTOR_INTAKE_LEFT              = 6; //Intake Left
     public static final int PORT_MOTOR_INTAKE_RIGHT             = 7; //Intake Right
