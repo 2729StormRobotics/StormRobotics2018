@@ -40,7 +40,7 @@ public class Constants {
     public static final double TOLERANCE_TICKS = (TICKS_PER_REV) / 5.0;
     public static final double TOLERANCE_DEGREES = 0.5;
 
-    public static final double TURNCONTROLLER_P                 = 0.006;
+    public static final double TURNCONTROLLER_P                 = 0.008;
     public static final double TURNCONTROLLER_I                 = 0.0000;
     public static final double TURNCONTROLLER_D                 = 0.00005;
     public static final double TURNCONTROLLER_F                 = 0.0;
@@ -49,13 +49,13 @@ public class Constants {
 
     public static final double FORWARD_LEFT_P                   = 0.0002;
     public static final double FORWARD_LEFT_I                   = 0.000004;
-    public static final double FORWARD_LEFT_D                   = 0.008;
+    public static final double FORWARD_LEFT_D                   = 0.09;
     public static final double FORWARD_LEFT_F                   = 0.0;
     public static final double FORWARD_LEFT_PERIOD              = 0.02;
 
     public static final double FORWARD_RIGHT_P                  = 0.0002;
     public static final double FORWARD_RIGHT_I                  = 0.000004;
-    public static final double FORWARD_RIGHT_D                  = 0.008;
+    public static final double FORWARD_RIGHT_D                  = 0.09;
     public static final double FORWARD_RIGHT_F                  = 0.0;
     public static final double FORWARD_RIGHT_PERIOD             = 0.02;
 

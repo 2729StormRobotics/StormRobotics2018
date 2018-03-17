@@ -122,6 +122,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
         autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
         autoChooser.addObject("Left Scale Angled", new LeftScaleAngled());
+        autoChooser.addObject("Left Cross Scale", new LeftCrossScale());
         autoChooser.addObject(Constants.INTAKE_TIMED, new BangBang(5000));
 
         positionChooser = new SendableChooser<>();
@@ -152,6 +153,7 @@ public class Dashboard {
         SmartDashboard.putString("StormDashboard/Arm", Intake.sol.get().toString());
         SmartDashboard.putString("StormDashboard/PTO", DriveTrain._PTO.get().toString());
         SmartDashboard.putBoolean("StormDashboard/Acceleration", Robot._driveTrain.acceleration);
+        SmartDashboard.putNumber("ProximitySensor", )
 
 
     }
