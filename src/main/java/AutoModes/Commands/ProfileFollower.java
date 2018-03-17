@@ -106,11 +106,11 @@ public class ProfileFollower extends Command {
         double turn = 0.8 * (-1.0/80.0) * angleDifference;
         System.out.println("Left: " + (l));// + turn));
         System.out.println("Right: " + (r));// - turn));
-        //Robot._driveTrain.tankDrive(l, r, false, 0);
+        Robot._driveTrain.tankDrive(l, r, false, 0);
         //leftMotor.set(ControlMode.PercentOutput, l + turn);// + turn);
         //rightMotor.set(ControlMode.PercentOutput, (r - turn));// - turn));
 
-        Robot._driveTrain.tankDrive(l+turn, r-turn);
+        //Robot._driveTrain.tankDrive(l+turn, r-turn);
 
 
     }
