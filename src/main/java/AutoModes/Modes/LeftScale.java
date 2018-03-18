@@ -17,7 +17,9 @@ public class LeftScale extends CommandGroup {
         addSequential(new BangBang(8000, 0), 3.5);
         addSequential(new IntakeTimed(0, 2));
 
-        //addSequential(new PointTurn(Constants.twoCubeAngle - Robot.startAngle - NavX.getNavx().getYaw())); To Turn to -170 relative to auto start
+
+        //double angleToCube = util.AngleMath.fixRange(Constants.twoCubeAngleLeft - (Robot.startAngle - NavX.getNavx().getYaw()));
+        //addSequential(new PointTurn(angleToCube));
 
     }
 

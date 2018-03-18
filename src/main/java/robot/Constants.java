@@ -6,13 +6,14 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 1; //Back left
     public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 0;//Front right
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 15;//Back right
-    public static final double twoCubeAngle                     = 170;
+    public static final double twoCubeAngleLeft                 = 170;
+    public static final double twoCubeAngleRight                = -170;
 
-    public static final int DRIVE_AMPERAGE_LIMIT_PEAK = 60;
-    public static final int DRIVE_AMPERAGE_PEAK_DURATION = 250;
-    public static final int DRIVE_AMPERAGE_LIMIT_CONTINUOUS = 35;
+    public static final int DRIVE_AMPERAGE_LIMIT_PEAK           = 60;
+    public static final int DRIVE_AMPERAGE_PEAK_DURATION        = 250;
+    public static final int DRIVE_AMPERAGE_LIMIT_CONTINUOUS     = 35;
 
-    public static final int CAN_TIMEOUT_SETUP = 500;
+    public static final int CAN_TIMEOUT_SETUP                   = 500;
 
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 3;//Elevator 1
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 12;//Elevator 2
