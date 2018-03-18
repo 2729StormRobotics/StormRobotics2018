@@ -1,10 +1,8 @@
 package AutoModes.Modes;
 
 import AutoModes.Commands.*;
-import Subsystems.NavX;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import robot.Constants;
-import robot.Robot;
 
 public class RightScale extends CommandGroup {
 
@@ -17,7 +15,7 @@ public class RightScale extends CommandGroup {
 
         addSequential(new PointTurn(-45), 2);
         addSequential(new BangBang(10000, 0), 3.5);
-        addSequential(new IntakeTimed(0, 2));
+        addSequential(new OutputTimed(0, 2));
 
         //double angleToCube = util.AngleMath.fixRange(Constants.twoCubeAngleLeft - (Robot.startAngle - NavX.getNavx().getYaw()));
         //addSequential(new PointTurn(angleToCube));

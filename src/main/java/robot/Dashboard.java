@@ -120,7 +120,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(176, Constants.FORWARD_LEFT_D)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
-        autoChooser.addObject(Constants.INTAKE_TIMED, new IntakeTimed(3, 5));
+        autoChooser.addObject(Constants.INTAKE_TIMED, new OutputTimed(3, 5));
         autoChooser.addObject(Constants.BANG_BANG, new BangBang(5000, 0));
         autoChooser.addObject("RightCross", new RightCross());
         autoChooser.addObject("LeftCross", new LeftCross());

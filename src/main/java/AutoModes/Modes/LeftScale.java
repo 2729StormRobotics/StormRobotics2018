@@ -7,7 +7,6 @@ import robot.Constants;
 import robot.Robot;
 
 public class LeftScale extends CommandGroup {
-
     public LeftScale() {
         System.err.println("LeftScale.");
         //addSequential(new MoveForward(176, Constants.FORWARD_LEFT_D));
@@ -15,12 +14,19 @@ public class LeftScale extends CommandGroup {
                 "/home/lvuser/MotionProfiles/LeftScaleAngled/_right_detailed.csv", 0.05));
         //addSequential(new PointTurn(45), 2);
         addSequential(new BangBang(8000, 0), 3.5);
-        addSequential(new IntakeTimed(0, 2));
+        addSequential(new OutputTimed(0, 2));
+        /*
+        addSequential(new BangBang(-8000, 0));  This needs to take elevator to the ground
 
 
-        //double angleToCube = util.AngleMath.fixRange(Constants.twoCubeAngleLeft - (Robot.startAngle - NavX.getNavx().getYaw()));
-        //addSequential(new PointTurn(angleToCube));
+        double angleToCube = util.AngleMath.fixRange(Constants.twoCubeAngleLeft - (Robot.startAngle - NavX.getNavx().getYaw()));
+        addSequential(new PointTurn(angleToCube));
 
+        addSequential(new MovingIntake(100));
+        addSequential(new MoveForward(-100, Constants.FORWARD_LEFT_D));
+        addSequential(new PointTurn(-angleToCube));
+        addSequential(new OutputTimed(0, 2));
+*/
     }
 
 }

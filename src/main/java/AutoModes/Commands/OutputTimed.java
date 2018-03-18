@@ -3,7 +3,7 @@ package AutoModes.Commands;
 import edu.wpi.first.wpilibj.command.Command;
 import robot.Robot;
 import util.CubeManipState;
-public class IntakeTimed extends Command {
+public class OutputTimed extends Command {
 
     double startTime, addedTime, delay, endTime;
 
@@ -11,7 +11,7 @@ public class IntakeTimed extends Command {
      * A command that runs our intake for a set time.
      * @param seconds time in seconds to run intake
      */
-    public IntakeTimed(double _delay, double seconds) {
+    public OutputTimed(double _delay, double seconds) {
         delay = _delay * 1000;
         addedTime = seconds * 1000;
     }
@@ -34,7 +34,7 @@ public class IntakeTimed extends Command {
      */
     @Override
     protected void execute() {
-        System.out.println("IntakeTimed: execute");
+        System.out.println("OutputTimed: execute");
         super.execute();
 
         if(System.currentTimeMillis() >= startTime)
@@ -49,7 +49,7 @@ public class IntakeTimed extends Command {
     protected void end() {
         super.end();
         Robot._elevator.setOutput(CubeManipState.IDLE, 0);
-        System.out.println("IntakeTimed: end");
+        System.out.println("OutputTimed: end");
     }
 
     /**
@@ -60,7 +60,7 @@ public class IntakeTimed extends Command {
     protected void interrupted() {
         super.interrupted();
         end();
-        System.out.println("IntakeTimed: interrupted");
+        System.out.println("OutputTimed: interrupted");
     }
 
     /**
@@ -71,7 +71,7 @@ public class IntakeTimed extends Command {
     @Override
     protected boolean isFinished() {
         if(System.currentTimeMillis() >= endTime) {
-            System.out.println("IntakeTimed: isFinished");
+            System.out.println("OutputTimed: isFinished");
             end();
             return true;
         }
