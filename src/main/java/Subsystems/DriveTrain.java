@@ -62,8 +62,6 @@ public class DriveTrain extends Subsystem {
         _left2.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
         _left2.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
         _left2.enableCurrentLimit(true);
-
-
     }
 
     /**
