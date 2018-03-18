@@ -22,6 +22,8 @@ public class Robot extends IterativeRobot {
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
+    public static final AnalogInput _proxSens = new AnalogInput(Constants.PORT_PROX_SENS);
+    public static double startAngle;
     //public static final KBar _kbar = new KBar();
 
     /**
@@ -50,10 +52,11 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousInit() {
+        startAngle = NavX.getNavx().getYaw();
         _intake.setIntakeArm(true);
         _driveTrain.gearShift(true);
         _driveTrain.setPTO(false);
-        SmartDashboard.putBoolean("Match Started:", true);
+        SmartDashboard.putBoolean("StormDashboard/MatchStarted", true);
 
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -92,8 +95,8 @@ public class Robot extends IterativeRobot {
             case "Left-Switch":
                 if(switchSide == 'L')
                     autonomousCommand = new LeftSwitch();
-                //else if(scaleSide == 'L')
-                //    autonomousCommand = new LeftScale();
+                else if(scaleSide == 'L')
+                    autonomousCommand = new LeftScale();
                 else
                     autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
@@ -111,8 +114,8 @@ public class Robot extends IterativeRobot {
             case "Right-Switch":
                 if(switchSide == 'R')
                     autonomousCommand = new RightSwitch();
-                //else if (scaleSide == 'R')
-                //    autonomousCommand = new RightScale();
+                else if (scaleSide == 'R')
+                    autonomousCommand = new RightScale();
                 else
                     autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
@@ -136,6 +139,8 @@ public class Robot extends IterativeRobot {
         _intake.setIntakeArm(false);
         _driveTrain.setPTO(false);
         _driveTrain.gearShift(true);
+        _elevator.setStartPos();
+
     }
 
     /**
@@ -145,6 +150,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledPeriodic() {
         super.disabledPeriodic();
+        _elevator.setOutput(CubeManipState.IDLE, 0);
+        _elevator.elevate(0);
         _dashboard.checkBug();
         NavX.dashboardStats();
         PDP.dashboardStats();
@@ -153,6 +160,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putString("Left2 Control Mode", DriveTrain._left2.getControlMode().toString());
         SmartDashboard.putString("RightMain Control Mode", DriveTrain._rightMain.getControlMode().toString());
         SmartDashboard.putString("Right2 Control Mode", DriveTrain._right2.getControlMode().toString());
+        SmartDashboard.putBoolean("StormDashboard/MatchStarted", false);
     }
 
     /**
@@ -161,6 +169,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
+        _elevator.setStartPos();
         Scheduler.getInstance().run();
         _dashboard.checkBug();
         NavX.dashboardStats();
@@ -196,7 +205,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         //System.out.println(_elevator.getPotFrac());
-        System.out.println(Elevator.getTicks());
+        //System.out.println(Elevator.getTicks());
         NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
@@ -210,8 +219,12 @@ public class Robot extends IterativeRobot {
         if(_controller.getLowGearLock()) {
             _driveTrain.toggleGear(); //for now this will just toggle, not hold low gear
         }
+
         if(_controller.getBlockOutput()) {
-            _elevator.toggleOutput();
+            if(_elevator.state == CubeManipState.IDLE)
+                _elevator.setOutput(CubeManipState.OUT, 0.5);
+            else
+                _elevator.setOutput(CubeManipState.IDLE, 0);
             System.out.println("Toggling Block Output");
             System.out.println("Elevator Status" + _elevator.state);
         }
@@ -227,8 +240,8 @@ public class Robot extends IterativeRobot {
         }
 
         if(_driveTrain.state.getState().equalsIgnoreCase("Drive")) {
-            _driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
-            //_driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());
+            //_driveTrain.stormDrive(combinedSpeed, _controller.getTurn());
+            _driveTrain.tankDrive(_controller.getLeftSpeed(), _controller.getRightSpeed());
         } else {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
@@ -238,27 +251,44 @@ public class Robot extends IterativeRobot {
         if(_controller.getArmToggle()) {
             _intake.toggleIntakeArm();
         }
-
+        if(_controller.getSetStart()) {
+            _elevator.setStartPos();
+        }
 
         CubeManipState controllerState = _controller.getIntake();
         if(controllerState == CubeManipState.OUT) {
-            System.out.println("Intake controller OUT");
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.OUT);
             else {
-                System.out.println("trying to set Intake to idle");
                 _intake.setIntake(CubeManipState.IDLE);
             }
-        } else if(controllerState == CubeManipState.IN){
-            System.out.println("Intake controller IN");
-            if(_intake.state == CubeManipState.IDLE)
+        } else if(controllerState == CubeManipState.IN) {
+            if (_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.IN);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
+        }
+        if(_proxSens.getValue() >= 690) {
+            _intake.setIntake(CubeManipState.IDLE);
+            SmartDashboard.putBoolean("StormDashboard/CubeIn", true);
+        } else {
+            SmartDashboard.putBoolean("StormDashboard/CubeIn", false);
+        }
+        if(controllerState == CubeManipState.CLOCKWISE) {
+            if(_intake.state == CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.CLOCKWISE);
+            else
+                _intake.setIntake(CubeManipState.IDLE);
+        } else if(controllerState == CubeManipState.COUNTERCLOCKWISE) {
+            if(_intake.state == CubeManipState.IDLE)
+                _intake.setIntake(CubeManipState.COUNTERCLOCKWISE);
             else
                 _intake.setIntake(CubeManipState.IDLE);
         }
 
         _controller.printDoubt();
         LEDs.checkStatus();
+        System.out.println(Elevator.getTicks());
     }
 
     /**
@@ -267,7 +297,7 @@ public class Robot extends IterativeRobot {
     private static void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-            camera.setResolution(640, 480);
+            camera.setResolution(320, 240);
 
             CvSink cvSink = CameraServer.getInstance().getVideo();
             CvSource outputStream = CameraServer.getInstance().putVideo("FirstP", 640, 480);

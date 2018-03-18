@@ -11,7 +11,6 @@ import util.DriveState;
 public class DriveTrain extends Subsystem {
 
     public boolean acceleration = false;
-
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
     public static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
 
@@ -35,13 +34,6 @@ public class DriveTrain extends Subsystem {
         setAmpLimit();
     }
 
-    @Override
-    protected void initDefaultCommand() {
-        _leftMain.setSensorPhase(false);
-        _rightMain.setSensorPhase(false);
-
-    }
-
     private void setAmpLimit() {
         _rightMain.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
         _rightMain.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
@@ -62,6 +54,13 @@ public class DriveTrain extends Subsystem {
         _left2.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
         _left2.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
         _left2.enableCurrentLimit(true);
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+        _leftMain.setSensorPhase(true);
+        _rightMain.setSensorPhase(true);
+
     }
 
     /**
@@ -121,7 +120,6 @@ public class DriveTrain extends Subsystem {
      * @param tolerance dead zone for input
      */
     public void tankDrive(double leftSpeed, double rightSpeed, boolean squareValues, double tolerance) {
-        setAmpLimit();
         _leftMain.configOpenloopRamp(0, 10000);
         _rightMain.configOpenloopRamp(0, 10000);
 
