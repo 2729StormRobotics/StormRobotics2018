@@ -32,18 +32,7 @@ public class DriveTrain extends Subsystem {
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
 
-        _rightMain.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
-        _rightMain.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
-        _rightMain.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
-        _right2.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
-        _right2.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
-        _right2.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
-        _leftMain.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
-        _leftMain.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
-        _leftMain.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
-        _left2.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
-        _left2.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
-        _left2.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        setAmpLimit();
     }
 
     @Override
@@ -57,15 +46,24 @@ public class DriveTrain extends Subsystem {
         _rightMain.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
         _rightMain.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
         _rightMain.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _rightMain.enableCurrentLimit(true);
+
         _right2.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
         _right2.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
         _right2.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _right2.enableCurrentLimit(true);
+
         _leftMain.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
         _leftMain.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
         _leftMain.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _leftMain.enableCurrentLimit(true);
+
         _left2.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
         _left2.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
         _left2.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _left2.enableCurrentLimit(true);
+
+
     }
 
     /**
