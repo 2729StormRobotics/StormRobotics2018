@@ -76,7 +76,7 @@ public class PointTurn extends Command {
 
         //Absolute is an angle relative to the field (initial angle recorded at start of auto)
         if (absolute){
-            setpoint = util.AngleMath.fixRange(targetAngle - (Robot.startAngle - NavX.getNavx().getYaw()));
+            setpoint = util.AngleMath.fixRange(targetAngle + Robot.startAngle);
         } else { //This turns to an angle relative of current orientation
             setpoint = targetAngle + currentYaw;
         }
