@@ -116,7 +116,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
-        autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90));
+        autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90, false));
         autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(176, Constants.FORWARD_LEFT_D)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());

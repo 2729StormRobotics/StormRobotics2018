@@ -15,18 +15,19 @@ public class LeftScale extends CommandGroup {
         //addSequential(new PointTurn(45), 2);
         addSequential(new BangBang(8000, 0), 3.5);
         addSequential(new OutputTimed(0, 2));
+
+        addSequential(new BangBang(-8000, 0));  //This needs to take elevator to the ground
+
+
+        addSequential(new PointTurn(Constants.TWO_CUBE_ANGLE_LEFT, true));
+
         /*
-        addSequential(new BangBang(-8000, 0));  This needs to take elevator to the ground
-
-
-        double angleToCube = util.AngleMath.fixRange(Constants.twoCubeAngleLeft - (Robot.startAngle - NavX.getNavx().getYaw()));
-        addSequential(new PointTurn(angleToCube));
-
         addSequential(new MovingIntake(100));
         addSequential(new MoveForward(-100, Constants.FORWARD_LEFT_D));
         addSequential(new PointTurn(-angleToCube));
         addSequential(new OutputTimed(0, 2));
-*/
+        */
+
     }
 
 }

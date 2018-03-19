@@ -11,9 +11,9 @@ public class LeftCross extends CommandGroup {
 
     public LeftCross() {
         addSequential(new MoveForward(204, Constants.FORWARD_LEFT_D));
-        addSequential(new PointTurn(90), 2);
+        addSequential(new PointTurn(90, false), 2);
         addSequential(new MoveForward(180, Constants.FORWARD_LEFT_D));
-        addSequential(new PointTurn(-90), 2);
+        addSequential(new PointTurn(-90, false), 2);
         addSequential(new MoveForward(32, Constants.FORWARD_LEFT_D));
         addSequential(new BangBang(10000, 0), 3.5); //10000
         addSequential(new OutputTimed(0, 2));

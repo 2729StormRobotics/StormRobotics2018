@@ -13,13 +13,15 @@ public class PointTurn extends Command {
     private double turnSpeed;
     private final double targetAngle;
     private PIDController turnController;
+    private boolean absolute;
 
     /**
      * Turns robot to desired angle relative to current position
      * @param angle clockwise angle in degrees to rotate.  Range (-180, 180)
      */
-    public PointTurn(double angle) { //Accepts only values between (-180, 180)
+    public PointTurn(double angle, boolean _absolute) { //Accepts only values between (-180, 180)
         targetAngle = angle;
+        absolute = _absolute;
     }
 
     private final PIDSource angleSource = new PIDSource() {
@@ -71,8 +73,13 @@ public class PointTurn extends Command {
         } catch (NullPointerException npe){
             npe.printStackTrace();
         }
-        setpoint = targetAngle + currentYaw;
 
+        //Absolute is an angle relative to the field (initial angle recorded at start of auto)
+        if (absolute){
+            setpoint = util.AngleMath.fixRange(targetAngle - (Robot.startAngle - NavX.getNavx().getYaw()));
+        } else { //This turns to an angle relative of current orientation
+            setpoint = targetAngle + currentYaw;
+        }
 
         if (setpoint > 180)
             setpoint = currentYaw + targetAngle - 360;
