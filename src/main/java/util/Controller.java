@@ -58,9 +58,8 @@ public class Controller {
     }
 
     public double getElevator() {
-        if (Math.abs(weaponsThing.getY(GenericHID.Hand.kRight)) > 0.1) {
-            System.out.println(weaponsThing.getY(GenericHID.Hand.kRight));
-            return weaponsThing.getY(GenericHID.Hand.kRight);
+        if (Math.abs(weaponsThing.getY(GenericHID.Hand.kLeft)) > 0.1) {
+            return weaponsThing.getY(GenericHID.Hand.kLeft);
         }
         return 0;
     }
