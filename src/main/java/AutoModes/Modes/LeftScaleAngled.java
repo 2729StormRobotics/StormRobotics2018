@@ -13,7 +13,7 @@ public class LeftScaleAngled extends CommandGroup {
         //addSequential(new MoveForward(176, Constants.FORWARD_LEFT_D));
         addSequential(new ProfileFollower("/home/lvuser/MotionProfiles/LeftScaleAngled/_left_detailed.csv",
             "/home/lvuser/MotionProfiles/LeftScaleAngled/_right_detailed.csv", 0.05));
-        addSequential(new BangBang(15000));
+        addSequential(new BangBang(15000, 0));
 
     }
 

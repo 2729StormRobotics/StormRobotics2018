@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
-    public static final AnalogInput _proxSens = new AnalogInput(Constants.PORT_PROX_SENS);
+    //public static final AnalogInput _proxSens = new AnalogInput(Constants.PORT_PROX_SENS);
     public static double startAngle;
     //public static final KBar _kbar = new KBar();
 
@@ -268,12 +268,14 @@ public class Robot extends IterativeRobot {
             else
                 _intake.setIntake(CubeManipState.IDLE);
         }
+        /*
         if(_proxSens.getValue() >= 690) {
             _intake.setIntake(CubeManipState.IDLE);
             SmartDashboard.putBoolean("StormDashboard/CubeIn", true);
         } else {
             SmartDashboard.putBoolean("StormDashboard/CubeIn", false);
         }
+        */
         if(controllerState == CubeManipState.CLOCKWISE) {
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.CLOCKWISE);

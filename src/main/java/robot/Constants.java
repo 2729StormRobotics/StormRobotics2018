@@ -8,7 +8,7 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 12;//Back right
 
     public static final int DRIVE_AMPERAGE_LIMIT_PEAK = 2;
-    public static final int DRIVE_AMPERAGE_PEAK_DURATION = 250;
+    public static final int DRIVE_AMPERAGE_PEAK_DURATION = 1;
     public static final int DRIVE_AMPERAGE_LIMIT_CONTINUOUS = 1;
 
     public static final int CAN_TIMEOUT_SETUP = 500;
