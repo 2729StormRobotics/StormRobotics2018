@@ -81,7 +81,7 @@ public class PointTurn extends Command {
             setpoint = targetAngle + currentYaw;
         }
 
-        if (setpoint > 180)
+        if (setpoint > 180) //replace with AngleMath eventually
             setpoint = currentYaw + targetAngle - 360;
         else if (setpoint < -180)
             setpoint = currentYaw - targetAngle + 360;
