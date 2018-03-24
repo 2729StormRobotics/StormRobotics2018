@@ -1,21 +1,21 @@
 package AutoModes.Modes;
 
-import AutoModes.Commands.BangBang;
-import AutoModes.Commands.OutputTimed;
-import AutoModes.Commands.MoveForward;
-import AutoModes.Commands.PointTurn;
+import AutoModes.Commands.*;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import robot.Constants;
+import robot.Robot;
 
 public class LeftCross extends CommandGroup {
 
     public LeftCross() {
-        addSequential(new MoveForward(204, Constants.FORWARD_LEFT_D));
+        Robot._driveTrain.gearShift(false);
+        addSequential(new MoveForward(215, 0.0006)); //204
+        addSequential(new WaitCommand(0.5));
         addSequential(new PointTurn(90, false), 2);
-        addSequential(new MoveForward(180, Constants.FORWARD_LEFT_D));
+        addSequential(new MoveForward(214, 0.0006));
         addSequential(new PointTurn(-90, false), 2);
-        addSequential(new MoveForward(32, Constants.FORWARD_LEFT_D));
-        addSequential(new BangBang(10000, 0), 3.5); //10000
+        addSequential(new MoveAndRaise(44, 0.0001, 35000, 0));
         addSequential(new OutputTimed(0, 2));
     }
 

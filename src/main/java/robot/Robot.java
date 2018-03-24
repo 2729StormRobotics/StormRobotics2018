@@ -268,7 +268,8 @@ public class Robot extends IterativeRobot {
             else
                 _intake.setIntake(CubeManipState.IDLE);
         }
-        if(_proxSens.getValue() >= 690) {
+
+        if(_proxSens.getValue() >= 690 && _intake.state == CubeManipState.IN) {
             _intake.setIntake(CubeManipState.IDLE);
             SmartDashboard.putBoolean("StormDashboard/CubeIn", true);
         } else {
@@ -300,7 +301,7 @@ public class Robot extends IterativeRobot {
             camera.setResolution(320, 240);
 
             CvSink cvSink = CameraServer.getInstance().getVideo();
-            CvSource outputStream = CameraServer.getInstance().putVideo("FirstP", 640, 480);
+            CvSource outputStream = CameraServer.getInstance().putVideo("FirstP", 320, 240);
 
             Mat source = new Mat();
             Mat output = new Mat();

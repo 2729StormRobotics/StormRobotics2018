@@ -14,7 +14,7 @@ public class RightScale extends CommandGroup {
         //addSequential(new ProfileFollower("/home/lvuser/MotionProfiles/ActuallyRightScale/_left_detailed.csv", "/home/lvuser/MotionProfiles/ActuallyRightScale/_right_detailed.csv", 0.05));
 
         addSequential(new PointTurn(-45, false), 2);
-        addSequential(new BangBang(10000, 0), 3.5);
+        addSequential(new BangBang(35000, 0), 3.5);
         addSequential(new OutputTimed(0, 2));
 
         addSequential(new PointTurn(Constants.TWO_CUBE_ANGLE_RIGHT, true));

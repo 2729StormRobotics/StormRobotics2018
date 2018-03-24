@@ -78,6 +78,7 @@ public class Elevator extends Subsystem {
             LEDs.elevatingUp = false;
         }
 
+        /*
         if(armsUp == false && _elevator.getSelectedSensorPosition(0) > startPos + 500) {
             armsUp = false;
 //            _intake.toggleIntakeArm();
@@ -88,6 +89,7 @@ public class Elevator extends Subsystem {
             System.out.println("Arms should be going down");
         }
 
+*/
     }
 
     /**
