@@ -18,7 +18,7 @@ public class BangBang extends Command {
 
     public synchronized void start() {
         super.start();
-        startTime = System.currentTimeMillis() + delay;
+
 
     }
     protected void end() {
@@ -38,6 +38,7 @@ public class BangBang extends Command {
 
     protected void initialize() {
         super.initialize();
+        startTime = System.currentTimeMillis() + delay;
         setPoint = Elevator.getTicks() + height;
         System.out.println("setpoint: " + setPoint);
         System.out.println("starting: " + Elevator.getTicks());

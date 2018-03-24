@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import util.AutoPosition;
 import util.AutoPreference;
+import util.CrossPreference;
 import util.DebugLevel;
 
 public class Dashboard {
@@ -23,6 +24,7 @@ public class Dashboard {
     SendableChooser<AutoPosition> positionChooser;
     SendableChooser<AutoPreference> preferenceChooser;
     SendableChooser<DebugLevel> debugChooser;
+    SendableChooser<CrossPreference> crossChooser;
 
     public Dashboard() {
     }
@@ -136,6 +138,10 @@ public class Dashboard {
         preferenceChooser.addObject(AutoPreference.SWITCH.getName(), AutoPreference.SWITCH);
         preferenceChooser.addObject(AutoPreference.SCALE.getName(), AutoPreference.SCALE);
 
+        crossChooser = new SendableChooser<>();
+        crossChooser.addObject(CrossPreference.CROSS.getName(), CrossPreference.CROSS);
+        crossChooser.addObject(CrossPreference.NOCROSS.getName(), CrossPreference.NOCROSS);
+
         debugChooser = new SendableChooser<>();
         debugChooser.addDefault(DebugLevel.INFO.getName(), DebugLevel.INFO);
         debugChooser.addObject(DebugLevel.INFO.getName(), DebugLevel.INFO);
@@ -146,6 +152,7 @@ public class Dashboard {
         SmartDashboard.putData("Auto Position", positionChooser);
         SmartDashboard.putData("Auto Preference", preferenceChooser);
         SmartDashboard.putData("Debug Level", debugChooser);
+        SmartDashboard.putData("Cross Preference", crossChooser);
     }
 
     private void sendCustomDashInfo() {

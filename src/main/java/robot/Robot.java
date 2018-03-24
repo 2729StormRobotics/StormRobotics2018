@@ -73,6 +73,7 @@ public class Robot extends IterativeRobot {
         Command autonomousCommand = _dashboard.autoChooser.getSelected();
         AutoPosition position = _dashboard.positionChooser.getSelected();
         AutoPreference preference = _dashboard.preferenceChooser.getSelected();
+        CrossPreference crossPreference = _dashboard.crossChooser.getSelected();
         _dashboard.setBug(_dashboard.debugChooser.getSelected());
         System.out.println(autonomousCommand.getName());
 
@@ -87,6 +88,8 @@ public class Robot extends IterativeRobot {
             case "Left-Scale":
                 if(scaleSide == 'L')
                     autonomousCommand = new LeftScale();
+                else if (crossPreference == CrossPreference.CROSS)
+                    autonomousCommand = new LeftCross();
                 else if(switchSide == 'L')
                     autonomousCommand = new LeftSwitch();
                 else
@@ -97,6 +100,8 @@ public class Robot extends IterativeRobot {
                     autonomousCommand = new LeftSwitch();
                 else if(scaleSide == 'L')
                     autonomousCommand = new LeftScale();
+                else if (crossPreference == CrossPreference.CROSS)
+                    autonomousCommand = new LeftCross();
                 else
                     autonomousCommand = new MoveForward(175.0, 0.008);
                 break;
