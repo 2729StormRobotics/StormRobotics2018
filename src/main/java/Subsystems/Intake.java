@@ -7,6 +7,8 @@ import robot.Constants;
 import robot.Robot;
 import util.CubeManipState;
 
+import static Subsystems.Elevator._elevator;
+
 public class Intake extends Subsystem{
     public static TalonSRX _intakeLeft = new TalonSRX(Constants.PORT_MOTOR_INTAKE_LEFT);
     public static TalonSRX _intakeRight = new TalonSRX(Constants.PORT_MOTOR_INTAKE_RIGHT);
@@ -14,6 +16,7 @@ public class Intake extends Subsystem{
     public CubeManipState state;
     public static DoubleSolenoid.Value armsUp = DoubleSolenoid.Value.kForward;
     public static DoubleSolenoid.Value armsDown = DoubleSolenoid.Value.kReverse;
+    Elevator elevator = Robot._elevator;
 
     /**
      * The intake subsystem.  Controls both intake arms and intake wheels.
@@ -22,6 +25,9 @@ public class Intake extends Subsystem{
         _intakeRight.setInverted(true);
         _intakeLeft.follow(_intakeRight);
         System.out.println("Reached Intake()");
+        _intakeLeft.configPeakCurrentLimit(25, 500);
+        _intakeRight.configPeakCurrentLimit(25, 500);
+        state = CubeManipState.IDLE;
     }
 
     /**
@@ -45,6 +51,7 @@ public class Intake extends Subsystem{
             sol.set(armsUp);
         else
             sol.set(armsDown);
+//        elevator.setArmsUp(up);
     }
 
     protected void initDefaultCommand() {
@@ -59,22 +66,30 @@ public class Intake extends Subsystem{
         if(desiredState == CubeManipState.IN){
             _intakeRight.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
             _intakeLeft.set(ControlMode.PercentOutput, -Constants.INTAKE_SPEED);
-            Robot._elevator.setOutput(CubeManipState.IN);
+            Robot._elevator.setOutput(CubeManipState.IN, 1);
             state = CubeManipState.IN;
         } else if (desiredState == CubeManipState.OUT) {
-            if(Elevator.getPercentageHeight() > 0.6) {
+            if (Elevator.getPercentageHeight() > 0.6) {
                 _intakeRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED / 2);
                 _intakeLeft.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED / 2);
             } else {
                 _intakeRight.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
                 _intakeLeft.set(ControlMode.PercentOutput, Constants.INTAKE_SPEED);
             }
-            Robot._elevator.setOutput(CubeManipState.OUT);
+            Robot._elevator.setOutput(CubeManipState.OUT, 1);
             state = CubeManipState.OUT;
-        } else if (desiredState == CubeManipState.IDLE){
+        } else if (desiredState == CubeManipState.CLOCKWISE) {
+            _intakeRight.set(ControlMode.PercentOutput, Robot._controller.getClockwiseIntakeSpeed());
+            _intakeLeft.set(ControlMode.PercentOutput, -Robot._controller.getClockwiseIntakeSpeed());
+            Robot._elevator.setOutput(CubeManipState.CLOCKWISE, Robot._controller.getClockwiseIntakeSpeed());
+        } else if (desiredState == CubeManipState.COUNTERCLOCKWISE) {
+             _intakeRight.set(ControlMode.PercentOutput, -Robot._controller.getCounterClockwiseIntakeSpeed());
+             _intakeLeft.set(ControlMode.PercentOutput, Robot._controller.getCounterClockwiseIntakeSpeed());
+             Robot._elevator.setOutput(CubeManipState.COUNTERCLOCKWISE, Robot._controller.getCounterClockwiseIntakeSpeed());
+        } else if (desiredState == CubeManipState.IDLE) {
             _intakeRight.set(ControlMode.PercentOutput, 0);
             _intakeLeft.set(ControlMode.PercentOutput, 0);
-            Robot._elevator.setOutput(CubeManipState.IDLE);
+            Robot._elevator.setOutput(CubeManipState.IDLE, 0);
             state = CubeManipState.IDLE;
         }
     }

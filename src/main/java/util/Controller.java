@@ -1,8 +1,5 @@
 package util;
 
-import AutoModes.Commands.Lift;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import robot.Constants;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,22 +10,22 @@ public class Controller {
 
     private final XboxController mainThing;
     private final XboxController weaponsThing;
-    private final Button scaleHighElevator;
-    private final Button scaleMidElevator;
-    private final Button switchElevator;
+    //private final Button scaleHighElevator;
+    //private final Button scaleMidElevator;
+    //private final Button switchElevator;
     private Timestamp intakePressedTime;
 
     public Controller() {
         mainThing = new XboxController(Constants.PORT_XBOX_DRIVE);
         weaponsThing = new XboxController(Constants.PORT_XBOX_WEAPONS);
-        scaleHighElevator = new JoystickButton(weaponsThing, 4);
+        /*scaleHighElevator = new JoystickButton(weaponsThing, 4);
         scaleMidElevator = new JoystickButton(weaponsThing, 3);
         switchElevator = new JoystickButton(weaponsThing, 1);
 
         scaleHighElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_HIGH_HEIGHT));  //YButton
         scaleMidElevator.whenPressed(new Lift(Constants.ELEVATOR_SCALE_MID_HEIGHT));  //XButton
         switchElevator.whenPressed(new Lift(Constants.ELEVATOR_SWITCH_HEIGHT));  //AButton
-
+        */
         intakePressedTime = new Timestamp(System.currentTimeMillis());
     }
 
@@ -61,9 +58,8 @@ public class Controller {
     }
 
     public double getElevator() {
-        if (Math.abs(weaponsThing.getY(GenericHID.Hand.kRight)) > 0.1) {
-            System.out.println(weaponsThing.getY(GenericHID.Hand.kRight));
-            return weaponsThing.getY(GenericHID.Hand.kRight);
+        if (Math.abs(weaponsThing.getY(GenericHID.Hand.kLeft)) > 0.1) {
+            return weaponsThing.getY(GenericHID.Hand.kLeft);
         }
         return 0;
     }
@@ -77,8 +73,15 @@ public class Controller {
             System.out.println("Controller: Intake controller OUT");
             return CubeManipState.OUT;
         }
-
-        return CubeManipState.IDLE;
+        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kRight) > 0.1) {
+            System.out.println("Controller: Intake controller Clockwise");
+            return CubeManipState.CLOCKWISE;
+        } else if(weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft) > 0.1) {
+            System.out.println("Controller: Intake controller CounterClockwise");
+            return CubeManipState.COUNTERCLOCKWISE;
+        } else {
+            return CubeManipState.IDLE;
+        }
     }
 
     public double getWinch() {
@@ -107,6 +110,10 @@ public class Controller {
         // .get(Button)Pressed checks if it was pressed since the last check and only checks when BackButton is true
     }
 
+    public boolean getSetStart() {
+        return (weaponsThing.getBackButton() && weaponsThing.getStartButtonPressed()); //Like the CDR girl: "TRUST ME IT WORKS"
+    }
+
     public void printDoubt() {
         if(mainThing.getXButtonPressed() || weaponsThing.getXButtonPressed()) {
             System.out.println("(X) Doubt");
@@ -124,4 +131,13 @@ public class Controller {
     public double getRightSpeed(){
         return -mainThing.getY(GenericHID.Hand.kRight);
     }
+
+    public double getClockwiseIntakeSpeed() {
+        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kRight) >= 0.05) return weaponsThing.getTriggerAxis(GenericHID.Hand.kRight); else return 0;
+    }
+
+    public double getCounterClockwiseIntakeSpeed() {
+        if(weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft) >= 0.05) return weaponsThing.getTriggerAxis(GenericHID.Hand.kLeft); else return 0;
+    }
+
 }

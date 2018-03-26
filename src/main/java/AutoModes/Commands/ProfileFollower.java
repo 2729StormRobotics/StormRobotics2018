@@ -20,13 +20,15 @@ public class ProfileFollower extends Command {
     private EncoderFollower right;
     private final Trajectory leftTra;
     private final Trajectory rightTra;
+    private double kd;
 
 
-    public ProfileFollower(String leftCSV, String rightCSV) {
+    public ProfileFollower(String leftCSV, String rightCSV, double _kd) {
         requires(Robot._driveTrain);
         requires(Robot.navx);
         File leftMotionProfile = new File(leftCSV);
         File rightMotionProfile = new File(rightCSV);
+        kd = _kd;
 
         leftMotor = DriveTrain._leftMain;
         rightMotor = DriveTrain._rightMain;
@@ -47,8 +49,8 @@ public class ProfileFollower extends Command {
         right.configureEncoder(rightMotor.getSelectedSensorPosition(0), 1024*4, 0.15 * 3.279);
 
         double max_velocity = 1.0 / 18.0;
-        left.configurePIDVA(1.0, 0.0, 0.05, max_velocity, 0);
-        right.configurePIDVA(1.0, 0.0, 0.05, max_velocity, 0);
+        left.configurePIDVA(1.0, 0.0, kd, max_velocity, 0);
+        right.configurePIDVA(1.0, 0.0, kd, max_velocity, 0);
         try {
             NavX.getNavx().zeroYaw();
         } catch (NullPointerException npe) {

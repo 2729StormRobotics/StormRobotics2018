@@ -6,10 +6,20 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 1; //Back left
     public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 0;//Front right
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 15;//Back right
+    public static final double TWO_CUBE_ANGLE_LEFT              = 170;
+    public static final double TWO_CUBE_ANGLE_RIGHT             = -170;
+
+    public static final int DRIVE_AMPERAGE_LIMIT_PEAK           = 60;
+    public static final int DRIVE_AMPERAGE_PEAK_DURATION        = 250;
+    public static final int DRIVE_AMPERAGE_LIMIT_CONTINUOUS     = 35;
+
+    public static final int CAN_TIMEOUT_SETUP                   = 500;
 
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_MAIN 		= 3;//Elevator 1
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 12;//Elevator 2
     public static final int PORT_STRING_POT 		            = 3;//Elevator 2
+
+    public static final int PORT_PROX_SENS                      = 2;
 
     public static final int PORT_MOTOR_INTAKE_LEFT              = 6; //Intake Left
     public static final int PORT_MOTOR_INTAKE_RIGHT             = 7; //Intake Right
@@ -39,25 +49,25 @@ public class Constants {
     public static final double TICKS_PER_REV                    = 1024.0 * 4;
 
     public static final double WHEEL_SIZE                       = 6.0 * 3.14;
-    public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 5.0;
+    public static final double TOLERANCE_TICKS                  = (TICKS_PER_REV) / 2.0;
     public static final double TOLERANCE_DEGREES                = 0.5;
 
-    public static final double TURNCONTROLLER_P                 = 0.015;
+    public static final double TURNCONTROLLER_P                 = 0.04; //0.0175
     public static final double TURNCONTROLLER_I                 = 0.0000;
-    public static final double TURNCONTROLLER_D                 = 0.05;
+    public static final double TURNCONTROLLER_D                 = 0.04; //0.07
     public static final double TURNCONTROLLER_F                 = 0.0;
     public static final double TURNCONTROLLER_PERIOD            = 0.02;
     public static final double POINT_TURN_TOLERANCE             = 2.0;
 
-    public static final double FORWARD_LEFT_P                   = 0.000035;
+    public static final double FORWARD_LEFT_P                   = 0.00004;
     public static final double FORWARD_LEFT_I                   = 0.0; //0.000004
-    public static final double FORWARD_LEFT_D                   = 0.00003; //0.008
+    public static final double FORWARD_LEFT_D                   = 0.0009; //0.008
     public static final double FORWARD_LEFT_F                   = 0.0;
     public static final double FORWARD_LEFT_PERIOD              = 0.02; //0.02
 
-    public static final double FORWARD_RIGHT_P                  = 0.000035;
+    public static final double FORWARD_RIGHT_P                  = 0.00004; //.00035
     public static final double FORWARD_RIGHT_I                  = 0.0;
-    public static final double FORWARD_RIGHT_D                  = 0.00003;
+    public static final double FORWARD_RIGHT_D                  = 0.0005;
     public static final double FORWARD_RIGHT_F                  = 0.0;
     public static final double FORWARD_RIGHT_PERIOD             = 0.02;
 
@@ -86,18 +96,13 @@ public class Constants {
     public static final double ELEVATOR_ENCODER_RANGE           = 0.0; //test 5 times going to the max height of the scale and subtract from the zeroPos to get range
     public static final double ELEVATOR_INCH_PER_REV            = 2.0 * Math.PI; //Change 2 later for actual diameter
     public static final double ELEVATOR_TICKS_PER_INCH          = TICKS_PER_REV / ELEVATOR_INCH_PER_REV;
-    public static final double ELEVATOR_MAX_TICKS               = ELEVATOR_MAX * ELEVATOR_TICKS_PER_INCH;
 
-    public static final double ELEVATOR_STAGE_ONE_MAX           = 31.0;
-    public static final double ELEVATOR_STAGE_TWO_MAX           = 38.0; //not right, gotta measure
-    public static final double ELEVATOR_STAGE_THREE_MAX         = 38.0;
-    public static final double ELEVATOR_STAGE_FOUR_MAX          = 39.0;
     public static final double ELEVATOR_SWITCH_HEIGHT           = 40.0; //just a guess
     public static final double ELEVATOR_SCALE_MID_HEIGHT        = 60.0;
     public static final double ELEVATOR_SCALE_HIGH_HEIGHT       = 72.0;
 
     public static final double STRPOT_MAX                       = 56.0; //push
-    public static final double STRPOT_START_FRACTION            = 0.1;
+    public static final double STRPOT_START_FRACTION            = 0.12; //maybe too high
     public static final double STRPOT_SWITCH_FRACTION           = 0.6426; //36.0 in inches (Should be 0.6426)
     public static final double ELEVATOR_SLOW_DOWN_FRACTION      = 0.25;
 
@@ -114,6 +119,7 @@ public class Constants {
     static final String TEST_MODE                               = "Test Mode";
     static final String FOLLOW_PREF                             = "Follow";
     static final String INTAKE_TIMED                            = "Intake Timed";
+    static final String BANG_BANG                               = "Bang Bang";
 
     public static final int CONTROLLER_INTAKE_BUFFER            = 250; //Time in ms where the intake controller stops listening.  (prevents double clicks)
 }

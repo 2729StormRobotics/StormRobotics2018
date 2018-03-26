@@ -11,7 +11,6 @@ import util.DriveState;
 public class DriveTrain extends Subsystem {
 
     public boolean acceleration = false;
-
     public static TalonSRX _leftMain = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_MAIN);
     public static final TalonSRX _left2 = new TalonSRX(Constants.PORT_MOTOR_DRIVE_LEFT_2);
 
@@ -31,6 +30,30 @@ public class DriveTrain extends Subsystem {
         _right2.setInverted(true);
         _left2.follow(_leftMain);
         _right2.follow(_rightMain);
+
+        setAmpLimit();
+    }
+
+    private void setAmpLimit() {
+        _rightMain.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _rightMain.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _rightMain.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _rightMain.enableCurrentLimit(true);
+
+        _right2.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _right2.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _right2.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _right2.enableCurrentLimit(true);
+
+        _leftMain.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _leftMain.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _leftMain.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _leftMain.enableCurrentLimit(true);
+
+        _left2.configPeakCurrentDuration(Constants.DRIVE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _left2.configPeakCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _left2.configContinuousCurrentLimit(Constants.DRIVE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _left2.enableCurrentLimit(true);
     }
 
     @Override
