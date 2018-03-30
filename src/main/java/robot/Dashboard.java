@@ -111,14 +111,24 @@ public class Dashboard {
      * Sends four SendableChoosers to the dashboard for autonomous modes, field position, switch/scale, and debug level respectively.
      */
     void sendChooser() {
+        String gameData;
+        gameData = DriverStation.getInstance().getGameSpecificMessage();
+        char switchSide = ' ';
+        try {
+            switchSide = gameData.charAt(0);
+        } catch (IndexOutOfBoundsException ex) {
+            System.out.println("No Game Data");
+        }
+
         autoChooser = new SendableChooser<>();
-        autoChooser.addDefault(Constants.BANG_BANG, new BangBang(35000, 0));
+        autoChooser.addDefault(Constants.FOLLOW_PREF, new DummyCommand());
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
         autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
-        autoChooser.addObject(Constants.POINT_TURN, new PointTurn(90, false));
+        autoChooser.addObject(Constants.POINT_TURN, new PointTurn(270, false));
+        autoChooser.addObject("Point 2", new PointTurn(-300, false));
         autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(176, Constants.FORWARD_LEFT_D)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());

@@ -6,11 +6,11 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_LEFT_2 			= 1; //Back left
     public static final int PORT_MOTOR_DRIVE_RIGHT_MAIN 		= 0;//Front right
     public static final int PORT_MOTOR_DRIVE_RIGHT_2 			= 15;//Back right
-    public static final double TWO_CUBE_ANGLE_LEFT              = 170;
-    public static final double TWO_CUBE_ANGLE_RIGHT             = -170;
+    public static final double TWO_CUBE_ANGLE_LEFT              = 135;
+    public static final double TWO_CUBE_ANGLE_RIGHT             = -135;
 
-    public static final int DRIVE_AMPERAGE_LIMIT_PEAK           = 60;
-    public static final int DRIVE_AMPERAGE_PEAK_DURATION        = 250;
+    public static final int DRIVE_AMPERAGE_LIMIT_PEAK           = 50;
+    public static final int DRIVE_AMPERAGE_PEAK_DURATION        = 100;
     public static final int DRIVE_AMPERAGE_LIMIT_CONTINUOUS     = 35;
 
     public static final int CAN_TIMEOUT_SETUP                   = 500;
@@ -19,14 +19,25 @@ public class Constants {
     public static final int PORT_MOTOR_DRIVE_ELEVATOR_2 		= 12;//Elevator 2
     public static final int PORT_STRING_POT 		            = 3;//Elevator 2
 
+    public static final int ELEVATOR_AMPERAGE_LIMIT_PEAK        = 50;
+    public static final int ELEVATOR_AMPERAGE_PEAK_DURATION     = 100;
+    public static final int ELEVATOR_AMPERAGE_LIMIT_CONTINUOUS  = 35;
+
     public static final int PORT_PROX_SENS                      = 2;
 
     public static final int PORT_MOTOR_INTAKE_LEFT              = 6; //Intake Left
     public static final int PORT_MOTOR_INTAKE_RIGHT             = 7; //Intake Right
 
+    public static final int INTAKE_AMPERAGE_LIMIT_PEAK          = 35;
+    public static final int INTAKE_AMPERAGE_PEAK_DURATION       = 100;
+    public static final int INTAKE_AMPERAGE_LIMIT_CONTINUOUS    = 25;
+
     public static final int PORT_MOTOR_OUTPUT_LEFT              = 5; //Output Left
     public static final int PORT_MOTOR_OUTPUT_RIGHT             = 10;//Output Right
 
+    public static final int OUTPUT_AMPERAGE_LIMIT_PEAK          = 35;
+    public static final int OUTPUT_AMPERAGE_PEAK_DURATION       = 100;
+    public static final int OUTPUT_AMPERAGE_LIMIT_CONTINUOUS    = 25;
 
     public static final int PORT_SOLENOID_INTAKE_IN             = 1; //Left Solenoid
     public static final int PORT_SOLENOID_INTAKE_OUT            = 2; //Left Solenoid
@@ -57,7 +68,7 @@ public class Constants {
     public static final double TURNCONTROLLER_D                 = 0.04; //0.07
     public static final double TURNCONTROLLER_F                 = 0.0;
     public static final double TURNCONTROLLER_PERIOD            = 0.02;
-    public static final double POINT_TURN_TOLERANCE             = 2.0;
+    public static final double POINT_TURN_TOLERANCE             = 1.0;
 
     public static final double FORWARD_LEFT_P                   = 0.00004;
     public static final double FORWARD_LEFT_I                   = 0.0; //0.000004
@@ -71,7 +82,7 @@ public class Constants {
     public static final double FORWARD_RIGHT_F                  = 0.0;
     public static final double FORWARD_RIGHT_PERIOD             = 0.02;
 
-    public static final double FORWARD_ANGLE_P                  = 0.8;
+    public static final double FORWARD_ANGLE_P                  = 0.04;
     public static final double FORWARD_ANGLE_I                  = 0.0;
     public static final double FORWARD_ANGLE_D                  = 0.04;
     public static final double FORWARD_ANGLE_F                  = 0.0;

@@ -138,8 +138,8 @@ public class MoveForward extends Command {
         System.err.println("initialize Move Forward");
         double angle;
 
-//        angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
-//
+        angleController = new PIDController(Constants.FORWARD_ANGLE_P, Constants.FORWARD_ANGLE_I, Constants.FORWARD_ANGLE_D, Constants.FORWARD_ANGLE_F, angleSource, motorSpeedWrite, Constants.FORWARD_ANGLE_PERIOD);
+
 //        try {
 //            angle = NavX.getNavx().getYaw();
 //            angleController.setInputRange(-180.0, 180.0);
@@ -185,7 +185,7 @@ public class MoveForward extends Command {
         System.err.println("end Move Forward");
         moveLeftController.disable();
         moveRightController.disable();
-        //angleController.disable();
+//        angleController.disable();
         super.end();
     }
 
@@ -198,7 +198,7 @@ public class MoveForward extends Command {
         System.err.println("interrupted Move Forward");
         moveLeftController.disable();
         moveRightController.disable();
-        //angleController.disable();
+//        angleController.disable();
 
         Robot._driveTrain.tankDrive(0, 0);
         super.interrupted();

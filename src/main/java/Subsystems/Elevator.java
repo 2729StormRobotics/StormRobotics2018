@@ -34,10 +34,25 @@ public class Elevator extends Subsystem {
         _elevatorFollow.follow(_elevator);
         //zeroPos = _elevator.getSelectedSensorPosition(0) - (((pot.get() - Constants.STRPOT_START_FRACTION) * Constants.STRPOT_MAX) / Constants.ELEVATOR_TICKS_PER_INCH);
         maxPos = zeroPos + (Constants.ELEVATOR_ENCODER_RANGE);
-        _elevator.configPeakCurrentLimit(35, 500);
-        _elevatorFollow.configPeakCurrentLimit(35, 500);
-        _outputLeft.configPeakCurrentLimit(25, 500);
-        _outputRight.configPeakCurrentLimit(25, 500);
+
+        _elevator.configPeakCurrentDuration(Constants.ELEVATOR_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _elevator.configPeakCurrentLimit(Constants.ELEVATOR_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _elevator.configContinuousCurrentLimit(Constants.ELEVATOR_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _elevator.enableCurrentLimit(true);
+        _elevatorFollow.configPeakCurrentDuration(Constants.ELEVATOR_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _elevatorFollow.configPeakCurrentLimit(Constants.ELEVATOR_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _elevatorFollow.configContinuousCurrentLimit(Constants.ELEVATOR_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _elevatorFollow.enableCurrentLimit(true);
+
+        _outputLeft.configPeakCurrentDuration(Constants.OUTPUT_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _outputLeft.configPeakCurrentLimit(Constants.OUTPUT_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _outputLeft.configContinuousCurrentLimit(Constants.OUTPUT_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _outputLeft.enableCurrentLimit(true);
+        _outputRight.configPeakCurrentDuration(Constants.OUTPUT_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _outputRight.configPeakCurrentLimit(Constants.OUTPUT_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _outputRight.configContinuousCurrentLimit(Constants.OUTPUT_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _outputRight.enableCurrentLimit(true);
+
         _elevator.setSensorPhase(true);
         armsUp = false;
     }
