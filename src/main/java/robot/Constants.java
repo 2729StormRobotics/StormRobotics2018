@@ -23,7 +23,8 @@ public class Constants {
     public static final int ELEVATOR_AMPERAGE_PEAK_DURATION     = 100;
     public static final int ELEVATOR_AMPERAGE_LIMIT_CONTINUOUS  = 35;
 
-    public static final int PORT_PROX_SENS                      = 2;
+    public static final int PORT_PROX_SENS                      = 1;
+    public static final int PORT_LIMIT_SWITCH                   = 9;
 
     public static final int PORT_MOTOR_INTAKE_LEFT              = 6; //Intake Left
     public static final int PORT_MOTOR_INTAKE_RIGHT             = 7; //Intake Right

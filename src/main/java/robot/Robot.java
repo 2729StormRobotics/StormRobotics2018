@@ -22,7 +22,9 @@ public class Robot extends IterativeRobot {
     public static final Intake _intake = new Intake();
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
-//    public static final AnalogInput _proxSens = new AnalogInput(Constants.PORT_PROX_SENS);
+    public static final AnalogInput _proxSens = new AnalogInput(Constants.PORT_PROX_SENS);
+    public static final DigitalInput _limitSwitch = new DigitalInput(Constants.PORT_LIMIT_SWITCH);
+
     public static double startAngle;
     public static char switchSide;
     //public static final KBar _kbar = new KBar();
@@ -212,6 +214,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         //System.out.println(_elevator.getPotFrac());
         //System.out.println(Elevator.getTicks());
+        System.out.println(_limitSwitch.get());
         NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
@@ -252,7 +255,8 @@ public class Robot extends IterativeRobot {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
 
-        _elevator.elevate(_controller.getElevator());
+        if(_limitSwitch.get())
+            _elevator.elevate(_controller.getElevator());
 
         if(_controller.getArmToggle()) {
             _intake.toggleIntakeArm();
@@ -275,12 +279,12 @@ public class Robot extends IterativeRobot {
                 _intake.setIntake(CubeManipState.IDLE);
         }
 
-//        if(_proxSens.getValue() >= 690 && _intake.state == CubeManipState.IN) {
-//            _intake.setIntake(CubeManipState.IDLE);
-//            SmartDashboard.putBoolean("StormDashboard/CubeIn", true);
-//        } else {
-//            SmartDashboard.putBoolean("StormDashboard/CubeIn", false);
-//        }
+        if(_proxSens.getValue() >= 690 && _intake.state == CubeManipState.IN) {
+            _intake.setIntake(CubeManipState.IDLE);
+            SmartDashboard.putBoolean("StormDashboard/CubeIn", true);
+        } else if (_proxSens.getValue() <= 600){
+            SmartDashboard.putBoolean("StormDashboard/CubeIn", false);
+        }
 
         if(controllerState == CubeManipState.CLOCKWISE) {
             if(_intake.state == CubeManipState.IDLE)
@@ -305,18 +309,9 @@ public class Robot extends IterativeRobot {
     private static void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-            camera.setResolution(320, 240);
+            camera.setResolution(640, 480);
+            camera.setFPS(30);
 
-            CvSink cvSink = CameraServer.getInstance().getVideo();
-            CvSource outputStream = CameraServer.getInstance().putVideo("FirstP", 320, 240);
-
-            Mat source = new Mat();
-            Mat output = new Mat();
-
-            while (!Thread.interrupted()) {
-                cvSink.grabFrame(source);
-                outputStream.putFrame(output);
-            }
         }).start();
     }
 
