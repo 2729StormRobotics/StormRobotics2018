@@ -214,7 +214,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         //System.out.println(_elevator.getPotFrac());
         //System.out.println(Elevator.getTicks());
-        System.out.println(_limitSwitch.get());
+        //System.out.println(_limitSwitch.get());
         NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
@@ -255,8 +255,11 @@ public class Robot extends IterativeRobot {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
 
-        if(_limitSwitch.get())
-            _elevator.elevate(_controller.getElevator());
+        double elevatorSpeed = _controller.getElevator();
+        if(!_limitSwitch.get() && _controller.getElevator() > 0)
+            elevatorSpeed = 0;
+
+        _elevator.elevate(elevatorSpeed);
 
         if(_controller.getArmToggle()) {
             _intake.toggleIntakeArm();
@@ -300,7 +303,6 @@ public class Robot extends IterativeRobot {
 
         _controller.printDoubt();
         LEDs.checkStatus();
-        System.out.println(Elevator.getTicks());
     }
 
     /**
@@ -309,7 +311,7 @@ public class Robot extends IterativeRobot {
     private static void cameraInit() {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-            camera.setResolution(640, 480);
+            camera.setResolution(320, 240);
             camera.setFPS(30);
 
         }).start();

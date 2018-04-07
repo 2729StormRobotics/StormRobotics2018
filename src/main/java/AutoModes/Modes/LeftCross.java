@@ -14,7 +14,7 @@ public class LeftCross extends CommandGroup {
         addSequential(new WaitCommand(0.5));
         addSequential(new PointTurn(85, true), 2);
         addSequential(new MoveForward(200, 0.0006));
-        addSequential(new PointTurn(-98, false), 2);
+        addSequential(new PointTurn(-25, true), 2);
         addSequential(new MoveAndRaise(42, 0.0001, 35000, 0));
         addSequential(new OutputTimed(0, 2));
         addSequential(new ArmState(false));

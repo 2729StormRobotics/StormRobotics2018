@@ -10,7 +10,7 @@ public class RightScale extends CommandGroup {
         System.err.println("RightScale.");
         //addSequential(new MoveForward(176, Constants.FORWARD_LEFT_D));
 
-        addSequential(new ScaleAndElevatorUp("RightScaleAngled", 0.05, 35000, 0));
+        addSequential(new ScaleAndElevatorUp("RightScaleAngled", 0.05, 35000, 1));
         //addSequential(new ProfileFollower("/home/lvuser/MotionProfiles/ActuallyRightScale/_left_detailed.csv", "/home/lvuser/MotionProfiles/ActuallyRightScale/_right_detailed.csv", 0.05));
 
         //addSequential(new PointTurn(-45, false), 2);

@@ -14,7 +14,7 @@ public class ElevatorDownLimit extends Command {
 
     @Override
     protected void initialize() {
-        Robot._elevator.elevate(-Math.abs(percentSpeed));
+        Robot._elevator.elevate(Math.abs(percentSpeed));
         super.initialize();
     }
 
