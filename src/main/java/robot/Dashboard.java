@@ -136,6 +136,7 @@ public class Dashboard {
         autoChooser.addObject(Constants.BANG_BANG, new BangBang(35000, 0));
         autoChooser.addObject("RightCross", new RightCross());
         autoChooser.addObject("LeftCross", new LeftCross());
+        autoChooser.addObject("ElevatorDownLimit", new ElevatorDownLimit(0.7));
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);

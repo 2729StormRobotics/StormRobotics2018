@@ -16,8 +16,8 @@ public class LeftScale extends CommandGroup {
         addSequential(new ArmState(false));
         addSequential(new BangBang(-35000, 0), 2);  //This needs to take elevator to the ground **Used to be 3 seconds **
         addSequential(new PointTurn(95, false)); //uncomment the other chunk for second cube auto
-        //addSequential(new PointAndElevator(0.0, 95, false));
-        //addSequential(new MoveForward(36, 0.0006)); //this one is to move out of the way for another robot doing cross scale
+        addSequential(new PointAndElevator(0.75, 95, false));
+        addSequential(new MoveForward(36, 0.0006)); //this one is to move out of the way for another robot doing cross scale
 
 
         /*

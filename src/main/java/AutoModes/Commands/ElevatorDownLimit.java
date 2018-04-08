@@ -3,8 +3,6 @@ package AutoModes.Commands;
 import edu.wpi.first.wpilibj.command.Command;
 import robot.Robot;
 
-import javax.management.relation.RoleNotFoundException;
-
 public class ElevatorDownLimit extends Command {
     double percentSpeed;
 
@@ -14,6 +12,7 @@ public class ElevatorDownLimit extends Command {
 
     @Override
     protected void initialize() {
+        Robot._intake.setIntakeArm(false);
         Robot._elevator.elevate(Math.abs(percentSpeed));
         super.initialize();
     }
@@ -21,6 +20,7 @@ public class ElevatorDownLimit extends Command {
     @Override
     protected void execute() {
         super.execute();
+        if(Robot._limitSwitch.get()) Robot._elevator.elevate(percentSpeed); else Robot._elevator.elevate(0);
     }
 
     @Override
