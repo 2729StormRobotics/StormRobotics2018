@@ -23,7 +23,10 @@ public class Robot extends IterativeRobot {
     public static final Dashboard _dashboard = new Dashboard();
     public static final Controller _controller = new Controller();
     public static final AnalogInput _proxSens = new AnalogInput(Constants.PORT_PROX_SENS);
+    public static final DigitalInput _limitSwitch = new DigitalInput(Constants.PORT_LIMIT_SWITCH);
+
     public static double startAngle;
+    public static char switchSide;
     //public static final KBar _kbar = new KBar();
 
     /**
@@ -60,7 +63,7 @@ public class Robot extends IterativeRobot {
 
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
-        char switchSide = ' ';
+        switchSide = ' ';
         char scaleSide = ' ';
         try {
             switchSide = gameData.charAt(0);
@@ -93,7 +96,7 @@ public class Robot extends IterativeRobot {
                 else if(switchSide == 'L')
                     autonomousCommand = new LeftSwitch();
                 else
-                    autonomousCommand = new MoveForward(176.0, 0.008);
+                    autonomousCommand = new MoveForward(176.0, 0.0006);
                 break;
             case "Left-Switch":
                 if(switchSide == 'L')
@@ -103,7 +106,7 @@ public class Robot extends IterativeRobot {
                 else if (crossPreference == CrossPreference.CROSS)
                     autonomousCommand = new LeftCross();
                 else
-                    autonomousCommand = new MoveForward(175.0, 0.008);
+                    autonomousCommand = new MoveForward(175.0, 0.0006);
                 break;
             case "Middle-Switch":
                 autonomousCommand = new MidSwitch(switchSide);
@@ -114,7 +117,7 @@ public class Robot extends IterativeRobot {
                 else if (switchSide == 'R')
                     autonomousCommand = new RightSwitch();
                 else
-                    autonomousCommand = new MoveForward(176.0, 0.008);
+                    autonomousCommand = new MoveForward(176.0, 0.0006);
                 break;
             case "Right-Switch":
                 if(switchSide == 'R')
@@ -122,7 +125,7 @@ public class Robot extends IterativeRobot {
                 else if (scaleSide == 'R')
                     autonomousCommand = new RightScale();
                 else
-                    autonomousCommand = new MoveForward(175.0, 0.008);
+                    autonomousCommand = new MoveForward(175.0, 0.0006);
                 break;
             default: break;
         }
@@ -211,6 +214,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         //System.out.println(_elevator.getPotFrac());
         //System.out.println(Elevator.getTicks());
+        //System.out.println(_limitSwitch.get());
         NavX.dashboardStats();
         PDP.dashboardStats();
         _dashboard.checkBug();
@@ -251,7 +255,11 @@ public class Robot extends IterativeRobot {
             _driveTrain.tankDrive(combinedSpeed, combinedSpeed);
         }
 
-        _elevator.elevate(_controller.getElevator());
+        double elevatorSpeed = _controller.getElevator();
+        if(!_limitSwitch.get() && _controller.getElevator() > 0)
+            elevatorSpeed = 0;
+
+        _elevator.elevate(elevatorSpeed);
 
         if(_controller.getArmToggle()) {
             _intake.toggleIntakeArm();
@@ -277,9 +285,10 @@ public class Robot extends IterativeRobot {
         if(_proxSens.getValue() >= 690 && _intake.state == CubeManipState.IN) {
             _intake.setIntake(CubeManipState.IDLE);
             SmartDashboard.putBoolean("StormDashboard/CubeIn", true);
-        } else {
+        } else if (_proxSens.getValue() <= 600){
             SmartDashboard.putBoolean("StormDashboard/CubeIn", false);
         }
+
         if(controllerState == CubeManipState.CLOCKWISE) {
             if(_intake.state == CubeManipState.IDLE)
                 _intake.setIntake(CubeManipState.CLOCKWISE);
@@ -294,7 +303,6 @@ public class Robot extends IterativeRobot {
 
         _controller.printDoubt();
         LEDs.checkStatus();
-        System.out.println(Elevator.getTicks());
     }
 
     /**
@@ -304,17 +312,8 @@ public class Robot extends IterativeRobot {
         new Thread(() -> {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
             camera.setResolution(320, 240);
+            camera.setFPS(30);
 
-            CvSink cvSink = CameraServer.getInstance().getVideo();
-            CvSource outputStream = CameraServer.getInstance().putVideo("FirstP", 320, 240);
-
-            Mat source = new Mat();
-            Mat output = new Mat();
-
-            while (!Thread.interrupted()) {
-                cvSink.grabFrame(source);
-                outputStream.putFrame(output);
-            }
         }).start();
     }
 

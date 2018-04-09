@@ -61,12 +61,12 @@ public class IntakeCube extends Command {
      */
     @Override
     protected boolean isFinished() {
-        if(Robot._proxSens.getValue() >= 690) {
-            Robot._intake.setIntake(CubeManipState.IDLE);
-            System.out.println("OutputTimed: isFinished");
-            end();
-            return true;
-        }
+//        if(Robot._proxSens.getValue() >= 690) {
+//            Robot._intake.setIntake(CubeManipState.IDLE);
+//            System.out.println("OutputTimed: isFinished");
+//            end();
+//            return true;
+//        }
         return false;
     }
 }

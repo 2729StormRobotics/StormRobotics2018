@@ -25,8 +25,16 @@ public class Intake extends Subsystem{
         _intakeRight.setInverted(true);
         _intakeLeft.follow(_intakeRight);
         System.out.println("Reached Intake()");
-        _intakeLeft.configPeakCurrentLimit(25, 500);
-        _intakeRight.configPeakCurrentLimit(25, 500);
+
+        _intakeLeft.configPeakCurrentDuration(Constants.INTAKE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _intakeLeft.configPeakCurrentLimit(Constants.INTAKE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _intakeLeft.configContinuousCurrentLimit(Constants.INTAKE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _intakeLeft.enableCurrentLimit(true);
+        _intakeRight.configPeakCurrentDuration(Constants.INTAKE_AMPERAGE_PEAK_DURATION, Constants.CAN_TIMEOUT_SETUP);
+        _intakeRight.configPeakCurrentLimit(Constants.INTAKE_AMPERAGE_LIMIT_PEAK, Constants.CAN_TIMEOUT_SETUP);
+        _intakeRight.configContinuousCurrentLimit(Constants.INTAKE_AMPERAGE_LIMIT_CONTINUOUS, Constants.CAN_TIMEOUT_SETUP);
+        _intakeRight.enableCurrentLimit(true);
+
         state = CubeManipState.IDLE;
     }
 
