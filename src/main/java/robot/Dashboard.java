@@ -122,13 +122,12 @@ public class Dashboard {
 
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Constants.FOLLOW_PREF, new DummyCommand());
-        autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
+        autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch(switchSide));
         autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
         autoChooser.addObject(Constants.RIGHT_SCALE, new RightScale());
         autoChooser.addObject(Constants.POINT_TURN, new PointTurn(270, false));
-        autoChooser.addObject("Point 2", new PointTurn(-300, false));
         autoChooser.addObject(Constants.MOVE_FORWARD, new MoveForward(176, Constants.FORWARD_LEFT_D)); //change distance
         autoChooser.addObject(Constants.TEST_MODE, new TestMode());
         autoChooser.addObject(Constants.FOLLOW_PREF, new DummyCommand());
@@ -137,6 +136,7 @@ public class Dashboard {
         autoChooser.addObject("RightCross", new RightCross());
         autoChooser.addObject("LeftCross", new LeftCross());
         autoChooser.addObject("ElevatorDownLimit", new ElevatorDownLimit(0.7));
+        autoChooser.addObject("Drift Test", new DriftTest());
 
         positionChooser = new SendableChooser<>();
         positionChooser.addDefault(AutoPosition.MIDDLE.getName(), AutoPosition.MIDDLE);

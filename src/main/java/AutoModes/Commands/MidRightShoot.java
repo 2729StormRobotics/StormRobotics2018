@@ -6,7 +6,7 @@ public class MidRightShoot extends CommandGroup {
 
     public MidRightShoot() {
         addParallel(new ProfileFollower("/home/lvuser/MotionProfiles/MidLeftSwitch/_left_detailed.csv",
-            "/home/lvuser/MotionProfiles/MidLeftSwitch/_right_detailed.csv", 0.05));
+            "/home/lvuser/MotionProfiles/MidLeftSwitch/_right_detailed.csv", 0.01));
         addParallel(new OutputTimed(3.25,1));
     }
 
