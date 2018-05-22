@@ -51,6 +51,9 @@ dependencies {
 	compile openrio.powerup.matchData()
     compile pathfinder()
 
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.0'
+
     compile name: 'json-simple-1.1.1'
 //    errorprone 'com.google.errorprone:error_prone_core:2.2.0'
 
