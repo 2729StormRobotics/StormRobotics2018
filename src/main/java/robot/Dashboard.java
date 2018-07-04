@@ -112,6 +112,7 @@ public class Dashboard {
         autoChooser = new SendableChooser<>();
         autoChooser.addDefault(Constants.BANG_BANG, new BangBang(5000, 0));
         autoChooser.addObject(Constants.MID_SWITCH, new MidSwitch('L'));
+        autoChooser.addObject("Push Points", new PushPoints());
         autoChooser.addObject(Constants.LEFT_SWITCH, new LeftSwitch());
         autoChooser.addObject(Constants.RIGHT_SWITCH, new RightSwitch());
         autoChooser.addObject(Constants.LEFT_SCALE, new LeftScale());
